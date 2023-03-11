@@ -1,7 +1,7 @@
 package com.project.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
@@ -16,24 +16,37 @@ class MainActivity : AppCompatActivity() {
         val settingsBtn = findViewById<MaterialButton>(R.id.settings_btn_main)
 
         //Способ 1. Реализация анонимного класса
-//        val btnClickListener: View.OnClickListener = object : View.OnClickListener {
+//        val searchBtnListener: View.OnClickListener = object : View.OnClickListener {
 //            override fun onClick(v: View?) {
-//                Toast.makeText(this@MainActivity, "Клик!", Toast.LENGTH_SHORT).show()
+//                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
 //            }
 //        }
-//        searchBtn.setOnClickListener(btnClickListener)
-//        mediaLibraryBtn.setOnClickListener(btnClickListener)
-//        settingsBtn.setOnClickListener(btnClickListener)
+//        searchBtn.setOnClickListener(searchBtnListener)
+//
+//        val mediaLibraryBtnListener: View.OnClickListener = object : View.OnClickListener {
+//            override fun onClick(v: View?) {
+//                startActivity(Intent(this@MainActivity, MediaLibraryActivity::class.java))
+//            }
+//        }
+//        mediaLibraryBtn.setOnClickListener(mediaLibraryBtnListener)
+//
+//        val settingsBtnListener: View.OnClickListener = object : View.OnClickListener {
+//            override fun onClick(v: View?) {
+//                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+//            }
+//        }
+//        settingsBtn.setOnClickListener(settingsBtnListener)
+
 
         //Способ 2. Лямбда-выражение
         searchBtn.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Клик! Поиск", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@MainActivity, SearchActivity::class.java))
         }
         mediaLibraryBtn.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Клик! Медиатека", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@MainActivity, MediaLibraryActivity::class.java))
         }
         settingsBtn.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Клик! Настройки", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
         }
     }
 }
