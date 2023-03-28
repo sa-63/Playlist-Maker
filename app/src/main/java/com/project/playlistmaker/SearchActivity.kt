@@ -10,6 +10,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
+var savedText: String? = null
+
 class SearchActivity : AppCompatActivity() {
     companion object {
         const val EDIT_TEXT_CONTENT = "PRODUCT_AMOUNT"
@@ -63,13 +65,14 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         val searchEditText = findViewById<EditText>(R.id.edit_text_in_search)
-        searchEditText.setText(savedInstanceState.getString(EDIT_TEXT_CONTENT))
+        searchEditText?.setText(savedText)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         val searchEditText = findViewById<EditText>(R.id.edit_text_in_search)
-        outState.putString(EDIT_TEXT_CONTENT, searchEditText.text.toString())
+        savedText = searchEditText.text.toString()
+        outState.putString(EDIT_TEXT_CONTENT, savedText)
+        super.onSaveInstanceState(outState)
     }
 }
 
