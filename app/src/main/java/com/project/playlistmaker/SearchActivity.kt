@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
-var savedText: String? = null
+var saveInputText: String? = null
 
 class SearchActivity : AppCompatActivity() {
     companion object {
@@ -41,6 +41,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                saveInputText = searchEditText.text.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -65,13 +66,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         val searchEditText = findViewById<EditText>(R.id.edit_text_in_search)
-        searchEditText?.setText(savedText)
+        searchEditText?.setText(saveInputText)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val searchEditText = findViewById<EditText>(R.id.edit_text_in_search)
-        savedText = searchEditText.text.toString()
-        outState.putString(EDIT_TEXT_CONTENT, savedText)
+        outState.putString(EDIT_TEXT_CONTENT, saveInputText)
         super.onSaveInstanceState(outState)
     }
 }
