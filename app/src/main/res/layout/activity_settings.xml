@@ -25,14 +25,18 @@
             android:backgroundTint="?attr/colorOnPrimary" />
 
         <TextView
+            style="@style/HeaderTextStyle"
             android:layout_gravity="end"
-            android:text="@string/settings"
-            style="@style/HeaderTextStyle"/>
+            android:text="@string/settings" />
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/theme_ll"
-        style="@style/SettingsActivityLL">
+        style="@style/SettingsActivityFr">
+
+        <ImageButton
+            android:id="@+id/dark_theme_btn"
+            style="@style/SettingsActivityButtons" />
 
         <TextView
             android:id="@+id/theme_tv"
@@ -40,50 +44,57 @@
             android:text="@string/app_theme_str" />
 
         <ToggleButton
-            android:layout_width="35dp"
-            android:layout_height="20dp"
-            android:background="@drawable/custom_toggle_button"
-            android:textOff=""
-            android:textOn="" />
-    </LinearLayout>
+            android:id="@+id/toggle_Btn_settings"
+            style="@style/CustomToggleButton"
+            android:layout_gravity="end"
+            android:layout_marginEnd="18dp" />
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/share_ll"
-        style="@style/SettingsActivityLL"
-        android:paddingEnd="@dimen/padding_16">
+        style="@style/SettingsActivityFr">
+
+        <ImageButton
+            android:id="@+id/shareBtn"
+            style="@style/SettingsActivityButtons" />
 
         <TextView
             android:id="@+id/share_tv"
             style="@style/SettingsActivityButtonsText"
             android:text="@string/share" />
 
-        <ImageButton
-            android:id="@+id/shareBtn"
+        <ImageView
             style="@style/SettingsActivityImageButtons"
+            android:layout_marginEnd="@dimen/margin_16"
             android:background="@drawable/ic_share"
             android:contentDescription="@string/share" />
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/support_ll"
-        style="@style/SettingsActivityLL"
-        android:paddingEnd="@dimen/padding_14">
+        style="@style/SettingsActivityFr">
+
+        <ImageButton
+            android:id="@+id/supportBtn"
+            style="@style/SettingsActivityButtons" />
 
         <TextView
             android:id="@+id/support_tv"
             style="@style/SettingsActivityButtonsText"
             android:text="@string/text_support" />
 
-        <ImageButton
-            android:id="@+id/supportBtn"
+        <ImageView
             style="@style/SettingsActivityImageButtons"
+            android:layout_marginEnd="@dimen/margin_14"
             android:background="@drawable/ic_support"
             android:contentDescription="@string/share" />
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
-        style="@style/SettingsActivityLL"
-        android:paddingEnd="20dp">
+    <FrameLayout style="@style/SettingsActivityFr">
+
+        <ImageButton
+            android:id="@+id/termsOfUseBtn"
+            style="@style/SettingsActivityButtons" />
 
         <TextView
             android:id="@+id/terms_of_use_tv"
@@ -91,10 +102,10 @@
             android:text="@string/terms_of_use"
             android:textSize="@dimen/text_16" />
 
-        <ImageButton
-            android:id="@+id/termsOfUseBtn"
+        <ImageView
             style="@style/SettingsActivityImageButtons"
+            android:layout_marginEnd="@dimen/margin_20"
             android:background="@drawable/ic_arrow"
             android:contentDescription="@string/share" />
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

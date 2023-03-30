@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="MainButtonsStyle" parent="Widget.MaterialComponents.Button">
+    <style name="MainButtonsStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -16,15 +16,28 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
-    <style name="SettingsActivityLL">
+    <style name="SettingsActivityFr">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">61dp</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingBottom">@dimen/settings_item_padding</item>
+    </style>
+
+    <style name="SettingsActivityButtons">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="CustomToggleButton">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:background">@drawable/custom_toggle_button</item>
+        <item name="android:textOff">""</item>
+        <item name="android:textOn">""</item>
     </style>
 
     <style name="SettingsActivityButtonsText">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
@@ -35,6 +48,7 @@
     <style name="SettingsActivityImageButtons">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end</item>
     </style>
 
     <style name="HeaderTextStyle">
