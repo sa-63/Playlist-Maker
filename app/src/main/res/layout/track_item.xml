@@ -29,7 +29,7 @@
         tools:text="Sample text" />
 
     <LinearLayout
-        android:layout_width="@dimen/max_text_size_in_track"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/track_name_tv"
         android:layout_toEndOf="@+id/track_cover_iv"
@@ -38,7 +38,7 @@
         <TextView
             android:id="@+id/artist_name_tv"
             style="@style/TrackItemTextStyle"
-            tools:text="Sample textfffffffffffffffffffffffffffffffffffffffffff" />
+            tools:text="Sample text" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
         <TextView
             android:id="@+id/track_duration_tv"
             style="@style/TrackItemTextStyle"
-            tools:text="Sample textfffffffffffffffffffffffffffffffffffffffffff" />
+            tools:text="Sample text" />
     </LinearLayout>
 
     <ImageView
