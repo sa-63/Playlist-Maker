@@ -105,3 +105,4 @@ class SearchActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 }
+
