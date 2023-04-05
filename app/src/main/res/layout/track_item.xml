@@ -19,17 +19,17 @@
     <TextView
         android:id="@+id/track_name_tv"
         style="@style/TrackItemTextStyle"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="@dimen/margin_14"
         android:layout_marginBottom="1dp"
         android:layout_toEndOf="@+id/track_cover_iv"
-        android:maxWidth="250dp"
+        android:maxWidth="@dimen/max_text_length_in_search"
         android:textColor="?attr/colorOnPrimary"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Sample text" />
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="@dimen/max_text_length_in_search"
         android:layout_height="wrap_content"
         android:layout_below="@+id/track_name_tv"
         android:layout_toEndOf="@+id/track_cover_iv"
