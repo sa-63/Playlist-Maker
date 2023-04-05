@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -15,6 +17,10 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        val toggleBtn = findViewById<ToggleButton>(R.id.toggle_Btn_settings)
+        val darkThemeBtn = findViewById<ImageButton>(R.id.dark_theme_btn).setOnClickListener {
+            toggleBtn.isChecked = !toggleBtn.isChecked
+        }
 
         val backBtn = findViewById<ImageButton>(R.id.back_imageBtn).setOnClickListener {
             onBackPressed()
@@ -24,7 +30,7 @@ class SettingsActivity : AppCompatActivity() {
             val sendIntent = Intent().apply {
                 action = Intent.ACTION_SEND
                 type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/android-developer/")
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.android_course_link))
             }
             checkIntent(sendIntent)
         }
@@ -45,11 +51,10 @@ class SettingsActivity : AppCompatActivity() {
             checkIntent(sendIntent)
         }
 
-
         val termsOfUseBtn = findViewById<ImageButton>(R.id.termsOfUseBtn).setOnClickListener {
             val sendIntent = Intent().apply {
                 action = Intent.ACTION_VIEW
-                data = Uri.parse("https://yandex.ru/legal/practicum_offer/")
+                data = Uri.parse(getString(R.string.terms_of_use_link))
             }
             checkIntent(sendIntent)
         }
@@ -59,6 +64,7 @@ class SettingsActivity : AppCompatActivity() {
         try {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show()
             Log.w("IntentSettings", "IntentNotStarted")
         }
     }
