@@ -6,3 +6,4 @@ data class TrackDto (
     val trackTime: String,
     val artworkUrl100: String
 )
+

@@ -82,5 +82,4 @@
         <item name="android:textColor">?attr/colorOnSecondary</item>
         <item name="android:maxWidth">125dp</item>
     </style>
-
 </resources>

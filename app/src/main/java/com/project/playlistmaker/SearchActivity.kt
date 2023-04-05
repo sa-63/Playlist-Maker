@@ -106,3 +106,4 @@ class SearchActivity : AppCompatActivity() {
     }
 }
 
+
