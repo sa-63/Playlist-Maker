@@ -11,7 +11,7 @@
     <dimen name="padding_16">16dp</dimen>
     <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_11">11dp</dimen>
-    <dimen name="margin_16">16dp</dimen>250dp
+    <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_14">14dp</dimen>
     <dimen name="margin_20">20dp</dimen>
     <dimen name="max_text_length_in_search">250dp</dimen>

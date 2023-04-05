@@ -15,30 +15,6 @@ class MainActivity : AppCompatActivity() {
         val mediaLibraryBtn = findViewById<MaterialButton>(R.id.media_library_btn_main)
         val settingsBtn = findViewById<MaterialButton>(R.id.settings_btn_main)
 
-        //Способ 1. Реализация анонимного класса
-//        val searchBtnListener: View.OnClickListener = object : View.OnClickListener {
-//            override fun onClick(v: View?) {
-//                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
-//            }
-//        }
-//        searchBtn.setOnClickListener(searchBtnListener)
-//
-//        val mediaLibraryBtnListener: View.OnClickListener = object : View.OnClickListener {
-//            override fun onClick(v: View?) {
-//                startActivity(Intent(this@MainActivity, MediaLibraryActivity::class.java))
-//            }
-//        }
-//        mediaLibraryBtn.setOnClickListener(mediaLibraryBtnListener)
-//
-//        val settingsBtnListener: View.OnClickListener = object : View.OnClickListener {
-//            override fun onClick(v: View?) {
-//                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-//            }
-//        }
-//        settingsBtn.setOnClickListener(settingsBtnListener)
-
-
-        //Способ 2. Лямбда-выражение
         searchBtn.setOnClickListener {
             startActivity(Intent(this@MainActivity, SearchActivity::class.java))
         }
