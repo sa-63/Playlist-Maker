@@ -38,7 +38,7 @@
         <TextView
             android:id="@+id/artist_name_tv"
             style="@style/TrackItemTextStyle"
-            tools:text="Sample textfffffffffffffffffffffffffffffffffffffffffff" />
+            tools:text="Sample text" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
         <TextView
             android:id="@+id/track_duration_tv"
             style="@style/TrackItemTextStyle"
-            tools:text="Sample textfffffffffffffffffffffffffffffffffffffffffff" />
+            tools:text="Sample text" />
     </LinearLayout>
 
     <ImageView
