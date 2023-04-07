@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
         val mediaLibraryBtn = findViewById<Button>(R.id.media_library_btn_main)
         val settingsBtn = findViewById<Button>(R.id.settings_btn_main)
 
-        //Способ 2. Лямбда-выражение
         searchBtn.setOnClickListener {
             startActivity(Intent(this@MainActivity, SearchActivity::class.java))
         }
