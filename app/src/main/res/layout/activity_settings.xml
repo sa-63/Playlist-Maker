@@ -12,12 +12,12 @@
         android:id="@+id/settings_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="@dimen/margin_4"
         android:gravity="end"
-        android:paddingBottom="44dp">
+        android:paddingBottom="@dimen/padding_44">
 
         <ImageButton
-            android:id="@+id/back_imageBtn"
+            android:id="@+id/back_imageBtn_in_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -31,8 +31,8 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/theme_ll"
-        style="@style/SettingsActivityFr">
+        android:id="@+id/theme_fl"
+        style="@style/SettingsActivityFl">
 
         <ImageButton
             android:id="@+id/dark_theme_btn"
@@ -51,8 +51,8 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/share_ll"
-        style="@style/SettingsActivityFr">
+        android:id="@+id/share_fl"
+        style="@style/SettingsActivityFl">
 
         <ImageButton
             android:id="@+id/shareBtn"
@@ -71,8 +71,8 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/support_ll"
-        style="@style/SettingsActivityFr">
+        android:id="@+id/support_fl"
+        style="@style/SettingsActivityFl">
 
         <ImageButton
             android:id="@+id/supportBtn"
@@ -87,10 +87,12 @@
             style="@style/SettingsActivityImageButtons"
             android:layout_marginEnd="@dimen/margin_14"
             android:background="@drawable/ic_support"
-            android:contentDescription="@string/share" />
+            android:contentDescription="@string/text_support" />
     </FrameLayout>
 
-    <FrameLayout style="@style/SettingsActivityFr">
+    <FrameLayout
+        android:id="@+id/terms_of_use_fl"
+        style="@style/SettingsActivityFl">
 
         <ImageButton
             android:id="@+id/termsOfUseBtn"
@@ -106,6 +108,6 @@
             style="@style/SettingsActivityImageButtons"
             android:layout_marginEnd="@dimen/margin_20"
             android:background="@drawable/ic_arrow"
-            android:contentDescription="@string/share" />
+            android:contentDescription="@string/terms_of_use" />
     </FrameLayout>
 </LinearLayout>

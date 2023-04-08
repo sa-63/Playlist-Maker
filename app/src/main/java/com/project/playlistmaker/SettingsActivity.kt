@@ -22,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
             toggleBtn.isChecked = !toggleBtn.isChecked
         }
 
-        val backBtn = findViewById<ImageButton>(R.id.back_imageBtn).setOnClickListener {
+        val backBtn = findViewById<ImageButton>(R.id.back_imageBtn_in_settings).setOnClickListener {
             onBackPressed()
         }
 

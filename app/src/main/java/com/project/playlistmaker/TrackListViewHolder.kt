@@ -22,7 +22,7 @@ class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) 
         Glide.with(itemView)
             .load(trackDto.artworkUrl100)
             .fitCenter()
-            .transform(RoundedCorners(2))
+            .transform(RoundedCorners(10))
             .placeholder(R.drawable.placeholder)
             .into(cover)
     }
