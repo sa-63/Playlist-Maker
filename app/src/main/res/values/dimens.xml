@@ -10,6 +10,7 @@
     <dimen name="size_15">15dp</dimen>
     <dimen name="size_36">36dp</dimen>
     <dimen name="size_61">61dp</dimen>
+    <dimen name="cover_corner_size">2dp</dimen>
 
     <dimen name="padding_10">10dp</dimen>
     <dimen name="padding_11">11dp</dimen>
