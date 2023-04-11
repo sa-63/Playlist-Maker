@@ -13,6 +13,7 @@ class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) 
     private val artistName: TextView = trackItem.findViewById(R.id.artist_name_tv)
     private val duration: TextView = trackItem.findViewById(R.id.track_duration_tv)
     private val cover: ImageView = trackItem.findViewById(R.id.track_cover_iv)
+    private val cornerSize: Int = itemView.resources.getDimensionPixelSize(R.dimen.cover_corner_size)
 
     fun bind(trackDto: TrackDto) {
         trackName.text = trackDto.trackName
@@ -22,8 +23,9 @@ class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) 
         Glide.with(itemView)
             .load(trackDto.artworkUrl100)
             .fitCenter()
-            .transform(RoundedCorners(2))
+            .transform(RoundedCorners(cornerSize))
             .placeholder(R.drawable.placeholder)
             .into(cover)
     }
 }
+
