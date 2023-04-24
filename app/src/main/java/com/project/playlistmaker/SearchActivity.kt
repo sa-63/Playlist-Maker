@@ -4,12 +4,16 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.project.playlistmaker.retrofit.ItunesSearchApi
 import com.project.playlistmaker.retrofit.SongsResponse
@@ -34,6 +38,7 @@ class SearchActivity : AppCompatActivity() {
     private var interceptor = HttpLoggingInterceptor().apply {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
+
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(interceptor)
         .build()
@@ -44,9 +49,7 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-
     private val itunesSearchApi = retrofit.create(ItunesSearchApi::class.java)
-
     private val trackDtoListArray = ArrayList<TrackDto>()
 
     //Views
@@ -57,7 +60,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var errorImage: ImageView
     private lateinit var errorTv: TextView
     private lateinit var updateBtn: Button
-
     private lateinit var trackListRv: RecyclerView
     private lateinit var tracksAdapter: TrackListAdapter
 
@@ -66,22 +68,24 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
         saveInputText = savedInstanceState?.getString(EDIT_TEXT_CONTENT)
 
-//        trackListRv = findViewById(R.id.track_list_rv)
-
+        //Binding
         searchEditText = findViewById(R.id.edit_text_in_search)
         clearButton = findViewById(R.id.clear_btn)
         backBtn = findViewById(R.id.back_imageBtn_in_search)
         errorLL = findViewById(R.id.error_ll)
-        errorImage = findViewById(R.id.error_image)
+        errorImage = findViewById(R.id.error_iv)
         errorTv = findViewById(R.id.error_tv)
         updateBtn = findViewById(R.id.update_btn)
         errorLL.visibility = View.GONE
 
-//        tracksAdapter = TrackListAdapter(trackDtoListArray)
-//        trackListRv.adapter = tracksAdapter
+        trackListRv = findViewById(R.id.track_list_rv)
+        tracksAdapter = TrackListAdapter(trackDtoListArray)
+        trackListRv.adapter = tracksAdapter
 
+        //Listeners
         clearButton.setOnClickListener {
             searchEditText.setText("")
+            trackListRv.visibility = View.GONE
             clearButton.visibility = clearButtonVisibility("")
             searchEditText.hideKeyboard()
         }
@@ -90,6 +94,11 @@ class SearchActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        updateBtn.setOnClickListener {
+            search()
+        }
+
+        //TextWatcher
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -112,6 +121,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    //EditText related
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -135,6 +145,7 @@ class SearchActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 
+    //Search related
     private fun search() {
         itunesSearchApi.search(searchEditText.text.toString())
             .enqueue(object : Callback<SongsResponse> {
@@ -147,62 +158,73 @@ class SearchActivity : AppCompatActivity() {
                             if (response.body()?.results?.isNotEmpty() == true) {
                                 trackDtoListArray.clear()
                                 trackDtoListArray.addAll(response.body()?.results!!)
-//                                tracksAdapter.notifyDataSetChanged()
-                                showMessage("", "", 0)
+                                tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
+                                showMessage("", false, 0, "")
                             } else {
                                 showMessage(
-                                    getString(R.string.not_found), "",
-                                    R.drawable.nothing_found_image
+                                    getString(R.string.not_found),
+                                    false,
+                                    R.drawable.nothing_found_image,
+                                    response.code().toString()
                                 )
-                                updateBtn.visibility = View.GONE
                             }
                         }
                         else -> {
                             showMessage(
                                 getString(R.string.not_found),
-                                response.code().toString(),
-                                R.drawable.nothing_found_image
+                                false,
+                                R.drawable.no_connection_image,
+                                response.code().toString()
                             )
-                            updateBtn.visibility = View.GONE
                         }
                     }
-
                 }
 
                 override fun onFailure(call: Call<SongsResponse>, t: Throwable) {
                     showMessage(
                         getString(R.string.connection_error),
-                        t.message.toString(),
-                        R.drawable.no_connection_image
+                        true,
+                        R.drawable.no_connection_image,
+                        t.message.toString()
                     )
-                    updateBtn.visibility = View.VISIBLE
                 }
             })
     }
 
-    private fun showMessage(text: String, additionalMessage: String, imageViewRes: Int) {
-        if (text.isNotEmpty()) {
-            showPlaceholderError(text, true, imageViewRes)
+    private fun showMessage(
+        errorText: String,
+        needBtn: Boolean,
+        imageSrc: Int,
+        LogMessage: String
+    ) {
+        if (errorText.isNotEmpty()) {
             trackDtoListArray.clear()
-//            tracksAdapter.notifyDataSetChanged()
-            if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                    .show()
+            tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
+
+            errorTv.text = errorText
+            errorImage.setImageResource(imageSrc)
+            hideRecyclerView(true)
+            updateBtn.visibility = View.GONE
+
+            if (needBtn) {
+                updateBtn.visibility = View.VISIBLE
+            }
+
+            if (LogMessage.isNotEmpty()) {
+                Log.e("ServerError", LogMessage)
             }
         } else {
-            showPlaceholderError(text, false, imageViewRes)
+            hideRecyclerView(false)
         }
     }
 
-    private fun showPlaceholderError(errorText: String, show: Boolean, imageViewRes: Int) {
-        if (show) {
-            errorTv.text = errorText
-            errorImage.setImageResource(imageViewRes)
-//            trackListRv.isVisible = false
-            errorLL.isVisible = true
+    private fun hideRecyclerView(hide: Boolean) {
+        if (hide) {
+            trackListRv.visibility = View.GONE
+            errorLL.visibility = View.VISIBLE
         } else {
-//            trackListRv.isVisible = true
-            errorLL.isVisible = false
+            trackListRv.visibility = View.VISIBLE
+            errorLL.visibility = View.GONE
         }
     }
 }
