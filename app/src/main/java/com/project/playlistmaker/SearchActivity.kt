@@ -159,44 +159,42 @@ class SearchActivity : AppCompatActivity() {
                                 trackDtoListArray.clear()
                                 trackDtoListArray.addAll(response.body()?.results!!)
                                 tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
-                                showMessage("", false, 0, "")
+                                hideRecyclerView(false)
                             } else {
-                                showMessage(
-                                    getString(R.string.not_found),
-                                    false,
-                                    R.drawable.nothing_found_image,
-                                    response.code().toString()
-                                )
+                                showMessage(NetworkStatus.NOTING_FOUND_ERROR)
                             }
                         }
                         else -> {
-                            showMessage(
-                                getString(R.string.not_found),
-                                false,
-                                R.drawable.no_connection_image,
-                                response.code().toString()
-                            )
+                            showMessage(NetworkStatus.NOTING_FOUND_ERROR)
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<SongsResponse>, t: Throwable) {
-                    showMessage(
-                        getString(R.string.connection_error),
-                        true,
-                        R.drawable.no_connection_image,
-                        t.message.toString()
-                    )
+                        showMessage(NetworkStatus.CONNECTION_ERROR)
+                        Log.e("ServerError", t.message.toString())
                 }
             })
     }
 
     private fun showMessage(
-        errorText: String,
-        needBtn: Boolean,
-        imageSrc: Int,
-        LogMessage: String
+        errorType: NetworkStatus
     ) {
+       val errorText: String
+       var needBtn = false
+       var imageSrc: Int = R.drawable.placeholder
+
+        when(errorType) {
+            NetworkStatus.CONNECTION_ERROR -> {
+                errorText = getString(R.string.connection_error)
+                needBtn = true
+                imageSrc = R.drawable.no_connection_image
+            }
+            NetworkStatus.NOTING_FOUND_ERROR -> {
+                errorText = getString(R.string.not_found)
+                imageSrc =  R.drawable.nothing_found_image
+            }
+        }
         if (errorText.isNotEmpty()) {
             trackDtoListArray.clear()
             tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
@@ -209,13 +207,13 @@ class SearchActivity : AppCompatActivity() {
             if (needBtn) {
                 updateBtn.visibility = View.VISIBLE
             }
-
-            if (LogMessage.isNotEmpty()) {
-                Log.e("ServerError", LogMessage)
-            }
         } else {
             hideRecyclerView(false)
         }
+    }
+
+    enum class NetworkStatus {
+        CONNECTION_ERROR, NOTING_FOUND_ERROR
     }
 
     private fun hideRecyclerView(hide: Boolean) {
