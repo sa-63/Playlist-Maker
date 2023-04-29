@@ -4,71 +4,88 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.project.playlistmaker.retrofit.ItunesSearchApi
+import com.project.playlistmaker.retrofit.SongsResponse
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
     var saveInputText: String? = null
-    private val trackDtoListArrays: ArrayList<TrackDto> = arrayListOf(
-        TrackDto(
-            "Smells Like Teen Spirit",
-            "Nirvana",
-            "5:01",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-        ),
-        TrackDto(
-            "Billie Jean",
-            "Michael Jackson",
-            "4:35",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-        ),
-        TrackDto(
-            "Stayin' Alive",
-            "Bee Gees",
-            "4:10",
-            "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-        ),
-        TrackDto(
-            "Whole Lotta Love",
-            "Led Zeppelin",
-            "5:33",
-            "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-        ),
-        TrackDto(
-            "Sweet Child O'Mine",
-            "Guns N' Roses",
-            "5:03",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-        ),
-    )
 
     companion object {
         const val EDIT_TEXT_CONTENT = "PRODUCT_AMOUNT"
     }
 
+    //Retrofit related
+    private val itunesBaseUrl = "http://itunes.apple.com"
+
+    private var interceptor = HttpLoggingInterceptor().apply {
+        this.level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(interceptor)
+        .build()
+
+    private val retrofit = Retrofit.Builder()
+        .client(okHttpClient)
+        .baseUrl(itunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val itunesSearchApi = retrofit.create(ItunesSearchApi::class.java)
+    private val trackDtoListArray = ArrayList<TrackDto>()
+
+    //Views
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
     private lateinit var backBtn: ImageView
-    private val tracksAdapter = TrackListAdapter(trackDtoListArrays)
+    private lateinit var errorLL: LinearLayout
+    private lateinit var errorImage: ImageView
+    private lateinit var errorTv: TextView
+    private lateinit var updateBtn: Button
+    private lateinit var trackListRv: RecyclerView
+    private lateinit var tracksAdapter: TrackListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         saveInputText = savedInstanceState?.getString(EDIT_TEXT_CONTENT)
 
+        //Binding
         searchEditText = findViewById(R.id.edit_text_in_search)
         clearButton = findViewById(R.id.clear_btn)
         backBtn = findViewById(R.id.back_imageBtn_in_search)
+        errorLL = findViewById(R.id.error_ll)
+        errorImage = findViewById(R.id.error_iv)
+        errorTv = findViewById(R.id.error_tv)
+        updateBtn = findViewById(R.id.update_btn)
+        errorLL.visibility = View.GONE
 
-        val trackListRv: RecyclerView = findViewById(R.id.track_list_rv)
+        trackListRv = findViewById(R.id.track_list_rv)
+        tracksAdapter = TrackListAdapter(trackDtoListArray)
         trackListRv.adapter = tracksAdapter
 
+        //Listeners
         clearButton.setOnClickListener {
             searchEditText.setText("")
+            trackListRv.visibility = View.GONE
             clearButton.visibility = clearButtonVisibility("")
             searchEditText.hideKeyboard()
         }
@@ -77,6 +94,11 @@ class SearchActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        updateBtn.setOnClickListener {
+            search()
+        }
+
+        //TextWatcher
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -90,8 +112,16 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         searchEditText.addTextChangedListener(simpleTextWatcher)
+
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search()
+            }
+            false
+        }
     }
 
+    //EditText related
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -113,5 +143,86 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(EDIT_TEXT_CONTENT, saveInputText)
         super.onSaveInstanceState(outState)
+    }
+
+    //Search related
+    private fun search() {
+        itunesSearchApi.search(searchEditText.text.toString())
+            .enqueue(object : Callback<SongsResponse> {
+                override fun onResponse(
+                    call: Call<SongsResponse>,
+                    response: Response<SongsResponse>
+                ) {
+                    when (response.code()) {
+                        200 -> {
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                trackDtoListArray.clear()
+                                trackDtoListArray.addAll(response.body()?.results!!)
+                                tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
+                                hideRecyclerView(false)
+                            } else {
+                                showMessage(NetworkStatus.NOTING_FOUND_ERROR)
+                            }
+                        }
+                        else -> {
+                            showMessage(NetworkStatus.NOTING_FOUND_ERROR)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<SongsResponse>, t: Throwable) {
+                        showMessage(NetworkStatus.CONNECTION_ERROR)
+                        Log.e("ServerError", t.message.toString())
+                }
+            })
+    }
+
+    private fun showMessage(
+        errorType: NetworkStatus
+    ) {
+       val errorText: String
+       var needBtn = false
+       var imageSrc: Int = R.drawable.placeholder
+
+        when(errorType) {
+            NetworkStatus.CONNECTION_ERROR -> {
+                errorText = getString(R.string.connection_error)
+                needBtn = true
+                imageSrc = R.drawable.no_connection_image
+            }
+            NetworkStatus.NOTING_FOUND_ERROR -> {
+                errorText = getString(R.string.not_found)
+                imageSrc =  R.drawable.nothing_found_image
+            }
+        }
+        if (errorText.isNotEmpty()) {
+            trackDtoListArray.clear()
+            tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
+
+            errorTv.text = errorText
+            errorImage.setImageResource(imageSrc)
+            hideRecyclerView(true)
+            updateBtn.visibility = View.GONE
+
+            if (needBtn) {
+                updateBtn.visibility = View.VISIBLE
+            }
+        } else {
+            hideRecyclerView(false)
+        }
+    }
+
+    enum class NetworkStatus {
+        CONNECTION_ERROR, NOTING_FOUND_ERROR
+    }
+
+    private fun hideRecyclerView(hide: Boolean) {
+        if (hide) {
+            trackListRv.visibility = View.GONE
+            errorLL.visibility = View.VISIBLE
+        } else {
+            trackListRv.visibility = View.VISIBLE
+            errorLL.visibility = View.GONE
+        }
     }
 }

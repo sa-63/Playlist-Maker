@@ -13,4 +13,8 @@
     <string name="thanks_to_developers">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="android_course_link">https://practicum.yandex.ru/android-developer/</string>
     <string name="error">Ошибка¯|_(ツ)_|¯</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="not_found">Ничего не нашлось</string>
+    <string name="connection_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update">Обновить</string>
 </resources>

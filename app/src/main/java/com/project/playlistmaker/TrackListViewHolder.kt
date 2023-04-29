@@ -1,11 +1,13 @@
 package com.project.playlistmaker
 
+import android.icu.text.SimpleDateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.util.*
 
 class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) {
 
@@ -18,7 +20,8 @@ class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) 
     fun bind(trackDto: TrackDto) {
         trackName.text = trackDto.trackName
         artistName.text = trackDto.artistName
-        duration.text = trackDto.trackTime
+        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault())
+            .format(trackDto.trackTimeMillis)
 
         Glide.with(itemView)
             .load(trackDto.artworkUrl100)
