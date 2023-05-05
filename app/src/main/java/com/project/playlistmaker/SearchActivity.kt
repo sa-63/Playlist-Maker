@@ -25,7 +25,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickListener {
     var saveInputText: String? = null
 
     companion object {
@@ -57,11 +57,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clearButton: ImageView
     private lateinit var backBtn: ImageView
     private lateinit var errorLL: LinearLayout
+    private lateinit var searchHistoryLL: LinearLayout
     private lateinit var errorImage: ImageView
     private lateinit var errorTv: TextView
     private lateinit var updateBtn: Button
     private lateinit var trackListRv: RecyclerView
+    private lateinit var searchHistoryRv: RecyclerView
     private lateinit var tracksAdapter: TrackListAdapter
+
+    private var historyList = ArrayList<TrackDto>()
+    private lateinit var historyAdapter: TrackListAdapter
+    private val searchHistory = SearchHistory()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +85,13 @@ class SearchActivity : AppCompatActivity() {
         errorLL.visibility = View.GONE
 
         trackListRv = findViewById(R.id.track_list_rv)
-        tracksAdapter = TrackListAdapter(trackDtoListArray)
+        tracksAdapter = TrackListAdapter(trackDtoListArray,this)
         trackListRv.adapter = tracksAdapter
+
+        searchHistoryLL = findViewById(R.id.search_history_ll)
+        searchHistoryRv = findViewById(R.id.search_history_rv)
+        historyAdapter = TrackListAdapter(historyList,this)
+        searchHistoryRv.adapter = historyAdapter
 
         //Listeners
         clearButton.setOnClickListener {
@@ -88,6 +99,13 @@ class SearchActivity : AppCompatActivity() {
             trackListRv.visibility = View.GONE
             clearButton.visibility = clearButtonVisibility("")
             searchEditText.hideKeyboard()
+
+            trackListRv.visibility = View.GONE
+            searchHistoryLL.visibility = View.VISIBLE
+            historyList.clear()
+            historyList.addAll(searchHistory.getTrackHistory())
+            historyList.reverse()
+            historyAdapter.notifyItemRangeChanged(0, 10)
         }
 
         backBtn.setOnClickListener {
@@ -224,5 +242,9 @@ class SearchActivity : AppCompatActivity() {
             trackListRv.visibility = View.VISIBLE
             errorLL.visibility = View.GONE
         }
+    }
+
+    override fun setTrackClickListener(trackDto: TrackDto) {
+        searchHistory.addTrackToHistory(trackDto)
     }
 }

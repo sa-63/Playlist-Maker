@@ -8,8 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
-import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("IntentReset")
@@ -17,9 +17,13 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val toggleBtn = findViewById<ToggleButton>(R.id.toggle_Btn_settings)
+        val themeSwitch = findViewById<SwitchMaterial>(R.id.theme_switch)
         val darkThemeBtn = findViewById<ImageButton>(R.id.dark_theme_btn).setOnClickListener {
-            toggleBtn.isChecked = !toggleBtn.isChecked
+            themeSwitch.isChecked = !themeSwitch.isChecked
+        }
+
+        themeSwitch.setOnCheckedChangeListener { switch, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
         val backBtn = findViewById<ImageButton>(R.id.back_imageBtn_in_settings).setOnClickListener {
