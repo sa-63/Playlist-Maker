@@ -67,9 +67,10 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
     private lateinit var updateBtn: Button
     private lateinit var searchHistoryRv: RecyclerView
     private lateinit var trackListRv: RecyclerView
+
     //Other
     private val trackDtoListArray = ArrayList<TrackDto>()
-    private var historyList = ArrayList<TrackDto>()
+    private val historyList = ArrayList<TrackDto>()
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var tracksAdapter: TrackListAdapter
     private lateinit var historyAdapter: TrackListAdapter
@@ -101,7 +102,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
             clearButton.visibility = clearButtonVisibility("")
             searchEditText.hideKeyboard()
             trackDtoListArray.clear()
-            tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
+            tracksAdapter.notifyDataSetChanged()
             showViews(ViewToShow.SHOW_TRACKS_RV)
             checkAndShowHistory()
         }
@@ -124,7 +125,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
 
         clearHistoryBtn.setOnClickListener {
             historyList.clear()
-            historyAdapter.notifyItemRangeChanged(0, 10)
+            historyAdapter.notifyItemRangeChanged(0, historyList.size)
             searchHistoryLL.visibility = View.GONE
         }
 
@@ -146,6 +147,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search()
+                showViews(ViewToShow.SHOW_TRACKS_RV)
             }
             false
         }
@@ -195,7 +197,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
                             if (response.body()?.results?.isNotEmpty() == true) {
                                 trackDtoListArray.clear()
                                 trackDtoListArray.addAll(response.body()?.results!!)
-                                tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
+                                tracksAdapter.notifyDataSetChanged()
                                 showViews(ViewToShow.SHOW_TRACKS_RV)
                             } else {
                                 showMessage(NetworkStatus.NOTING_FOUND_ERROR)
@@ -215,9 +217,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
             })
     }
 
-    private fun showMessage(
-        errorType: NetworkStatus
-    ) {
+    private fun showMessage(errorType: NetworkStatus) {
         val errorText: String
         var needBtn = false
         var imageSrc: Int = R.drawable.placeholder
@@ -236,7 +236,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         }
         if (errorText.isNotEmpty()) {
             trackDtoListArray.clear()
-            tracksAdapter.notifyItemRangeChanged(0, trackDtoListArray.size)
+            tracksAdapter.notifyDataSetChanged()
 
             errorTv.text = errorText
             errorImage.setImageResource(imageSrc)
@@ -269,13 +269,13 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
                 trackListRv.visibility = View.GONE
                 errorLL.visibility = View.GONE
                 searchHistoryLL.visibility = View.VISIBLE
-                historyAdapter.notifyItemRangeChanged(0, 10)
             }
         }
     }
 
     override fun setTrackClickListener(trackDto: TrackDto) {
         searchHistory.addTrackToHistory(trackDto)
+        historyAdapter.notifyDataSetChanged()
     }
 
     private fun fromJsonToTracksArray(stringToConvert: String): Array<TrackDto> {
@@ -306,7 +306,6 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         errorTv = findViewById(R.id.error_tv)
         updateBtn = findViewById(R.id.update_btn)
         errorLL.visibility = View.GONE
-
         //Tracks
         trackListRv = findViewById(R.id.track_list_rv)
         tracksAdapter = TrackListAdapter(trackDtoListArray, this)
