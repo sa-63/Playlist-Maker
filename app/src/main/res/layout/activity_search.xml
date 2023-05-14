@@ -46,6 +46,7 @@
             android:layout_centerInParent="true"
             android:background="@android:color/transparent"
             android:imeOptions="actionDone"
+            android:inputType="text"
             android:singleLine="true" />
 
         <ImageView
@@ -64,8 +65,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_24"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <LinearLayout
+        android:id="@+id/search_history_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_32"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_18"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:fontFamily="@font/ys_display_medium"
+            android:text="@string/searched_for"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_19" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_history_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="true"
+            app:stackFromEnd="true" />
+
+        <Button
+            android:id="@+id/clear_search_history_btn"
+            style="@style/searchActivityBtnStyle"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:text="@string/clear_history"
+            app:backgroundTint="?attr/colorOnPrimary"
+            app:cornerRadius="54dp" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/error_ll"
@@ -96,15 +133,8 @@
 
         <Button
             android:id="@+id/update_btn"
-            style="@style/UpdateBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_24"
-            android:fontFamily="@font/ys_display_medium"
+            style="@style/searchActivityBtnStyle"
             android:text="@string/update"
-            android:textAllCaps="false"
-            android:textSize="@dimen/text_14"
             app:backgroundTint="?attr/colorOnPrimary"
             app:cornerRadius="54dp" />
     </LinearLayout>

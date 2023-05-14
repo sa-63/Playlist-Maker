@@ -3,13 +3,15 @@ package com.project.playlistmaker
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
-import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("IntentReset")
@@ -17,9 +19,18 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val toggleBtn = findViewById<ToggleButton>(R.id.toggle_Btn_settings)
-        val darkThemeBtn = findViewById<ImageButton>(R.id.dark_theme_btn).setOnClickListener {
-            toggleBtn.isChecked = !toggleBtn.isChecked
+        val themeSwitch = findViewById<SwitchMaterial>(R.id.theme_switch)
+
+        when (AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_YES -> {
+                themeSwitch.isChecked = true
+            }
+            AppCompatDelegate.MODE_NIGHT_NO -> {
+                themeSwitch.isChecked = false
+            }
+        }
+        themeSwitch.setOnCheckedChangeListener { switch, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
         val backBtn = findViewById<ImageButton>(R.id.back_imageBtn_in_settings).setOnClickListener {
@@ -40,12 +51,10 @@ class SettingsActivity : AppCompatActivity() {
                 action = Intent.ACTION_SENDTO
                 data = Uri.parse("mailto:${getString(R.string.developers_email)}")
                 putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    getString(R.string.message_to_developers)
+                    Intent.EXTRA_SUBJECT, getString(R.string.message_to_developers)
                 )
                 putExtra(
-                    Intent.EXTRA_TEXT,
-                    getString(R.string.thanks_to_developers)
+                    Intent.EXTRA_TEXT, getString(R.string.thanks_to_developers)
                 )
             }
             checkIntent(sendIntent)

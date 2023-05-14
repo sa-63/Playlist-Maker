@@ -16,7 +16,13 @@
         <item name="editTextColor">@color/black</item>
     </style>
 
-    <style name="UpdateBtn">
+    <style name="searchActivityBtnStyle">
         <item name="android:textColor">@color/black</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_14</item>
     </style>
 </resources>
