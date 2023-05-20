@@ -16,11 +16,8 @@
 
         <ImageButton
             android:id="@+id/back_imageBtn_in_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_arrow_back"
-            android:backgroundTint="?attr/colorOnPrimary" />
+            style="@style/back_btn_style"
+            android:layout_gravity="center" />
 
         <TextView
             style="@style/HeaderTextStyle"
