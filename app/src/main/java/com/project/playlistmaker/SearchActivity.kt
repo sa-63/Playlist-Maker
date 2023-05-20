@@ -1,6 +1,7 @@
 package com.project.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -276,6 +277,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
     override fun setTrackClickListener(trackDto: TrackDto) {
         searchHistory.addTrackToHistory(trackDto)
         historyAdapter.notifyDataSetChanged()
+        startActivity(Intent(this@SearchActivity, ActivityPlayer::class.java))
     }
 
     private fun fromJsonToTracksArray(stringToConvert: String): Array<TrackDto> {
