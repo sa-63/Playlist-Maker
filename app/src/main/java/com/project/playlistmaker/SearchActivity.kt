@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.project.playlistmaker.ActivityPlayer.Companion.TRACK_DTO_DATA
 import com.project.playlistmaker.retrofit.ItunesSearchApi
 import com.project.playlistmaker.retrofit.SongsResponse
 import okhttp3.OkHttpClient
@@ -35,8 +36,14 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         const val EDIT_TEXT_CONTENT = "PRODUCT_AMOUNT"
         const val SHARED_PREF_SEARCH = "search_preferences"
         const val SEARCH_HISTORY_KEY = "key_for_search_history_prefs"
-        const val TRACK_DTO_DATA = "track_dto_data"
+
+//        fun startActivity(trackDto: TrackDto) {
+//            val intent = Intent(this, ActivityPlayer::class.java)
+//            intent.putExtra(TRACK_DTO_DATA, trackDto)
+//            startActivity(intent)
+//        }
     }
+
 
     //Retrofit related
     private val itunesBaseUrl = "http://itunes.apple.com"

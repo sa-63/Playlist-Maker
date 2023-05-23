@@ -13,6 +13,8 @@
     <dimen name="size_15">15dp</dimen>
     <dimen name="size_36">36dp</dimen>
     <dimen name="size_61">61dp</dimen>
+    <dimen name="guide_line_16">16dp</dimen>
+    <dimen name="guide_line_24">24dp</dimen>
     <dimen name="cover_corner_size">8dp</dimen>
 
     <dimen name="padding_10">10dp</dimen>

@@ -1,5 +1,6 @@
 package com.project.playlistmaker
 
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.widget.ImageButton
@@ -11,6 +12,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.util.Locale
 
 class ActivityPlayer : AppCompatActivity() {
+
+    companion object {
+        const val TRACK_DTO_DATA = "track_dto_data"
+        const val SEPARATE_DATE_STR_YEAR = 4
+    }
 
     private lateinit var backBtn: ImageButton
     private lateinit var addToPlaylistBtn: ImageButton
@@ -32,7 +38,7 @@ class ActivityPlayer : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
-        trackDto = intent.getSerializableExtra(SearchActivity.TRACK_DTO_DATA) as TrackDto
+        trackDto = intent.getSerializableExtra(TRACK_DTO_DATA) as TrackDto
         bindViews()
         fillContent()
 
@@ -53,7 +59,7 @@ class ActivityPlayer : AppCompatActivity() {
         durationTotalTv.text = SimpleDateFormat("mm:ss", Locale.getDefault())
             .format(trackDto.trackTimeMillis)
         albumTv.text = trackDto.collectionName
-        yearTv.text = trackDto.releaseDate.substring(0, 4)
+        yearTv.text = trackDto.releaseDate.substring(0, SEPARATE_DATE_STR_YEAR)
         genreTv.text = trackDto.primaryGenreName
         countryTv.text = trackDto.country
     }
