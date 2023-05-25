@@ -36,14 +36,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         const val EDIT_TEXT_CONTENT = "PRODUCT_AMOUNT"
         const val SHARED_PREF_SEARCH = "search_preferences"
         const val SEARCH_HISTORY_KEY = "key_for_search_history_prefs"
-
-//        fun startActivity(trackDto: TrackDto) {
-//            val intent = Intent(this, ActivityPlayer::class.java)
-//            intent.putExtra(TRACK_DTO_DATA, trackDto)
-//            startActivity(intent)
-//        }
     }
-
 
     //Retrofit related
     private val itunesBaseUrl = "http://itunes.apple.com"
