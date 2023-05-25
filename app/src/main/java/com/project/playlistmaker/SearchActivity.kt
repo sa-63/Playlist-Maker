@@ -1,6 +1,7 @@
 package com.project.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -17,6 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.project.playlistmaker.ActivityPlayer.Companion.TRACK_DTO_DATA
 import com.project.playlistmaker.retrofit.ItunesSearchApi
 import com.project.playlistmaker.retrofit.SongsResponse
 import okhttp3.OkHttpClient
@@ -276,6 +278,13 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
     override fun setTrackClickListener(trackDto: TrackDto) {
         searchHistory.addTrackToHistory(trackDto)
         historyAdapter.notifyDataSetChanged()
+        sendDataToPlayer(trackDto)
+    }
+
+    private fun sendDataToPlayer(trackDto: TrackDto) {
+        val intent = Intent(this, ActivityPlayer::class.java)
+        intent.putExtra(TRACK_DTO_DATA, trackDto)
+        startActivity(intent)
     }
 
     private fun fromJsonToTracksArray(stringToConvert: String): Array<TrackDto> {

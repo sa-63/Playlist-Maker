@@ -3,7 +3,6 @@ package com.project.playlistmaker
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +24,7 @@ class SettingsActivity : AppCompatActivity() {
             AppCompatDelegate.MODE_NIGHT_YES -> {
                 themeSwitch.isChecked = true
             }
+
             AppCompatDelegate.MODE_NIGHT_NO -> {
                 themeSwitch.isChecked = false
             }
