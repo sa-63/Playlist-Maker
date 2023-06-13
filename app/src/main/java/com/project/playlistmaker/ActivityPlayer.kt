@@ -48,7 +48,6 @@ class ActivityPlayer : AppCompatActivity() {
     //MediaPlayer
     private var mediaPlayer = MediaPlayer()
     private var playerState = STATE_DEFAULT
-    private var currentTime: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
