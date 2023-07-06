@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -29,13 +32,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickListener {
 
     companion object {
         const val EDIT_TEXT_CONTENT = "PRODUCT_AMOUNT"
         const val SHARED_PREF_SEARCH = "search_preferences"
         const val SEARCH_HISTORY_KEY = "key_for_search_history_prefs"
+        const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+        const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 
     //Retrofit related
@@ -57,6 +61,11 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
 
     private val itunesSearchApi = retrofit.create(ItunesSearchApi::class.java)
 
+    //Debounce
+    private val searchRunnable = Runnable { search() }
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
+
     //Views
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
@@ -69,6 +78,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
     private lateinit var updateBtn: Button
     private lateinit var searchHistoryRv: RecyclerView
     private lateinit var trackListRv: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     //Other
     private val trackDtoListArray = ArrayList<TrackDto>()
@@ -139,6 +149,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
                 saveInputText = searchEditText.text.toString()
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -188,6 +199,8 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
 
     //Search related
     private fun search() {
+        showViews(ViewToShow.SHOW_PROGRESS_BAR)
+
         itunesSearchApi.search(searchEditText.text.toString())
             .enqueue(object : Callback<SongsResponse> {
                 override fun onResponse(
@@ -258,27 +271,39 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
             ViewToShow.SHOW_TRACKS_RV -> {
                 errorLL.visibility = View.GONE
                 searchHistoryLL.visibility = View.GONE
+                progressBar.visibility = View.GONE
                 trackListRv.visibility = View.VISIBLE
             }
 
             ViewToShow.SHOW_ERROR_LL -> {
                 trackListRv.visibility = View.GONE
                 searchHistoryLL.visibility = View.GONE
+                progressBar.visibility = View.GONE
                 errorLL.visibility = View.VISIBLE
             }
 
             ViewToShow.SHOW_SEARCH_HISTORY_LL -> {
                 trackListRv.visibility = View.GONE
                 errorLL.visibility = View.GONE
+                progressBar.visibility = View.GONE
                 searchHistoryLL.visibility = View.VISIBLE
+            }
+
+            ViewToShow.SHOW_PROGRESS_BAR -> {
+                trackListRv.visibility = View.GONE
+                errorLL.visibility = View.GONE
+                searchHistoryLL.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
             }
         }
     }
 
     override fun setTrackClickListener(trackDto: TrackDto) {
-        searchHistory.addTrackToHistory(trackDto)
-        historyAdapter.notifyDataSetChanged()
-        sendDataToPlayer(trackDto)
+        if (clickDebounce()) {
+            searchHistory.addTrackToHistory(trackDto)
+            historyAdapter.notifyDataSetChanged()
+            sendDataToPlayer(trackDto)
+        }
     }
 
     private fun sendDataToPlayer(trackDto: TrackDto) {
@@ -302,8 +327,24 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
     }
 
     enum class ViewToShow {
-        SHOW_TRACKS_RV, SHOW_ERROR_LL, SHOW_SEARCH_HISTORY_LL
+        SHOW_TRACKS_RV, SHOW_ERROR_LL, SHOW_SEARCH_HISTORY_LL, SHOW_PROGRESS_BAR
     }
+
+    //Debounce
+    private fun searchDebounce() {
+        mainHandler.removeCallbacks(searchRunnable)
+        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
+    }
+
+    private fun clickDebounce(): Boolean {
+        val currentState = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY_MILLIS)
+        }
+        return currentState
+    }
+
 
     private fun bindViewsAndAdapters() {
         searchEditText = findViewById(R.id.edit_text_in_search)
@@ -324,5 +365,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         searchHistoryRv = findViewById(R.id.search_history_rv)
         historyAdapter = TrackListAdapter(historyList, this)
         searchHistoryRv.adapter = historyAdapter
+        //ProgressBar
+        progressBar = findViewById(R.id.search_progress_bar)
     }
 }

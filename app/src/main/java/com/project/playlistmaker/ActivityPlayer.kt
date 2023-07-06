@@ -1,21 +1,26 @@
 package com.project.playlistmaker
 
-import android.content.Intent
-import android.icu.text.SimpleDateFormat
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import java.util.Locale
 
 class ActivityPlayer : AppCompatActivity() {
 
     companion object {
         const val TRACK_DTO_DATA = "track_dto_data"
         const val SEPARATE_DATE_STR_YEAR = 4
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val UPDATE_DURATION_TIME_MILLIS = 1000L
     }
 
     private lateinit var backBtn: ImageButton
@@ -34,6 +39,13 @@ class ActivityPlayer : AppCompatActivity() {
 
     private lateinit var trackDto: TrackDto
     private var cornerSize: Int = 0
+    private var mainHandler: Handler = Handler(Looper.getMainLooper())
+    private val createDurationCountTask: Runnable = createDurationCountTask()
+    private val dataFormat = DataFormat()
+
+    //MediaPlayer
+    private var mediaPlayer = MediaPlayer()
+    private var playerState = STATE_DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +53,25 @@ class ActivityPlayer : AppCompatActivity() {
         trackDto = intent.getSerializableExtra(TRACK_DTO_DATA) as TrackDto
         bindViews()
         fillContent()
+        preparePlayer()
 
         backBtn.setOnClickListener {
             onBackPressed()
         }
+
+        playPauseBtn.setOnClickListener {
+            playbackControl()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
     }
 
     private fun fillContent() {
@@ -56,14 +83,75 @@ class ActivityPlayer : AppCompatActivity() {
             .into(albumCover)
         trackName.text = trackDto.trackName
         artistName.text = trackDto.artistName
-        durationTotalTv.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-            .format(trackDto.trackTimeMillis)
+        durationTotalTv.text = dataFormat.convertTimeToMnSs(trackDto.trackTimeMillis)
+
         albumTv.text = trackDto.collectionName
         yearTv.text = trackDto.releaseDate.substring(0, SEPARATE_DATE_STR_YEAR)
         genreTv.text = trackDto.primaryGenreName
         countryTv.text = trackDto.country
     }
 
+    //MediaPlayer
+    private fun preparePlayer() {
+        mediaPlayer.setDataSource(trackDto.previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playPauseBtn.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playPauseBtn.setImageResource(R.drawable.ic_play)
+            playerState = STATE_PREPARED
+        }
+    }
+
+    private fun startPlayer() {
+        mainHandler.post(
+            createDurationCountTask()
+        )
+        playPauseBtn.setImageResource(R.drawable.pause_btn)
+        playerState = STATE_PLAYING
+        mediaPlayer.start()
+    }
+
+    private fun pausePlayer() {
+        mainHandler.removeCallbacks(createDurationCountTask)
+        playPauseBtn.setImageResource(R.drawable.ic_play)
+        playerState = STATE_PAUSED
+        mediaPlayer.pause()
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    private fun createDurationCountTask(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                val remainingTime =
+                    dataFormat.convertMediaPlayerRemainingTime(
+                        mediaPlayer.duration,
+                        mediaPlayer.currentPosition
+                    )
+                if (remainingTime > 0) {
+                    currentDuration.text = dataFormat.roundTimeToMinAndSecond(remainingTime)
+                    mainHandler.postDelayed(this, UPDATE_DURATION_TIME_MILLIS)
+                } else {
+                    currentDuration.text = getString(R.string.no_time)
+                }
+            }
+        }
+    }
+
+    //Binding
     private fun bindViews() {
         backBtn = findViewById(R.id.back_btn_player)
         addToPlaylistBtn = findViewById(R.id.add_to_playlist_btn)

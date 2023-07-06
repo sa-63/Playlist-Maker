@@ -16,6 +16,7 @@
     <dimen name="guide_line_16">16dp</dimen>
     <dimen name="guide_line_24">24dp</dimen>
     <dimen name="cover_corner_size">8dp</dimen>
+    <dimen name="circular_progress_indicator_size">44dp</dimen>
 
     <dimen name="padding_10">10dp</dimen>
     <dimen name="padding_11">11dp</dimen>
