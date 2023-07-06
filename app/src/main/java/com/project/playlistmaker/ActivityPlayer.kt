@@ -1,6 +1,5 @@
 package com.project.playlistmaker
 
-import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -11,8 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import java.util.Locale
-
 
 class ActivityPlayer : AppCompatActivity() {
 
@@ -23,7 +20,7 @@ class ActivityPlayer : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val UPDATE_DURATION_TIME = 1000L
+        private const val UPDATE_DURATION_TIME_MILLIS = 1000L
     }
 
     private lateinit var backBtn: ImageButton
@@ -43,7 +40,8 @@ class ActivityPlayer : AppCompatActivity() {
     private lateinit var trackDto: TrackDto
     private var cornerSize: Int = 0
     private var mainHandler: Handler = Handler(Looper.getMainLooper())
-    val createDurationCountTask: Runnable = createDurationCountTask()
+    private val createDurationCountTask: Runnable = createDurationCountTask()
+    private val dataFormat = DataFormat()
 
     //MediaPlayer
     private var mediaPlayer = MediaPlayer()
@@ -85,8 +83,8 @@ class ActivityPlayer : AppCompatActivity() {
             .into(albumCover)
         trackName.text = trackDto.trackName
         artistName.text = trackDto.artistName
-        durationTotalTv.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-            .format(trackDto.trackTimeMillis)
+        durationTotalTv.text = dataFormat.convertTimeToMnSs(trackDto.trackTimeMillis)
+
         albumTv.text = trackDto.collectionName
         yearTv.text = trackDto.releaseDate.substring(0, SEPARATE_DATE_STR_YEAR)
         genreTv.text = trackDto.primaryGenreName
@@ -118,7 +116,6 @@ class ActivityPlayer : AppCompatActivity() {
 
     private fun pausePlayer() {
         mainHandler.removeCallbacks(createDurationCountTask)
-        mainHandler.removeCallbacksAndMessages(null)
         playPauseBtn.setImageResource(R.drawable.ic_play)
         playerState = STATE_PAUSED
         mediaPlayer.pause()
@@ -139,11 +136,14 @@ class ActivityPlayer : AppCompatActivity() {
     private fun createDurationCountTask(): Runnable {
         return object : Runnable {
             override fun run() {
-                val remainingTime = (mediaPlayer.duration - mediaPlayer.currentPosition) / 1000
+                val remainingTime =
+                    dataFormat.convertMediaPlayerRemainingTime(
+                        mediaPlayer.duration,
+                        mediaPlayer.currentPosition
+                    )
                 if (remainingTime > 0) {
-                    currentDuration.text =
-                        String.format("%d:%02d", remainingTime / 60, remainingTime % 60)
-                    mainHandler.postDelayed(this, UPDATE_DURATION_TIME)
+                    currentDuration.text = dataFormat.roundTimeToMinAndSecond(remainingTime)
+                    mainHandler.postDelayed(this, UPDATE_DURATION_TIME_MILLIS)
                 } else {
                     currentDuration.text = getString(R.string.no_time)
                 }

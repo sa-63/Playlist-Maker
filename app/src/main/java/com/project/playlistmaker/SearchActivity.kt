@@ -32,15 +32,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickListener {
 
     companion object {
         const val EDIT_TEXT_CONTENT = "PRODUCT_AMOUNT"
         const val SHARED_PREF_SEARCH = "search_preferences"
         const val SEARCH_HISTORY_KEY = "key_for_search_history_prefs"
-        const val SEARCH_DEBOUNCE_DELAY = 2000L
-        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+        const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 
     //Retrofit related
@@ -334,14 +333,14 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
     //Debounce
     private fun searchDebounce() {
         mainHandler.removeCallbacks(searchRunnable)
-        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
     }
 
     private fun clickDebounce(): Boolean {
         val currentState = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY_MILLIS)
         }
         return currentState
     }
