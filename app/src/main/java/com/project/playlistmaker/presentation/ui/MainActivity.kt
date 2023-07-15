@@ -1,9 +1,10 @@
-package com.project.playlistmaker
+package com.project.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.project.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
 

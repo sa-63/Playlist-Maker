@@ -1,8 +1,8 @@
-package com.project.playlistmaker
+package com.project.playlistmaker.domain.models
 
 import java.io.Serializable
 
-data class TrackDto (
+data class Track (
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,

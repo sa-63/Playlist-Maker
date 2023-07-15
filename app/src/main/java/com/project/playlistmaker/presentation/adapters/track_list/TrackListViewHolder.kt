@@ -1,13 +1,14 @@
-package com.project.playlistmaker
+package com.project.playlistmaker.presentation.adapters.track_list
 
 import android.icu.text.SimpleDateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.project.playlistmaker.R
+import com.project.playlistmaker.domain.models.Track
 import java.util.Locale
 
 class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) {
@@ -18,26 +19,26 @@ class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) 
     private val cover: ImageView = trackItem.findViewById(R.id.track_cover_iv)
     private val cornerSize: Int = itemView.resources.getDimensionPixelSize(R.dimen.cover_corner_size)
 
-    fun bind(trackDto: TrackDto, trackListClickListener: TrackListClickListener) {
-        trackName.text = trackDto.trackName
-        artistName.text = trackDto.artistName
+    fun bind(track: Track, trackListClickListener: TrackListClickListener) {
+        trackName.text = track.trackName
+        artistName.text = track.artistName
         duration.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-            .format(trackDto.trackTimeMillis)
+            .format(track.trackTimeMillis)
 
         Glide.with(itemView)
-            .load(trackDto.artworkUrl100)
+            .load(track.artworkUrl100)
             .fitCenter()
             .transform(RoundedCorners(cornerSize))
             .placeholder(R.drawable.placeholder)
             .into(cover)
 
         itemView.setOnClickListener {
-            trackListClickListener.setTrackClickListener(trackDto)
+            trackListClickListener.setTrackClickListener(track)
         }
     }
 
     interface TrackListClickListener {
-        fun setTrackClickListener(trackDto: TrackDto)
+        fun setTrackClickListener(track: Track)
     }
 }
 

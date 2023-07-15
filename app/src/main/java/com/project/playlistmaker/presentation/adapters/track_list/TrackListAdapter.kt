@@ -1,11 +1,13 @@
-package com.project.playlistmaker
+package com.project.playlistmaker.presentation.adapters.track_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.project.playlistmaker.R
+import com.project.playlistmaker.domain.models.Track
 
 class TrackListAdapter(
-    private val tracksList: ArrayList<TrackDto>,
+    private val tracksList: ArrayList<Track>,
     private val trackListClickListener: TrackListViewHolder.TrackListClickListener
 ) : RecyclerView.Adapter<TrackListViewHolder>() {
 
