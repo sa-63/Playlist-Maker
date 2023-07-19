@@ -1,12 +1,12 @@
-package com.project.playlistmaker.domain.use_cases
+package com.project.playlistmaker.presentation.ui.activity_player.play_back
 
 import android.widget.ImageButton
 import com.project.playlistmaker.R
-import com.project.playlistmaker.player.PlayerState
-import com.project.playlistmaker.player.player_interactor.PlayerInterector
-import com.project.playlistmaker.player.update_duration.UpdateDurationTask
+import com.project.playlistmaker.domain.player.PlayerState
+import com.project.playlistmaker.domain.player.player_interactor.PlayerInterector
+import com.project.playlistmaker.presentation.ui.activity_player.updateDurationView.UpdateDurationTask
 
-class PlayBackControlUseCase(
+class PlayBackControl(
     private val playerInterectorImpl: PlayerInterector,
     private val updateDurationTask: UpdateDurationTask,
     private val textViewToUpdate: ImageButton,

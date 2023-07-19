@@ -1,6 +1,6 @@
-package com.project.playlistmaker.player.player_interactor
+package com.project.playlistmaker.domain.player.player_interactor
 
-import com.project.playlistmaker.player.PlayerState
+import com.project.playlistmaker.domain.player.PlayerState
 
 interface PlayerInterector {
 

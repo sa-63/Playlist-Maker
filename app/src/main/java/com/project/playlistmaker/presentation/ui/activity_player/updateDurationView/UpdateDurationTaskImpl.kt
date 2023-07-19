@@ -1,4 +1,4 @@
-package com.project.playlistmaker.player.update_duration
+package com.project.playlistmaker.presentation.ui.activity_player.updateDurationView
 
 import android.content.Context
 import android.os.Handler
@@ -6,7 +6,7 @@ import android.os.Looper
 import android.widget.TextView
 import com.project.playlistmaker.R
 import com.project.playlistmaker.domain.use_cases.utilities.DataFormat
-import com.project.playlistmaker.player.player_interactor.PlayerInterector
+import com.project.playlistmaker.domain.player.player_interactor.PlayerInterector
 
 class UpdateDurationTaskImpl(
     private val playerInterector: PlayerInterector,

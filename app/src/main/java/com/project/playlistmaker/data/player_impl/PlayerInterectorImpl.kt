@@ -1,7 +1,8 @@
-package com.project.playlistmaker.player.player_interactor
+package com.project.playlistmaker.data.player_impl
 
 import android.media.MediaPlayer
-import com.project.playlistmaker.player.PlayerState
+import com.project.playlistmaker.domain.player.PlayerState
+import com.project.playlistmaker.domain.player.player_interactor.PlayerInterector
 
 class PlayerInterectorImpl : PlayerInterector {
 

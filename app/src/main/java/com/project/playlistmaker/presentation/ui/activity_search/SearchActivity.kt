@@ -1,4 +1,4 @@
-package com.project.playlistmaker.presentation.ui
+package com.project.playlistmaker.presentation.ui.activity_search
 
 import android.content.Context
 import android.content.Intent
@@ -25,10 +25,11 @@ import com.project.playlistmaker.R
 import com.project.playlistmaker.domain.use_cases.SearchHistoryUseCase
 import com.project.playlistmaker.presentation.adapters.track_list.TrackListAdapter
 import com.project.playlistmaker.presentation.adapters.track_list.TrackListViewHolder
-import com.project.playlistmaker.presentation.ui.ActivityPlayer.Companion.TRACK_DTO_DATA
+import com.project.playlistmaker.presentation.ui.activity_player.ActivityPlayer.Companion.TRACK_DTO_DATA
 import com.project.playlistmaker.data.network.ItunesSearchApi
 import com.project.playlistmaker.data.network.SongsResponse
 import com.project.playlistmaker.domain.models.Track
+import com.project.playlistmaker.presentation.ui.activity_player.ActivityPlayer
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
