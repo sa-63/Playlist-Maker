@@ -2,9 +2,9 @@ package com.project.playlistmaker.data.player_impl
 
 import android.media.MediaPlayer
 import com.project.playlistmaker.domain.player.PlayerState
-import com.project.playlistmaker.domain.player.player_interactor.PlayerInterector
+import com.project.playlistmaker.domain.player.player_repository.PlayerRepository
 
-class PlayerInterectorImpl : PlayerInterector {
+class PlayerRepositoryImpl : PlayerRepository {
 
     private var isPlayerReleased = false
     private var mediaPlayer = MediaPlayer()
@@ -13,12 +13,10 @@ class PlayerInterectorImpl : PlayerInterector {
     override fun preparePlayer(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = PlayerState.STATE_PREPARED
-        }
         mediaPlayer.setOnCompletionListener {
             playerState = PlayerState.STATE_PREPARED
         }
+        playerState = PlayerState.STATE_PREPARED
         isPlayerReleased = false
     }
 
@@ -58,6 +56,12 @@ class PlayerInterectorImpl : PlayerInterector {
     override fun setOnCompletionListener(whenComplete: () -> Unit) {
         mediaPlayer.setOnCompletionListener {
             whenComplete()
+        }
+    }
+
+    override fun startAfterPrepare(afterPrepared: () -> Unit) {
+        mediaPlayer.setOnPreparedListener {
+            afterPrepared()
         }
     }
 }

@@ -40,7 +40,7 @@ class ActivityPlayer : AppCompatActivity() {
     private var cornerSize: Int = 0
     private lateinit var track: Track
     private val dataFormat = DataFormat()
-    private val playerInterectorImpl = Creator.providePlayerRepository()
+    private val playerInterectorImpl = Creator.providePlayerInteractor()
     private lateinit var playBackControl: PlayBackControl
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class ActivityPlayer : AppCompatActivity() {
 
         track = intent.getSerializableExtra(TRACK_DTO_DATA) as Track
 
-        playBackControl()
+        initPlayBackControl()
 
         fillContent()
 
@@ -90,7 +90,7 @@ class ActivityPlayer : AppCompatActivity() {
         countryTv.text = track.country
     }
 
-    private fun playBackControl() {
+    private fun initPlayBackControl() {
         playBackControl = PlayBackControl(
             playerInterectorImpl,
             UpdateDurationTaskImpl(

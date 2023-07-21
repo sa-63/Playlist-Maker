@@ -1,12 +1,17 @@
 package com.project.playlistmaker.creator
 
-import com.project.playlistmaker.data.player_impl.PlayerInterectorImpl
-import com.project.playlistmaker.domain.player.player_interactor.PlayerInterector
+import com.project.playlistmaker.data.player_impl.PlayerRepositoryImpl
+import com.project.playlistmaker.domain.player.impl.PlayerInteractorImpl
+import com.project.playlistmaker.domain.player.player_interactor.PlayerInteractor
+import com.project.playlistmaker.domain.player.player_repository.PlayerRepository
 
 object Creator {
 
-    fun providePlayerRepository(): PlayerInterector {
-        return PlayerInterectorImpl()
+    private fun getPlayerRepository(): PlayerRepository {
+        return PlayerRepositoryImpl()
     }
 
+    fun providePlayerInteractor(): PlayerInteractor {
+        return PlayerInteractorImpl(getPlayerRepository())
+    }
 }

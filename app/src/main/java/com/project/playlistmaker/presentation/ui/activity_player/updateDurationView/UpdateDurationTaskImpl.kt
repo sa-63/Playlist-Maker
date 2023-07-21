@@ -5,11 +5,11 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
 import com.project.playlistmaker.R
+import com.project.playlistmaker.domain.player.player_interactor.PlayerInteractor
 import com.project.playlistmaker.domain.use_cases.utilities.DataFormat
-import com.project.playlistmaker.domain.player.player_interactor.PlayerInterector
 
 class UpdateDurationTaskImpl(
-    private val playerInterector: PlayerInterector,
+    private val playerInteractor: PlayerInteractor,
     private var viewToUpdate: TextView,
     private val context: Context
 ) : UpdateDurationTask {
@@ -26,8 +26,8 @@ class UpdateDurationTaskImpl(
             override fun run() {
                 val remainingTime =
                     dataFormat.convertMediaPlayerRemainingTime(
-                        playerInterector.getDuration(),
-                        playerInterector.getCurrentPosition()
+                        playerInteractor.getDuration(),
+                        playerInteractor.getCurrentPosition()
                     )
                 if (remainingTime > 0) {
                     viewToUpdate.text = dataFormat.roundTimeToMinAndSecond(remainingTime)
