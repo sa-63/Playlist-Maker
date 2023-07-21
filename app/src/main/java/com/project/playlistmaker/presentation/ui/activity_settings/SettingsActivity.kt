@@ -1,4 +1,4 @@
-package com.project.playlistmaker
+package com.project.playlistmaker.presentation.ui.activity_settings
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.project.playlistmaker.app.App
+import com.project.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("IntentReset")

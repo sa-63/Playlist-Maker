@@ -1,4 +1,4 @@
-package com.project.playlistmaker
+package com.project.playlistmaker.presentation.ui.activity_search
 
 import android.content.Context
 import android.content.Intent
@@ -21,9 +21,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.project.playlistmaker.ActivityPlayer.Companion.TRACK_DTO_DATA
-import com.project.playlistmaker.retrofit.ItunesSearchApi
-import com.project.playlistmaker.retrofit.SongsResponse
+import com.project.playlistmaker.R
+import com.project.playlistmaker.domain.use_cases.SearchHistoryUseCase
+import com.project.playlistmaker.presentation.adapters.track_list.TrackListAdapter
+import com.project.playlistmaker.presentation.adapters.track_list.TrackListViewHolder
+import com.project.playlistmaker.presentation.ui.activity_player.ActivityPlayer.Companion.TRACK_DTO_DATA
+import com.project.playlistmaker.data.network.ItunesSearchApi
+import com.project.playlistmaker.data.network.SongsResponse
+import com.project.playlistmaker.domain.models.Track
+import com.project.playlistmaker.presentation.ui.activity_player.ActivityPlayer
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -81,12 +87,12 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
     private lateinit var progressBar: ProgressBar
 
     //Other
-    private val trackDtoListArray = ArrayList<TrackDto>()
-    private val historyList = ArrayList<TrackDto>()
+    private val trackListArray = ArrayList<Track>()
+    private val historyList = ArrayList<Track>()
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var tracksAdapter: TrackListAdapter
     private lateinit var historyAdapter: TrackListAdapter
-    private val searchHistory = SearchHistory(historyList)
+    private val searchHistoryUseCase = SearchHistoryUseCase(historyList)
     var saveInputText: String? = null
     private val gson = Gson()
 
@@ -113,7 +119,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
             searchEditText.setText("")
             clearButton.visibility = clearButtonVisibility("")
             searchEditText.hideKeyboard()
-            trackDtoListArray.clear()
+            trackListArray.clear()
             tracksAdapter.notifyDataSetChanged()
             showViews(ViewToShow.SHOW_TRACKS_RV)
             checkAndShowHistory()
@@ -210,8 +216,8 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
                     when (response.code()) {
                         200 -> {
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                trackDtoListArray.clear()
-                                trackDtoListArray.addAll(response.body()?.results!!)
+                                trackListArray.clear()
+                                trackListArray.addAll(response.body()?.results!!)
                                 tracksAdapter.notifyDataSetChanged()
                                 showViews(ViewToShow.SHOW_TRACKS_RV)
                             } else {
@@ -250,7 +256,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
             }
         }
         if (errorText.isNotEmpty()) {
-            trackDtoListArray.clear()
+            trackListArray.clear()
             tracksAdapter.notifyDataSetChanged()
 
             errorTv.text = errorText
@@ -298,22 +304,22 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         }
     }
 
-    override fun setTrackClickListener(trackDto: TrackDto) {
+    override fun setTrackClickListener(track: Track) {
         if (clickDebounce()) {
-            searchHistory.addTrackToHistory(trackDto)
+            searchHistoryUseCase.addTrackToHistory(track)
             historyAdapter.notifyDataSetChanged()
-            sendDataToPlayer(trackDto)
+            sendDataToPlayer(track)
         }
     }
 
-    private fun sendDataToPlayer(trackDto: TrackDto) {
+    private fun sendDataToPlayer(track: Track) {
         val intent = Intent(this, ActivityPlayer::class.java)
-        intent.putExtra(TRACK_DTO_DATA, trackDto)
+        intent.putExtra(TRACK_DTO_DATA, track)
         startActivity(intent)
     }
 
-    private fun fromJsonToTracksArray(stringToConvert: String): Array<TrackDto> {
-        return gson.fromJson(stringToConvert, Array<TrackDto>::class.java)
+    private fun fromJsonToTracksArray(stringToConvert: String): Array<Track> {
+        return gson.fromJson(stringToConvert, Array<Track>::class.java)
     }
 
     private fun checkAndShowHistory() {
@@ -358,7 +364,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         errorLL.visibility = View.GONE
         //Tracks
         trackListRv = findViewById(R.id.track_list_rv)
-        tracksAdapter = TrackListAdapter(trackDtoListArray, this)
+        tracksAdapter = TrackListAdapter(trackListArray, this)
         trackListRv.adapter = tracksAdapter
         //History
         searchHistoryLL = findViewById(R.id.search_history_ll)
