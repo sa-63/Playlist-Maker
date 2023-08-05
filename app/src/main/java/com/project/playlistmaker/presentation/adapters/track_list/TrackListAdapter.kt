@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.playlistmaker.R
-import com.project.playlistmaker.domain.models.Track
+import com.project.playlistmaker.search_screen.domain.models.Track
 
 class TrackListAdapter(
     private val tracksList: ArrayList<Track>,

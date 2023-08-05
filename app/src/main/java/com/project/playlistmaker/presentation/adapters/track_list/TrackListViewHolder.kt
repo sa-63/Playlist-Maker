@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.project.playlistmaker.R
-import com.project.playlistmaker.domain.models.Track
+import com.project.playlistmaker.search_screen.domain.models.Track
 import java.util.Locale
 
 class TrackListViewHolder(trackItem: View) : RecyclerView.ViewHolder(trackItem) {
