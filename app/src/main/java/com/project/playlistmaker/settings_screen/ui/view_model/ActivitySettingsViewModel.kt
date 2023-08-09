@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.project.playlistmaker.app.App
+import com.project.playlistmaker.utils.App
 import com.project.playlistmaker.creator.Creator
 import com.project.playlistmaker.settings_screen.domain.interactor.SettingsInteractor
 import com.project.playlistmaker.settings_screen.domain.model.ThemeSettings

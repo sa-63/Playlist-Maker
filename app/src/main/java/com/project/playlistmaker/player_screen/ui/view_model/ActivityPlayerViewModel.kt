@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.project.playlistmaker.creator.Creator
 import com.project.playlistmaker.player_screen.domain.player_interactor.PlayerInteractor
 import com.project.playlistmaker.player_screen.domain.player_state.PlayerState
-import com.project.playlistmaker.use_cases.utilities.DataFormat
+import com.project.playlistmaker.utils.DataFormat
 
 class ActivityPlayerViewModel(
     private val playerInteractor: PlayerInteractor

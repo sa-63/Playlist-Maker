@@ -10,7 +10,7 @@ import com.project.playlistmaker.databinding.ActivityPlayerBinding
 import com.project.playlistmaker.player_screen.domain.player_state.PlayerState
 import com.project.playlistmaker.player_screen.ui.view_model.ActivityPlayerViewModel
 import com.project.playlistmaker.search_screen.domain.models.Track
-import com.project.playlistmaker.use_cases.utilities.DataFormat
+import com.project.playlistmaker.utils.DataFormat
 
 class ActivityPlayer : ComponentActivity() {
 

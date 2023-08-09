@@ -1,4 +1,4 @@
-package com.project.playlistmaker.use_cases.utilities
+package com.project.playlistmaker.utils
 
 import java.text.SimpleDateFormat
 import java.util.Locale

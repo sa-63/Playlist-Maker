@@ -1,4 +1,4 @@
-package com.project.playlistmaker.app
+package com.project.playlistmaker.utils
 
 import android.app.Application
 import android.content.SharedPreferences
