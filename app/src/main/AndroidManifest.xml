@@ -20,16 +20,16 @@
             android:name=".player_screen.ui.activity.ActivityPlayer"
             android:exported="false" />
         <activity
-            android:name=".search_screen.SearchActivity"
+            android:name=".search_screen.ui.activity.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".media_screen.MediaLibraryActivity"
+            android:name=".media_screen.ui.activity.MediaLibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".settings_screen.SettingsActivity"
+            android:name=".settings_screen.ui.activity.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".main_screen.ui.MainActivity"
+            android:name=".main_screen.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

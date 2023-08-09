@@ -28,6 +28,7 @@ class PlayerRepositoryImpl : PlayerRepository {
 
     override fun releasePlayer() {
         if (!isPlayerReleased) {
+            mediaPlayer.reset()
             mediaPlayer.release()
             isPlayerReleased = true
         }
