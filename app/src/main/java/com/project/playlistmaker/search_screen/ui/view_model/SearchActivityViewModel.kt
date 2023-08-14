@@ -11,31 +11,22 @@ import com.project.playlistmaker.creator.Creator
 import com.project.playlistmaker.search_screen.domain.models.NetworkError
 import com.project.playlistmaker.search_screen.domain.models.Track
 import com.project.playlistmaker.search_screen.domain.search_interactor.SearchInteractor
-import com.project.playlistmaker.search_screen.ui.models.SearchStatusResult
+import com.project.playlistmaker.search_screen.ui.models.SearchScreenStatus
 
 class SearchActivityViewModel(private val searchInteractor: SearchInteractor) : ViewModel() {
     //For Debounce
     private val mainHandler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
-    private lateinit var searchRunnable: Runnable
+    private var searchRunnable: Runnable? = null
 
     //LiveData
     //Request status
-    private val searchStatusResultStateLiveData = MutableLiveData<SearchStatusResult>()
-    fun observeSearchStatusResultLiveData(): LiveData<SearchStatusResult> =
-        searchStatusResultStateLiveData
-
-    //Tracks
-    private val tracksResults = MutableLiveData<List<Track>>()
-    fun observeTracksResultLiveData(): LiveData<List<Track>> = tracksResults
+    private val _state = MutableLiveData<SearchScreenStatus>()
+    fun observeSearchStatusResultLiveData(): LiveData<SearchScreenStatus> =
+        _state
 
     //History
-    private val searchHistoryLiveData = MutableLiveData<ArrayList<Track>>()
-    fun observeSearchHistory(): LiveData<ArrayList<Track>> = searchHistoryLiveData
-
-    init {
-        tracksResults.postValue(emptyList())
-    }
+    private val searchHistory = arrayListOf<Track>()
 
     companion object {
         //ViewModelProvider
@@ -54,13 +45,20 @@ class SearchActivityViewModel(private val searchInteractor: SearchInteractor) : 
         const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
     }
 
+    fun notifyCleared() {
+        _state
+            .postValue(SearchScreenStatus.ShowHistory(searchInteractor.getTracksHistory()))
+    }
+
     //Debounce
     fun searchDebounce(toSearch: String) {
+        if (searchRunnable != null) {
+            mainHandler.removeCallbacks(searchRunnable!!)
+        }
         searchRunnable = Runnable {
             searchForTracks(toSearch)
         }
-        mainHandler.removeCallbacks(searchRunnable)
-        mainHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
+        mainHandler.postDelayed(searchRunnable!!, SEARCH_DEBOUNCE_DELAY_MILLIS)
     }
 
     fun clickDebounce(): Boolean {
@@ -74,16 +72,17 @@ class SearchActivityViewModel(private val searchInteractor: SearchInteractor) : 
 
     //Search
     fun searchForTracks(toSearch: String) {
+        setState(SearchScreenStatus.Loading)
         searchInteractor.searchForTracks(
             toSearch,
             onSuccess = { trackList ->
-                tracksResults.postValue(trackList)
+                setState(SearchScreenStatus.ShowTracks(trackList))
             },
             onError = { networkError ->
                 if (networkError == NetworkError.CONNECTION_ERROR) {
-                    searchStatusResultStateLiveData.postValue(SearchStatusResult.CONNECTION_ERROR)
+                    setState(SearchScreenStatus.ConnectionError)
                 } else {
-                    searchStatusResultStateLiveData.postValue(SearchStatusResult.NOTING_FOUND_ERROR)
+                    setState(SearchScreenStatus.NotFound)
                 }
             }
         )
@@ -99,25 +98,29 @@ class SearchActivityViewModel(private val searchInteractor: SearchInteractor) : 
             tempList.removeFirst()
             tempList.add(track)
             searchInteractor.addHistoryToLocalDb(tempList)
-            searchHistoryLiveData.postValue(tempList)
+            searchHistory.addAll(tempList)
         } else {
             tempList.add(track)
             searchInteractor.addHistoryToLocalDb(tempList)
-            searchHistoryLiveData.postValue(tempList)
+            searchHistory.addAll(tempList)
         }
 
     }
 
-    fun addHistoryToLocalDb() {
-        searchInteractor.addHistoryToLocalDb(searchHistoryLiveData.value!!)
-    }
-
-    fun getTracksHistory() {
-        searchHistoryLiveData.postValue(searchInteractor.getTracksHistory())
+    fun getSearchHistory(): List<Track> {
+        if (searchInteractor.getTracksHistory().isNotEmpty()) {
+            return searchInteractor.getTracksHistory()
+        }
+        return emptyList()
     }
 
     fun clearSearchHistory() {
         searchInteractor.clearHistory()
-        searchHistoryLiveData.postValue(arrayListOf())
+        searchHistory.clear()
+    }
+
+    //State
+    private fun setState(status: SearchScreenStatus) {
+        _state.postValue(status)
     }
 }

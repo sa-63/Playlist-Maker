@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.project.playlistmaker.utils.App
 import com.project.playlistmaker.creator.Creator
 import com.project.playlistmaker.settings_screen.domain.interactor.SettingsInteractor
 import com.project.playlistmaker.settings_screen.domain.model.ThemeSettings
@@ -13,8 +12,7 @@ import com.project.playlistmaker.sharing.domain.interactor.SharingInteractor
 
 class ActivitySettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
-    private val sharingInteractor: SharingInteractor,
-    private val application: App,
+    private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
 
     companion object {
@@ -25,8 +23,7 @@ class ActivitySettingsViewModel(
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return ActivitySettingsViewModel(
                         Creator.provideSettingsInteractor(context),
-                        Creator.provideSharingInteractor(context),
-                        App()
+                        Creator.provideSharingInteractor(context)
                     ) as T
                 }
             }
@@ -43,7 +40,6 @@ class ActivitySettingsViewModel(
         val settings = ThemeSettings(darkThemeEnabled)
         themeSettings.postValue(settings)
         settingsInteractor.updateThemeSetting(settings)
-        application.switchTheme(darkThemeEnabled)
     }
 
     fun shareApp() {

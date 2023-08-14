@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.PlaylistMaker"
+        android:theme="@style/AppTheme"
         tools:targetApi="33">
         <activity
             android:name=".player_screen.ui.activity.ActivityPlayer"

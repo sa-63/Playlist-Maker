@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.project.playlistmaker.creator.Creator
 import com.project.playlistmaker.player_screen.domain.player_interactor.PlayerInteractor
-import com.project.playlistmaker.player_screen.domain.player_state.PlayerState
+import com.project.playlistmaker.player_screen.ui.model.player_state.PlayerState
 import com.project.playlistmaker.utils.DataFormat
 
 class ActivityPlayerViewModel(
@@ -16,14 +16,11 @@ class ActivityPlayerViewModel(
 ) : ViewModel() {
 
     //Observers
-    private val playerStateLiveData = MutableLiveData<PlayerState>()
-    fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
-
-    private val durationTimeLiveData = MutableLiveData<String>()
-    fun observeDurationTime(): LiveData<String> = durationTimeLiveData
+    private val _state = MutableLiveData<PlayerState>()
+    fun observePlayerState(): LiveData<PlayerState> = _state
 
     init {
-        playerStateLiveData.postValue(PlayerState.STATE_DEFAULT)
+        _state.postValue(PlayerState.STATE_DEFAULT)
     }
 
     companion object {
@@ -44,33 +41,34 @@ class ActivityPlayerViewModel(
 
     //Timer variables
     private val dataFormat = DataFormat()
-    private var mainHandler: Handler = Handler(Looper.getMainLooper())
+    private  var currentTime = "00:00"
+    private var handler = Handler(Looper.getMainLooper())
 
     private fun startAfterPrepare(afterPrepared: () -> Unit) {
         playerInteractor.startAfterPrepare(afterPrepared)
-        playerStateLiveData.value = PlayerState.STATE_PLAYING
+        _state.value = PlayerState.STATE_PLAYING
     }
 
     private fun preparePlayer(url: String) {
         playerInteractor.preparePlayer(url)
-        playerStateLiveData.value = PlayerState.STATE_PREPARED
+        _state.value = PlayerState.STATE_PREPARED
     }
 
     fun releasePlayer() {
         playerInteractor.releasePlayer()
-        playerStateLiveData.value = PlayerState.STATE_DEFAULT
+        _state.value = PlayerState.STATE_DEFAULT
     }
 
     private fun pausePlayer() {
         playerInteractor.pausePlayer()
         removeCallbacks()
-        playerStateLiveData.value = PlayerState.STATE_PAUSED
+        _state.value = PlayerState.STATE_PAUSED
     }
 
     private fun startPlayer() {
         playerInteractor.startPlayer()
         startDurationTask()
-        playerStateLiveData.value = PlayerState.STATE_PLAYING
+        _state.value = PlayerState.STATE_PLAYING
     }
 
     private fun setOnCompletionListener(whenComplete: () -> Unit) {
@@ -86,7 +84,7 @@ class ActivityPlayerViewModel(
     }
 
     fun playbackControl(trackUrl: String) {
-        when (playerStateLiveData.value!!) {
+        when (_state.value!!) {
             PlayerState.STATE_PLAYING -> {
                 pausePlayer()
             }
@@ -108,31 +106,39 @@ class ActivityPlayerViewModel(
         }
     }
 
-    private fun createDurationCountTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
+    private val runnableTask = object : Runnable {
+        override fun run() {
+            if (_state.value == PlayerState.STATE_PLAYING) {
+                _state.value = PlayerState.STATE_PLAYING
                 val remainingTime =
                     dataFormat.convertMediaPlayerRemainingTime(
                         getDuration(),
                         getCurrentPosition()
                     )
-                if (remainingTime > 0) {
-                    durationTimeLiveData.value = dataFormat.roundTimeToMinAndSecond(remainingTime)
-                    mainHandler.postDelayed(this, UPDATE_DURATION_TIME_MILLIS)
+                currentTime = if (remainingTime > 0) {
+                    dataFormat.roundTimeToMinAndSecond(remainingTime)
                 } else {
-                    durationTimeLiveData.value = "00:00"
+                    "00:00"
                 }
             }
+            handler.postDelayed(
+                this,
+                ActivityPlayerViewModel.UPDATE_DURATION_TIME_MILLIS
+            )
         }
     }
 
     private fun removeCallbacks() {
-        mainHandler.removeCallbacks(createDurationCountTask())
+        handler.removeCallbacks(runnableTask)
     }
 
     private fun startDurationTask() {
-        mainHandler.post(
-            createDurationCountTask()
+        handler.post(
+            runnableTask
         )
+    }
+
+    fun getCurrentTrackDuration(): String {
+        return currentTime
     }
 }

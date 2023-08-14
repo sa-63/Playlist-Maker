@@ -1,23 +1,25 @@
 package com.project.playlistmaker.settings_screen.ui.activity
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.ActivitySettingsBinding
 import com.project.playlistmaker.settings_screen.ui.view_model.ActivitySettingsViewModel
+import com.project.playlistmaker.utils.App
 
-class SettingsActivity : ComponentActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     //ViewBinding
     private lateinit var binding: ActivitySettingsBinding
     //ViewModel
-    private lateinit var activitySettingsViewModel: ActivitySettingsViewModel
+    private var activitySettingsViewModel: ActivitySettingsViewModel? = null
+    //Application
+    private var app = App()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
 
         activitySettingsViewModel =
             ViewModelProvider(
@@ -30,26 +32,27 @@ class SettingsActivity : ComponentActivity() {
 
         initListeners()
 
-        binding.backImageBtnInSettings.setOnClickListener {
+        binding.ibBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed() }
 
-        activitySettingsViewModel.themeSettingsState().observe(this) { themeSettings ->
-            binding.themeSwitch.isChecked = themeSettings.darkTheme
+        activitySettingsViewModel!!.themeSettingsState().observe(this) { themeSettings ->
+            binding.smTheme.isChecked = themeSettings.darkTheme
         }
     }
 
     private fun initListeners() {
-        binding.shareBtn.setOnClickListener {
-            activitySettingsViewModel.shareApp()
+        binding.btnShare.setOnClickListener {
+            activitySettingsViewModel!!.shareApp()
         }
-        binding.supportBtn.setOnClickListener {
-            activitySettingsViewModel.supportEmail()
+        binding.btnSupport.setOnClickListener {
+            activitySettingsViewModel!!.supportEmail()
         }
-        binding.termsOfUseBtn.setOnClickListener {
-            activitySettingsViewModel.openAgreement()
+        binding.btnTermsOfUse.setOnClickListener {
+            activitySettingsViewModel!!.openAgreement()
         }
-        binding.themeSwitch.setOnCheckedChangeListener { _, checked ->
-            activitySettingsViewModel.switchTheme(checked)
+        binding.smTheme.setOnCheckedChangeListener { _, checked ->
+            activitySettingsViewModel!!.switchTheme(checked)
+            app.switchTheme(checked)
         }
     }
 }
