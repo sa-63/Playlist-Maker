@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.ui.activity.SearchActivity">
+    tools:context=".search_screen.ui.activity.SearchActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:paddingTop="@dimen/padding_14">
 
         <ImageButton
-            android:id="@+id/back_imageBtn_in_search"
+            android:id="@+id/ib_back"
             style="@style/back_btn_style"
             android:layout_gravity="center" />
 
@@ -34,11 +34,11 @@
         android:paddingStart="@dimen/padding_13">
 
         <EditText
-            android:id="@+id/edit_text_in_search"
+            android:id="@+id/et_search"
             style="@style/searchEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/clear_btn"
+            android:layout_alignEnd="@+id/iv_clear"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
             android:background="@android:color/transparent"
@@ -47,7 +47,7 @@
             android:singleLine="true" />
 
         <ImageView
-            android:id="@+id/clear_btn"
+            android:id="@+id/iv_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -58,14 +58,14 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/track_list_rv"
+        android:id="@+id/rv_tracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_24"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <ProgressBar
-        android:id="@+id/search_progress_bar"
+        android:id="@+id/pb_search"
         android:layout_width="@dimen/circular_progress_indicator_size"
         android:layout_height="@dimen/circular_progress_indicator_size"
         android:layout_gravity="center"
@@ -74,7 +74,7 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/search_history_ll"
+        android:id="@+id/ll_search_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_32"
@@ -93,7 +93,7 @@
             android:textSize="@dimen/text_19" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_history_rv"
+            android:id="@+id/rv_search_history"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -102,7 +102,7 @@
             app:stackFromEnd="true" />
 
         <Button
-            android:id="@+id/clear_search_history_btn"
+            android:id="@+id/btn_clear_history"
             style="@style/searchActivityBtnStyle"
             android:layout_marginBottom="@dimen/margin_20"
             android:text="@string/clear_history"
@@ -111,7 +111,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/error_ll"
+        android:id="@+id/ll_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="113dp"
@@ -119,14 +119,14 @@
         android:visibility="gone">
 
         <ImageView
-            android:id="@+id/error_iv"
+            android:id="@+id/iv_error"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/error_tv"
+            android:id="@+id/tv_error"
             android:layout_width="312dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -138,7 +138,7 @@
             android:textSize="@dimen/text_19" />
 
         <Button
-            android:id="@+id/update_btn"
+            android:id="@+id/btn_update"
             style="@style/searchActivityBtnStyle"
             android:text="@string/update"
             app:backgroundTint="?attr/colorOnPrimary"
