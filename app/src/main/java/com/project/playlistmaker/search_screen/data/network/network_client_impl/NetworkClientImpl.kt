@@ -5,31 +5,10 @@ import com.project.playlistmaker.search_screen.data.network.search_api.ItunesSea
 import com.project.playlistmaker.search_screen.data.network.search_api_response.TracksResponse
 import com.project.playlistmaker.search_screen.domain.models.NetworkError
 import com.project.playlistmaker.search_screen.domain.models.Track
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class NetworkClientImpl() : NetworkClient {
-    private val itunesBaseUrl = "http://itunes.apple.com"
-
-    private var interceptor = HttpLoggingInterceptor().apply {
-        this.level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(interceptor)
-        .build()
-
-    private val retrofit = Retrofit.Builder()
-        .client(okHttpClient)
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesSearchApi = retrofit.create(ItunesSearchApi::class.java)
+class NetworkClientImpl(private val itunesSearchApi: ItunesSearchApi) : NetworkClient {
 
     override fun doRequest(
         query: String,

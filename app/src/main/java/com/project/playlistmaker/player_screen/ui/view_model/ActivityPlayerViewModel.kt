@@ -5,8 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.project.playlistmaker.creator.Creator
 import com.project.playlistmaker.player_screen.domain.player_interactor.PlayerInteractor
 import com.project.playlistmaker.player_screen.ui.model.player_state.PlayerState
 import com.project.playlistmaker.utils.DataFormat
@@ -24,17 +22,6 @@ class ActivityPlayerViewModel(
     }
 
     companion object {
-        //ViewModelProvider
-        fun getViewModelFactory(): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ActivityPlayerViewModel(
-                        Creator.providePlayerInteractor()
-                    ) as T
-                }
-            }
-
         //Count value for timer
         private const val UPDATE_DURATION_TIME_MILLIS = 1000L
     }

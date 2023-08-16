@@ -9,7 +9,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.ActivitySearchBinding
 import com.project.playlistmaker.player_screen.ui.activity.ActivityPlayer
@@ -19,11 +18,11 @@ import com.project.playlistmaker.search_screen.ui.adapter.TrackListAdapter
 import com.project.playlistmaker.search_screen.ui.models.SearchScreenStatus
 import com.project.playlistmaker.search_screen.ui.view_holder.TrackListViewHolder
 import com.project.playlistmaker.search_screen.ui.view_model.SearchActivityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickListener {
+ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickListener {
     //ViewModel
-    private var searchActivityViewModel: SearchActivityViewModel? = null
-
+    private val searchActivityViewModel by viewModel<SearchActivityViewModel>()
     //Binding
     private lateinit var binding: ActivitySearchBinding
 
@@ -50,24 +49,19 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         setContentView(binding.root)
 
         //ViewModel
-        searchActivityViewModel = ViewModelProvider(
-            this,
-            SearchActivityViewModel.getViewModelFactory(this)
-        )[SearchActivityViewModel::class.java]
-
-        searchActivityViewModel!!.observeSearchStatusResultLiveData().observe(this) { status ->
+        searchActivityViewModel.observeSearchStatusResultLiveData().observe(this) { status ->
             showContentBasedOnState(status)
         }
         //Adapters
         initAdapters()
-        historyList.addAll(searchActivityViewModel!!.getSearchHistory())
+        historyList.addAll(searchActivityViewModel.getSearchHistory())
 
         //Listeners
         binding.ivClear.setOnClickListener {
             binding.etSearch.text.clear()
             binding.ivClear.visibility = clearButtonVisibility("")
             binding.etSearch.hideKeyboard()
-            searchActivityViewModel!!.notifyCleared()
+            searchActivityViewModel.notifyCleared()
         }
 
         binding.etSearch.setOnFocusChangeListener { view, hasFocus ->
@@ -87,7 +81,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
         }
 
         binding.btnClearHistory.setOnClickListener {
-            searchActivityViewModel!!.clearSearchHistory()
+            searchActivityViewModel.clearSearchHistory()
             historyAdapter.notifyItemRangeChanged(0, historyList.size)
             binding.llSearchHistory.visibility = View.GONE
         }
@@ -103,7 +97,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
                 binding.ivClear.visibility = clearButtonVisibility(s)
                 saveInputText = binding.etSearch.text.toString()
                 if (binding.etSearch.text.isNotEmpty()) {
-                    searchActivityViewModel!!.searchDebounce(s.toString())
+                    searchActivityViewModel.searchDebounce(s.toString())
                 }
             }
         })
@@ -131,7 +125,7 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
 
     //Search tracks
     private fun search() {
-        searchActivityViewModel!!.searchForTracks(binding.etSearch.text.toString())
+        searchActivityViewModel.searchForTracks(binding.etSearch.text.toString())
     }
 
     //Show error message you need
@@ -201,9 +195,9 @@ class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickLi
 
     //RecyclerView click listener
     override fun setTrackClickListener(track: Track) {
-            searchActivityViewModel!!.clickDebounce()
+            searchActivityViewModel.clickDebounce()
             openPlayer(track)
-            searchActivityViewModel!!.addToSearchHistory(track)
+            searchActivityViewModel.addToSearchHistory(track)
     }
 
     //Open Player Activity
