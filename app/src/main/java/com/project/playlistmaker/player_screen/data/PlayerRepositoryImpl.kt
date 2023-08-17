@@ -3,10 +3,9 @@ package com.project.playlistmaker.player_screen.data
 import android.media.MediaPlayer
 import com.project.playlistmaker.player_screen.domain.player_repository.PlayerRepository
 
-class PlayerRepositoryImpl : PlayerRepository {
+class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerRepository {
 
     private var isPlayerReleased = false
-    private var mediaPlayer = MediaPlayer()
 
     override fun preparePlayer(url: String) {
         if (isPlayerReleased) {

@@ -6,7 +6,8 @@ import com.project.playlistmaker.search_screen.domain.models.NetworkError
 import com.project.playlistmaker.search_screen.domain.models.Track
 import com.project.playlistmaker.search_screen.domain.search_repository.SearchRepository
 
-class SearchRepositoryImpl(private val networkClient: NetworkClient,  private val searchHistoryStorage: SearchHistoryStorage) :
+class SearchRepositoryImpl(private val networkClient: NetworkClient,
+                           private val searchHistoryStorage: SearchHistoryStorage) :
     SearchRepository {
     override fun addHistoryToLocalDb(tracksList: ArrayList<Track>) {
         searchHistoryStorage.addHistoryToLocalDb(tracksList)

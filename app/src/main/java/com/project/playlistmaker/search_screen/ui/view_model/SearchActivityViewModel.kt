@@ -1,13 +1,10 @@
 package com.project.playlistmaker.search_screen.ui.view_model
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.project.playlistmaker.creator.Creator
 import com.project.playlistmaker.search_screen.domain.models.NetworkError
 import com.project.playlistmaker.search_screen.domain.models.Track
 import com.project.playlistmaker.search_screen.domain.search_interactor.SearchInteractor
@@ -29,17 +26,6 @@ class SearchActivityViewModel(private val searchInteractor: SearchInteractor) : 
     private val searchHistory = arrayListOf<Track>()
 
     companion object {
-        //ViewModelProvider
-        fun getViewModelFactory(context: Context): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return SearchActivityViewModel(
-                        Creator.provideSearchInteractor(context)
-                    ) as T
-                }
-            }
-
         //For Delay
         const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
         const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
