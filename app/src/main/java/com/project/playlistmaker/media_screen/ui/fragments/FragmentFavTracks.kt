@@ -24,7 +24,6 @@ class FragmentFavTracks : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = FragmentFavTracks()
     }
 }

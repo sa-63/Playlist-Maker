@@ -24,7 +24,6 @@ class FragmentMyPlaylists : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = FragmentMyPlaylists()
     }
 }
