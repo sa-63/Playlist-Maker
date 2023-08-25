@@ -19,8 +19,7 @@ class SearchActivityViewModel(private val searchInteractor: SearchInteractor) : 
     //LiveData
     //Request status
     private val _state = MutableLiveData<SearchScreenStatus>()
-    fun observeSearchStatusResultLiveData(): LiveData<SearchScreenStatus> =
-        _state
+    fun observeSearchStatusResultLiveData(): LiveData<SearchScreenStatus> = _state
 
     //History
     private val searchHistory = arrayListOf<Track>()
@@ -32,8 +31,7 @@ class SearchActivityViewModel(private val searchInteractor: SearchInteractor) : 
     }
 
     fun notifyCleared() {
-        _state
-            .postValue(SearchScreenStatus.ShowHistory(searchInteractor.getTracksHistory()))
+        _state.postValue(SearchScreenStatus.ShowHistory(searchInteractor.getTracksHistory()))
     }
 
     //Debounce

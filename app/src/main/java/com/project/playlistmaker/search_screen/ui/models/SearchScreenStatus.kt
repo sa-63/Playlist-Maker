@@ -13,5 +13,4 @@ sealed class SearchScreenStatus {
     object ConnectionError : SearchScreenStatus()
 
     object Loading : SearchScreenStatus()
-
 }

@@ -4,19 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".media_screen.ui.activity.MediaLibraryActivity">
+    tools:context=".media_screen.ui.fragments.FragmentMediaLibrary">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
-
-        <ImageButton
-            android:id="@+id/ib_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_28"
-            android:background="@drawable/ic_arrow_back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,5 +28,4 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         style="@style/viewPagerStyle" />
-
 </LinearLayout>

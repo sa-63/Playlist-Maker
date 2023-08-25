@@ -1,16 +1,18 @@
- package com.project.playlistmaker.search_screen.ui.activity
+package com.project.playlistmaker.search_screen.ui.fragments
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.project.playlistmaker.R
-import com.project.playlistmaker.databinding.ActivitySearchBinding
+import com.project.playlistmaker.databinding.FragmentSearchBinding
 import com.project.playlistmaker.player_screen.ui.activity.ActivityPlayer
 import com.project.playlistmaker.player_screen.ui.activity.ActivityPlayer.Companion.TRACK_DTO_DATA
 import com.project.playlistmaker.search_screen.domain.models.Track
@@ -20,11 +22,12 @@ import com.project.playlistmaker.search_screen.ui.view_holder.TrackListViewHolde
 import com.project.playlistmaker.search_screen.ui.view_model.SearchActivityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
- class SearchActivity : AppCompatActivity(), TrackListViewHolder.TrackListClickListener {
+class FragmentSearch : Fragment(), TrackListViewHolder.TrackListClickListener {
     //ViewModel
     private val searchActivityViewModel by viewModel<SearchActivityViewModel>()
+
     //Binding
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
 
     //Adapters
     private lateinit var tracksAdapter: TrackListAdapter
@@ -41,17 +44,22 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
         const val EDIT_TEXT_CONTENT = "CONTENT"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-        //Binding
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         //ViewModel
-        searchActivityViewModel.observeSearchStatusResultLiveData().observe(this) { status ->
-            showContentBasedOnState(status)
-        }
+        searchActivityViewModel.observeSearchStatusResultLiveData()
+            .observe(viewLifecycleOwner) { status ->
+                showContentBasedOnState(status)
+            }
+
         //Adapters
         initAdapters()
         historyList.addAll(searchActivityViewModel.getSearchHistory())
@@ -64,16 +72,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
             searchActivityViewModel.notifyCleared()
         }
 
-        binding.etSearch.setOnFocusChangeListener { view, hasFocus ->
+        binding.etSearch.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.etSearch.text.isEmpty() && historyList.isNotEmpty()) {
                 showViews(ViewToShow.SHOW_SEARCH_HISTORY_LL)
             } else {
                 showViews(ViewToShow.SHOW_TRACKS_RV)
             }
-        }
-
-        binding.ibBack.setOnClickListener {
-            onBackPressed()
         }
 
         binding.btnUpdate.setOnClickListener {
@@ -122,7 +126,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
         historyAdapter.notifyDataSetChanged()
     }
 
-
     //Search tracks
     private fun search() {
         searchActivityViewModel.searchForTracks(binding.etSearch.text.toString())
@@ -139,7 +142,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
         var imageSrc: Int = R.drawable.placeholder
 
         when (errorType) {
-           is SearchScreenStatus.ConnectionError -> {
+            is SearchScreenStatus.ConnectionError -> {
                 errorText = getString(R.string.connection_error)
                 needBtn = true
                 imageSrc = R.drawable.no_connection_image
@@ -149,6 +152,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
                 errorText = getString(R.string.not_found)
                 imageSrc = R.drawable.nothing_found_image
             }
+
             else -> {}
         }
         if (errorText.isNotEmpty()) {
@@ -169,11 +173,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
     private fun showContentBasedOnState(status: SearchScreenStatus) {
         when (status) {
-           is SearchScreenStatus.ShowTracks -> {
-               clearAndNotifyTracksAdapter()
-               tracksList.addAll(status.trackList)
-               showViews(ViewToShow.SHOW_TRACKS_RV)
-           }
+            is SearchScreenStatus.ShowTracks -> {
+                clearAndNotifyTracksAdapter()
+                tracksList.addAll(status.trackList)
+                showViews(ViewToShow.SHOW_TRACKS_RV)
+            }
+
             is SearchScreenStatus.ShowHistory -> {
                 clearAndNotifyHistoryAdapter()
                 historyList.addAll(status.historyList)
@@ -181,12 +186,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
                     showViews(ViewToShow.SHOW_SEARCH_HISTORY_LL)
                 }
             }
+
             is SearchScreenStatus.Loading -> {
                 showViews(ViewToShow.SHOW_PROGRESS_BAR)
             }
+
             is SearchScreenStatus.NotFound -> {
                 showErrorMessage(status)
             }
+
             is SearchScreenStatus.ConnectionError -> {
                 showErrorMessage(status)
             }
@@ -195,16 +203,18 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
     //RecyclerView click listener
     override fun setTrackClickListener(track: Track) {
-            searchActivityViewModel.clickDebounce()
-            openPlayer(track)
-            searchActivityViewModel.addToSearchHistory(track)
+        searchActivityViewModel.clickDebounce()
+        openPlayer(track)
+        searchActivityViewModel.addToSearchHistory(track)
     }
 
     //Open Player Activity
     private fun openPlayer(track: Track) {
-        val intent = Intent(this, ActivityPlayer::class.java)
-        intent.putExtra(TRACK_DTO_DATA, track)
-        startActivity(intent)
+        activity?.let {
+            val intent = Intent(it, ActivityPlayer::class.java)
+            intent.putExtra(TRACK_DTO_DATA, track)
+            it.startActivity(intent)
+        }
     }
 
     //Adapters
@@ -225,8 +235,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
         }
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         binding.etSearch.setText(saveInputText)
     }
 

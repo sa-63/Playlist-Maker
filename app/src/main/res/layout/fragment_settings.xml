@@ -8,27 +8,16 @@
     android:paddingStart="@dimen/padding_16"
     android:paddingTop="@dimen/padding_14"
     android:paddingEnd="@dimen/zero_dp"
-    tools:context=".search_screen.ui.activity.SearchActivity">
+    tools:context=".search_screen.ui.fragments.FragmentSearch">
 
     <LinearLayout
         android:id="@+id/ll_settings_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_4"
-        android:gravity="end"
         android:paddingBottom="@dimen/padding_44">
-
-        <ImageButton
-            android:id="@+id/ib_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_arrow_back"
-            android:backgroundTint="?attr/colorOnPrimary" />
 
         <TextView
             style="@style/HeaderTextStyle"
-            android:layout_gravity="end"
             android:text="@string/settings" />
     </LinearLayout>
 

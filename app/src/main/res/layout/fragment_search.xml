@@ -6,21 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".search_screen.ui.activity.SearchActivity">
+    tools:context=".search_screen.ui.fragments.FragmentSearch">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/padding_20"
         android:paddingTop="@dimen/padding_14">
-
-        <ImageButton
-            android:id="@+id/ib_back"
-            style="@style/back_btn_style"
-            android:layout_gravity="center" />
 
         <TextView
             style="@style/HeaderTextStyle"
+            android:paddingStart="@dimen/padding_16"
             android:text="@string/search" />
     </LinearLayout>
 
