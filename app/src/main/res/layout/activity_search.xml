@@ -107,7 +107,7 @@
             android:layout_marginBottom="@dimen/margin_20"
             android:text="@string/clear_history"
             app:backgroundTint="?attr/colorOnPrimary"
-            app:cornerRadius="54dp" />
+            app:cornerRadius="@dimen/round_btn_corners" />
     </LinearLayout>
 
     <LinearLayout
@@ -142,6 +142,6 @@
             style="@style/searchActivityBtnStyle"
             android:text="@string/update"
             app:backgroundTint="?attr/colorOnPrimary"
-            app:cornerRadius="54dp" />
+            app:cornerRadius="@dimen/round_btn_corners" />
     </LinearLayout>
 </LinearLayout>
