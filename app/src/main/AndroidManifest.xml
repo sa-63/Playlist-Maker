@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".main_screen.RootActivity"
+            android:name=".mainscreen.RootActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".player_screen.ui.activity.ActivityPlayer"
+            android:name=".playerscreen.ui.activity.PlayerActivity"
             android:exported="false" />
     </application>
 </manifest>

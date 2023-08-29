@@ -12,12 +12,6 @@ import org.koin.core.context.GlobalContext.startKoin
 
 class App : Application() {
 
-    companion object {
-        const val SHARED_PREF_APP = "app_theme_preferences"
-        const val THEME_KEY = "key_for_theme_prefs"
-        lateinit var sharedPrefs: SharedPreferences
-    }
-
     override fun onCreate() {
         super.onCreate()
         startKoin {
@@ -47,5 +41,12 @@ class App : Application() {
         sharedPrefs.edit()
             .putBoolean(THEME_KEY, darkThemeEnabled)
             .apply()
+    }
+
+    companion object {
+        const val SHARED_PREF_APP = "app_theme_preferences"
+        const val THEME_KEY = "key_for_theme_prefs"
+        lateinit var sharedPrefs: SharedPreferences
+        fun newInstance() = App()
     }
 }
