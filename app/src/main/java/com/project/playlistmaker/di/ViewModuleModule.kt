@@ -1,11 +1,11 @@
 package com.project.playlistmaker.di
 
-import com.project.playlistmaker.media_screen.ui.view_models.FragmentFavTracksViewModel
-import com.project.playlistmaker.media_screen.ui.view_models.FragmentMyPlaylistsViewModel
-import com.project.playlistmaker.media_screen.ui.view_models.MediaLibraryActivityViewModel
-import com.project.playlistmaker.player_screen.ui.view_model.ActivityPlayerViewModel
-import com.project.playlistmaker.search_screen.ui.view_model.SearchActivityViewModel
-import com.project.playlistmaker.settings_screen.ui.view_model.ActivitySettingsViewModel
+import com.project.playlistmaker.mediascreen.ui.viewmodels.FavTracksViewModel
+import com.project.playlistmaker.mediascreen.ui.viewmodels.MyPlaylistsViewModel
+import com.project.playlistmaker.mediascreen.ui.viewmodels.MediaLibraryViewModel
+import com.project.playlistmaker.playerscreen.ui.viewmodel.PlayerViewModel
+import com.project.playlistmaker.searchscreen.ui.view_model.SearchViewModel
+import com.project.playlistmaker.settingsscreen.ui.viewmodel.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -15,31 +15,31 @@ class ViewModuleModule {
 
         //Search
         viewModel {
-            SearchActivityViewModel(get())
+            SearchViewModel(get())
         }
 
         //Player
         viewModel {
-            ActivityPlayerViewModel(get())
+            PlayerViewModel(get())
         }
 
         //Settings
         viewModel {
-            ActivitySettingsViewModel(get(), get())
+            SettingsViewModel(get(), get())
         }
 
         //MediaLibrary
         viewModel {
-            MediaLibraryActivityViewModel()
+            MediaLibraryViewModel()
         }
 
         //Fragments
         viewModel {
-            FragmentFavTracksViewModel()
+            FavTracksViewModel()
         }
 
         viewModel {
-            FragmentMyPlaylistsViewModel()
+            MyPlaylistsViewModel()
         }
     }
 }

@@ -46,6 +46,7 @@
 
     <dimen name="cover_size">45dp</dimen>
     <dimen name="round_btn_corners">54dp</dimen>
+    <dimen name="default_bar_sizes">56dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
     <dimen name="max_text_size_in_track">250dp</dimen>
 </resources>

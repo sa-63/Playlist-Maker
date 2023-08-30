@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/padding_16"
+    android:paddingTop="@dimen/padding_14"
+    android:paddingEnd="@dimen/zero_dp"
+    tools:context=".searchscreen.ui.fragments.SearchFragment">
+
+    <LinearLayout
+        android:id="@+id/ll_settings_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_44">
+
+        <TextView
+            style="@style/HeaderTextStyle"
+            android:text="@string/settings" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_theme"
+        style="@style/SettingsActivityFl">
+
+        <ImageButton
+            android:id="@+id/btn_dark_theme"
+            style="@style/SettingsActivityButtons" />
+
+        <TextView
+            android:id="@+id/tv_theme"
+            style="@style/SettingsActivityButtonsText"
+            android:text="@string/app_theme_str" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sm_theme"
+            style="@style/SettingsActivityImages"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:theme="@style/ThemeSwitchStyle" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_share"
+        style="@style/SettingsActivityFl">
+
+        <ImageButton
+            android:id="@+id/btn_share"
+            style="@style/SettingsActivityButtons" />
+
+        <TextView
+            android:id="@+id/tv_share"
+            style="@style/SettingsActivityButtonsText"
+            android:text="@string/share" />
+
+        <ImageView
+            style="@style/SettingsActivityImages"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:background="@drawable/ic_share"
+            android:contentDescription="@string/share" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_support"
+        style="@style/SettingsActivityFl">
+
+        <ImageButton
+            android:id="@+id/btn_support"
+            style="@style/SettingsActivityButtons" />
+
+        <TextView
+            android:id="@+id/tv_support"
+            style="@style/SettingsActivityButtonsText"
+            android:text="@string/text_support" />
+
+        <ImageView
+            style="@style/SettingsActivityImages"
+            android:layout_marginEnd="@dimen/margin_14"
+            android:background="@drawable/ic_support"
+            android:contentDescription="@string/text_support" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_terms_of_use"
+        style="@style/SettingsActivityFl">
+
+        <ImageButton
+            android:id="@+id/btn_terms_of_use"
+            style="@style/SettingsActivityButtons" />
+
+        <TextView
+            android:id="@+id/tv_terms_of_use"
+            style="@style/SettingsActivityButtonsText"
+            android:text="@string/terms_of_use"
+            android:textSize="@dimen/text_16" />
+
+        <ImageView
+            style="@style/SettingsActivityImages"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:background="@drawable/ic_arrow"
+            android:contentDescription="@string/terms_of_use" />
+    </FrameLayout>
+</LinearLayout>

@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="editTextBackground">@color/lightest_grey</item>
         <item name="editTextColor">@color/light_grey</item>
+        <item name="buttonTint">#401A1B22</item>
     </style>
 
     <style name="searchActivityBtnStyle">

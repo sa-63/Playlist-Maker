@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".player_screen.ui.activity.ActivityPlayer">
+    tools:context=".playerscreen.ui.activity.PlayerActivity">
 
     <!--24 guideline-->
     <androidx.constraintlayout.widget.Guideline
