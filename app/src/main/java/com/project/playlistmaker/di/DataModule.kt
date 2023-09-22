@@ -44,7 +44,7 @@ class DataModule {
         }
 
         single<NetworkClient> {
-            NetworkClientImpl(get(), get())
+            NetworkClientImpl(get())
         }
 
         //LocalDb

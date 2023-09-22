@@ -1,51 +1,42 @@
 package com.project.playlistmaker.searchscreen.data.network.networkclientimpl
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import com.project.playlistmaker.searchscreen.data.dto.ResponseResultCode
-import com.project.playlistmaker.searchscreen.data.dto.TracksRequest
 import com.project.playlistmaker.searchscreen.data.network.networkclient.NetworkClient
 import com.project.playlistmaker.searchscreen.data.network.searchapi.ItunesSearchApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.project.playlistmaker.searchscreen.data.network.searchapiresponse.TracksResponse
+import com.project.playlistmaker.searchscreen.domain.models.NetworkError
+import com.project.playlistmaker.searchscreen.domain.models.Track
+import retrofit2.Call
+import retrofit2.Callback
 
-class NetworkClientImpl(
-    private val context: Context,
-    private val itunesSearchApi: ItunesSearchApi
-) : NetworkClient {
+class NetworkClientImpl(private val itunesSearchApi: ItunesSearchApi) : NetworkClient {
 
-    override suspend fun doRequest(dto: Any): ResponseResultCode {
-        if (!isConnected()) {
-            return ResponseResultCode().apply { resultCode = -1 }
-        }
-        if (dto !is TracksRequest) {
-            return ResponseResultCode().apply { resultCode = 400 }
-        }
+    override fun doRequest(
+        query: String,
+        onSuccess: (ArrayList<Track>) -> Unit,
+        onError: (NetworkError) -> Unit
+    ) {
+        itunesSearchApi.search(query).enqueue(object : Callback<TracksResponse> {
+            override fun onResponse(
+                call: Call<TracksResponse>,
+                response: retrofit2.Response<TracksResponse>,
+            ) {
+                when (response.code()) {
+                    200 -> {
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            onSuccess.invoke(response.body()?.results!!)
+                        } else {
+                            onError.invoke(NetworkError.NOTING_FOUND)
+                        }
+                    }
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = itunesSearchApi.search(dto.expression)
-                response.apply { resultCode = 200 }
-            } catch (e: Throwable) {
-                ResponseResultCode().apply { resultCode = 500 }
+                    else ->
+                        onError.invoke(NetworkError.CONNECTION_ERROR)
+                }
             }
-        }
-    }
 
-    private fun isConnected(): Boolean {
-        val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
+            override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                onError.invoke(NetworkError.CONNECTION_ERROR)
             }
-        }
-        return false
+        })
     }
 }

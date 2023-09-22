@@ -1,15 +1,13 @@
 package com.project.playlistmaker.playerscreen.ui.viewmodel
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.playerscreen.ui.model.playerstate.PlayerState
 import com.project.playlistmaker.utils.DataFormat
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor
@@ -25,9 +23,8 @@ class PlayerViewModel(
 
     //Timer variables
     private val dataFormat = DataFormat()
-    private var currentTime = "00:00"
-    private var timerJob: Job? = null
-
+    private  var currentTime = "00:00"
+    private var handler = Handler(Looper.getMainLooper())
 
     private fun startAfterPrepare(afterPrepared: () -> Unit) {
         playerInteractor.startAfterPrepare(afterPrepared)
@@ -42,19 +39,18 @@ class PlayerViewModel(
     fun releasePlayer() {
         playerInteractor.releasePlayer()
         _state.value = PlayerState.STATE_DEFAULT
-        timerJob?.cancel()
     }
 
     private fun pausePlayer() {
         playerInteractor.pausePlayer()
+        removeCallbacks()
         _state.value = PlayerState.STATE_PAUSED
-        timerJob?.cancel()
     }
 
     private fun startPlayer() {
         playerInteractor.startPlayer()
+        startDurationTask()
         _state.value = PlayerState.STATE_PLAYING
-        startTimerJob()
     }
 
     private fun setOnCompletionListener(whenComplete: () -> Unit) {
@@ -92,25 +88,36 @@ class PlayerViewModel(
         }
     }
 
-    private fun startTimerJob() {
-        timerJob = viewModelScope.launch {
-            while (true) {
-                if (_state.value == PlayerState.STATE_PLAYING) {
-                    _state.value = PlayerState.STATE_PLAYING
-                    delay(UPDATE_DURATION_TIME_MILLIS)
-                    val remainingTime =
-                        dataFormat.convertMediaPlayerRemainingTime(
-                            getDuration(),
-                            getCurrentPosition()
-                        )
-                    currentTime = if (remainingTime > 0) {
-                        dataFormat.roundTimeToMinAndSecond(remainingTime)
-                    } else {
-                        "00:00"
-                    }
+    private val runnableTask = object : Runnable {
+        override fun run() {
+            if (_state.value == PlayerState.STATE_PLAYING) {
+                _state.value = PlayerState.STATE_PLAYING
+                val remainingTime =
+                    dataFormat.convertMediaPlayerRemainingTime(
+                        getDuration(),
+                        getCurrentPosition()
+                    )
+                currentTime = if (remainingTime > 0) {
+                    dataFormat.roundTimeToMinAndSecond(remainingTime)
+                } else {
+                    "00:00"
                 }
             }
+            handler.postDelayed(
+                this,
+                PlayerViewModel.UPDATE_DURATION_TIME_MILLIS
+            )
         }
+    }
+
+    private fun removeCallbacks() {
+        handler.removeCallbacks(runnableTask)
+    }
+
+    private fun startDurationTask() {
+        handler.post(
+            runnableTask
+        )
     }
 
     fun getCurrentTrackDuration(): String {
