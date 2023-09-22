@@ -1,8 +1,7 @@
 package com.project.playlistmaker.searchscreen.data.network.networkclient
 
-import com.project.playlistmaker.searchscreen.domain.models.NetworkError
-import com.project.playlistmaker.searchscreen.domain.models.Track
+import com.project.playlistmaker.searchscreen.data.dto.ResponseResultCode
 
 interface NetworkClient {
-    fun doRequest(query: String, onSuccess: (ArrayList<Track>) -> Unit, onError: (NetworkError) -> Unit)
+    suspend fun doRequest(dto: Any): ResponseResultCode
 }
