@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/padding_14"
     android:paddingEnd="@dimen/padding_15"
     android:paddingBottom="@dimen/padding_28"
-    tools:context=".mainscreen.MainActivity">
+    tools:context=".mainscreen.RootActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

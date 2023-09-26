@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="bottomMenuStyle">
+        <item name="itemIconTint">@color/bottom_nav_colors_night</item>
+        <item name="itemTextColor">@color/bottom_nav_colors_night</item>
+    </style>
+</resources>

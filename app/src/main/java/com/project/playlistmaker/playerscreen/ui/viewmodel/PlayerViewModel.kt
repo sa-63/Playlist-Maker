@@ -19,13 +19,17 @@ class PlayerViewModel(
     private val _state = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = _state
 
+    //Current time livedata
+    private val _duration = MutableLiveData<String>()
+    fun observeCurrentDuration(): LiveData<String> = _duration
+
     init {
         _state.postValue(PlayerState.STATE_DEFAULT)
+        _duration.postValue("00:00")
     }
 
     //Timer variables
     private val dataFormat = DataFormat()
-    private var currentTime = "00:00"
     private var timerJob: Job? = null
 
 
@@ -103,7 +107,7 @@ class PlayerViewModel(
                             getDuration(),
                             getCurrentPosition()
                         )
-                    currentTime = if (remainingTime > 0) {
+                    _duration.value = if (remainingTime > 0) {
                         dataFormat.roundTimeToMinAndSecond(remainingTime)
                     } else {
                         "00:00"
@@ -113,12 +117,8 @@ class PlayerViewModel(
         }
     }
 
-    fun getCurrentTrackDuration(): String {
-        return currentTime
-    }
-
     companion object {
         //Count value for timer
-        private const val UPDATE_DURATION_TIME_MILLIS = 1000L
+        private const val UPDATE_DURATION_TIME_MILLIS = 300L
     }
 }
