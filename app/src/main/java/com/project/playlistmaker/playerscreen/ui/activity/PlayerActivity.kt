@@ -37,8 +37,9 @@ class PlayerActivity : AppCompatActivity() {
 
         playerViewModel.observePlayerState().observe(this) { playerState ->
             changePlayPauseBtnImage(playerState)
-            binding.tvTrackDurationCurrent.text =
-                playerViewModel.getCurrentTrackDuration()
+            playerViewModel.observeCurrentDuration().observe(this) { duration ->
+                binding.tvTrackDurationCurrent.text = duration
+            }
         }
 
         //Listeners

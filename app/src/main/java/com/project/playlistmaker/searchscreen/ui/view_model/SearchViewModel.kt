@@ -15,7 +15,8 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
 
     //For Debounce
     private var isClickAllowed = true
-    private var debounceJob: Job? = null
+    private var clickDebounceJob: Job? = null
+    private var searchDebounceJob: Job? = null
 
     //LiveData
     //Request status
@@ -25,14 +26,14 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     //History
     private val searchHistory = arrayListOf<Track>()
 
-    fun notifyCleared() {
-        _state
+    fun showHistory() {
         _state.postValue(SearchScreenStatus.ShowHistory(searchInteractor.getTracksHistory()))
     }
 
     //Debounce
     fun searchDebounce(toSearch: String) {
-        debounceJob = viewModelScope.launch {
+        searchDebounceJob?.cancel()
+        searchDebounceJob = viewModelScope.launch {
             delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             searchForTracks(toSearch)
         }
@@ -40,7 +41,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
 
     fun clickDebounce(): Boolean {
         val currentState = isClickAllowed
-        debounceJob?.cancel()
+        clickDebounceJob?.cancel()
         if (isClickAllowed) {
             viewModelScope.launch {
                 isClickAllowed = false
@@ -53,6 +54,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
 
     //Search
     fun searchForTracks(toSearch: String) {
+        searchDebounceJob?.cancel()
         setState(SearchScreenStatus.Loading)
         viewModelScope.launch {
             searchInteractor
@@ -110,6 +112,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     fun clearSearchHistory() {
         searchInteractor.clearHistory()
         searchHistory.clear()
+        showHistory()
     }
 
     //State
