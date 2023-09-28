@@ -65,7 +65,8 @@ class SearchFragment : Fragment(), TrackListViewHolder.TrackListClickListener {
             binding.etSearch.text.clear()
             binding.ivClear.visibility = clearButtonVisibility("")
             binding.etSearch.hideKeyboard()
-            searchViewModel.notifyCleared()
+            clearAndNotifyTracksAdapter()
+            searchViewModel.showHistory()
         }
 
         binding.etSearch.setOnFocusChangeListener { _, hasFocus ->

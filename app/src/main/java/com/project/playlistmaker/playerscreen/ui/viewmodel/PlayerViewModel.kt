@@ -1,13 +1,15 @@
 package com.project.playlistmaker.playerscreen.ui.viewmodel
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.playerscreen.ui.model.playerstate.PlayerState
 import com.project.playlistmaker.utils.DataFormat
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor
@@ -17,14 +19,19 @@ class PlayerViewModel(
     private val _state = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = _state
 
+    //Current time livedata
+    private val _duration = MutableLiveData<String>()
+    fun observeCurrentDuration(): LiveData<String> = _duration
+
     init {
         _state.postValue(PlayerState.STATE_DEFAULT)
+        _duration.postValue("00:00")
     }
 
     //Timer variables
     private val dataFormat = DataFormat()
-    private  var currentTime = "00:00"
-    private var handler = Handler(Looper.getMainLooper())
+    private var timerJob: Job? = null
+
 
     private fun startAfterPrepare(afterPrepared: () -> Unit) {
         playerInteractor.startAfterPrepare(afterPrepared)
@@ -39,18 +46,19 @@ class PlayerViewModel(
     fun releasePlayer() {
         playerInteractor.releasePlayer()
         _state.value = PlayerState.STATE_DEFAULT
+        timerJob?.cancel()
     }
 
     private fun pausePlayer() {
         playerInteractor.pausePlayer()
-        removeCallbacks()
         _state.value = PlayerState.STATE_PAUSED
+        timerJob?.cancel()
     }
 
     private fun startPlayer() {
         playerInteractor.startPlayer()
-        startDurationTask()
         _state.value = PlayerState.STATE_PLAYING
+        startTimerJob()
     }
 
     private fun setOnCompletionListener(whenComplete: () -> Unit) {
@@ -88,44 +96,29 @@ class PlayerViewModel(
         }
     }
 
-    private val runnableTask = object : Runnable {
-        override fun run() {
-            if (_state.value == PlayerState.STATE_PLAYING) {
-                _state.value = PlayerState.STATE_PLAYING
-                val remainingTime =
-                    dataFormat.convertMediaPlayerRemainingTime(
-                        getDuration(),
-                        getCurrentPosition()
-                    )
-                currentTime = if (remainingTime > 0) {
-                    dataFormat.roundTimeToMinAndSecond(remainingTime)
-                } else {
-                    "00:00"
+    private fun startTimerJob() {
+        timerJob = viewModelScope.launch {
+            while (true) {
+                if (_state.value == PlayerState.STATE_PLAYING) {
+                    _state.value = PlayerState.STATE_PLAYING
+                    delay(UPDATE_DURATION_TIME_MILLIS)
+                    val remainingTime =
+                        dataFormat.convertMediaPlayerRemainingTime(
+                            getDuration(),
+                            getCurrentPosition()
+                        )
+                    _duration.value = if (remainingTime > 0) {
+                        dataFormat.roundTimeToMinAndSecond(remainingTime)
+                    } else {
+                        "00:00"
+                    }
                 }
             }
-            handler.postDelayed(
-                this,
-                PlayerViewModel.UPDATE_DURATION_TIME_MILLIS
-            )
         }
-    }
-
-    private fun removeCallbacks() {
-        handler.removeCallbacks(runnableTask)
-    }
-
-    private fun startDurationTask() {
-        handler.post(
-            runnableTask
-        )
-    }
-
-    fun getCurrentTrackDuration(): String {
-        return currentTime
     }
 
     companion object {
         //Count value for timer
-        private const val UPDATE_DURATION_TIME_MILLIS = 1000L
+        private const val UPDATE_DURATION_TIME_MILLIS = 300L
     }
 }

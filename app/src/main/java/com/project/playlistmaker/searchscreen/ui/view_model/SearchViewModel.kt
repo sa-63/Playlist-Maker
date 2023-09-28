@@ -1,20 +1,22 @@
 package com.project.playlistmaker.searchscreen.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.project.playlistmaker.searchscreen.domain.models.NetworkError
+import androidx.lifecycle.viewModelScope
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.domain.search_interactor.SearchInteractor
 import com.project.playlistmaker.searchscreen.ui.models.SearchScreenStatus
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewModel() {
+
     //For Debounce
-    private val mainHandler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
-    private var searchRunnable: Runnable? = null
+    private var clickDebounceJob: Job? = null
+    private var searchDebounceJob: Job? = null
 
     //LiveData
     //Request status
@@ -24,46 +26,61 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     //History
     private val searchHistory = arrayListOf<Track>()
 
-    fun notifyCleared() {
+    fun showHistory() {
         _state.postValue(SearchScreenStatus.ShowHistory(searchInteractor.getTracksHistory()))
     }
 
     //Debounce
     fun searchDebounce(toSearch: String) {
-        if (searchRunnable != null) {
-            mainHandler.removeCallbacks(searchRunnable!!)
-        }
-        searchRunnable = Runnable {
+        searchDebounceJob?.cancel()
+        searchDebounceJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             searchForTracks(toSearch)
         }
-        mainHandler.postDelayed(searchRunnable!!, SEARCH_DEBOUNCE_DELAY_MILLIS)
     }
 
     fun clickDebounce(): Boolean {
         val currentState = isClickAllowed
+        clickDebounceJob?.cancel()
         if (isClickAllowed) {
-            isClickAllowed = false
-            mainHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY_MILLIS)
+            viewModelScope.launch {
+                isClickAllowed = false
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
         }
         return currentState
     }
 
     //Search
     fun searchForTracks(toSearch: String) {
+        searchDebounceJob?.cancel()
         setState(SearchScreenStatus.Loading)
-        searchInteractor.searchForTracks(
-            toSearch,
-            onSuccess = { trackList ->
-                setState(SearchScreenStatus.ShowTracks(trackList))
-            },
-            onError = { networkError ->
-                if (networkError == NetworkError.CONNECTION_ERROR) {
-                    setState(SearchScreenStatus.ConnectionError)
-                } else {
-                    setState(SearchScreenStatus.NotFound)
+        viewModelScope.launch {
+            searchInteractor
+                .searchForTracks(toSearch)
+                .collect { pair ->
+                    getTracksResult(pair.first, pair.second)
                 }
+        }
+    }
+
+    private fun getTracksResult(foundTracks: List<Track>?, errorMessage: Boolean?) {
+        val trackList = mutableListOf<Track>()
+        if (foundTracks != null) {
+            trackList.addAll(foundTracks)
+            setState(SearchScreenStatus.ShowTracks(trackList))
+        }
+
+        when {
+            errorMessage != null -> {
+                setState(SearchScreenStatus.ConnectionError)
             }
-        )
+
+            trackList.isEmpty() -> {
+                setState(SearchScreenStatus.NotFound)
+            }
+        }
     }
 
     //History
@@ -95,6 +112,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     fun clearSearchHistory() {
         searchInteractor.clearHistory()
         searchHistory.clear()
+        showHistory()
     }
 
     //State
