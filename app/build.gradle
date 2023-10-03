@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -62,4 +63,8 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.5.6"
     //Coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    //Room
+    implementation 'androidx.room:room-ktx:2.5.2'
+    kapt group: 'androidx.room', name: 'room-compiler', version: '2.5.2'
+    implementation group: 'androidx.room', name: 'room-runtime', version: '2.5.2'
 }

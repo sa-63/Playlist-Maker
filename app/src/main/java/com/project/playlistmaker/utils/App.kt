@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.project.playlistmaker.di.DataModule
+import com.project.playlistmaker.di.DbModule
 import com.project.playlistmaker.di.InteractorModule
 import com.project.playlistmaker.di.RepositoryModule
 import com.project.playlistmaker.di.ViewModuleModule
@@ -20,7 +21,8 @@ class App : Application() {
                 DataModule().dataModule,
                 RepositoryModule().repositoryModule,
                 InteractorModule().interactorModule,
-                ViewModuleModule().viewModelModule
+                ViewModuleModule().viewModelModule,
+                DbModule().dbModule
             )
         }
 

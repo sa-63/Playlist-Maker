@@ -42,6 +42,14 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
+        playerViewModel.checkIsFavourite(track.trackId)
+
+        playerViewModel.observeFavourite().observe(this) { isFavorite ->
+            binding.btnAddToFav.setImageResource(
+                if (isFavorite) R.drawable.ic_like_on else R.drawable.ic_like
+            )
+        }
+
         //Listeners
         binding.btnPlayPause.setOnClickListener {
             playerViewModel.playbackControl(track.previewUrl)
@@ -49,6 +57,10 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.ibBack.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.btnAddToFav.setOnClickListener {
+            playerViewModel.onFavouriteClicked(track)
         }
     }
 
