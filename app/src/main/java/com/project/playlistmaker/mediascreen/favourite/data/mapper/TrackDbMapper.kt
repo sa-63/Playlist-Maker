@@ -1,10 +1,10 @@
-package com.project.playlistmaker.data.converter
+package com.project.playlistmaker.mediascreen.favourite.data.mapper
 
-import com.project.playlistmaker.data.entity.TrackEntity
+import com.project.playlistmaker.mediascreen.favourite.data.entity.TrackEntity
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import java.util.Calendar
 
-class TrackDbConverter {
+class TrackDbMapper {
 
     fun mapTrackEntityToTrack(from: TrackEntity): Track {
         return Track(

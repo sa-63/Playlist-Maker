@@ -1,4 +1,4 @@
-package com.project.playlistmaker.mediascreen.domain.repository
+package com.project.playlistmaker.mediascreen.favourite.domain.repository
 
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import kotlinx.coroutines.flow.Flow

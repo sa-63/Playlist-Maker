@@ -1,16 +1,16 @@
-package com.project.playlistmaker.mediascreen.data
+package com.project.playlistmaker.mediascreen.favourite.data.impl
 
-import com.project.playlistmaker.data.converter.TrackDbConverter
-import com.project.playlistmaker.data.database.AppDatabase
-import com.project.playlistmaker.data.entity.TrackEntity
-import com.project.playlistmaker.mediascreen.domain.repository.FavouriteTracksRepository
+import com.project.playlistmaker.mediascreen.favourite.data.database.AppDatabase
+import com.project.playlistmaker.mediascreen.favourite.data.entity.TrackEntity
+import com.project.playlistmaker.mediascreen.favourite.data.mapper.TrackDbMapper
+import com.project.playlistmaker.mediascreen.favourite.domain.repository.FavouriteTracksRepository
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FavouriteTracksRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val trackDbConvertor: TrackDbConverter,
+    private val trackDbConvertor: TrackDbMapper,
 ) : FavouriteTracksRepository {
 
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.playlistmaker.mediascreen.domain.interactor.FavouriteTracksInteractor
+import com.project.playlistmaker.mediascreen.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.mediascreen.ui.models.FavTracksState
 import com.project.playlistmaker.searchscreen.ui.view_model.SearchViewModel.Companion.CLICK_DEBOUNCE_DELAY_MILLIS
 import kotlinx.coroutines.Job

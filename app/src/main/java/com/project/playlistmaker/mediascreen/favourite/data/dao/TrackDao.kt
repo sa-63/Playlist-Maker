@@ -1,10 +1,10 @@
-package com.project.playlistmaker.data.dao
+package com.project.playlistmaker.mediascreen.favourite.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.project.playlistmaker.data.entity.TrackEntity
+import com.project.playlistmaker.mediascreen.favourite.data.entity.TrackEntity
 
 @Dao
 interface TrackDao {

@@ -1,7 +1,7 @@
 package com.project.playlistmaker.di
 
-import com.project.playlistmaker.mediascreen.domain.impl.FavouriteTracksInteractorImpl
-import com.project.playlistmaker.mediascreen.domain.interactor.FavouriteTracksInteractor
+import com.project.playlistmaker.mediascreen.favourite.domain.impl.FavouriteTracksInteractorImpl
+import com.project.playlistmaker.mediascreen.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.playerscreen.domain.impl.PlayerInteractorImpl
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.searchscreen.domain.impl.SearchInteractorImpl

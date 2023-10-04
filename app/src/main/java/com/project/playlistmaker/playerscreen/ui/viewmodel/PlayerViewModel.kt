@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.playlistmaker.mediascreen.domain.interactor.FavouriteTracksInteractor
+import com.project.playlistmaker.mediascreen.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.playerscreen.ui.model.playerstate.PlayerState
 import com.project.playlistmaker.searchscreen.domain.models.Track
@@ -36,9 +36,6 @@ class PlayerViewModel(
     //Timer variables
     private val dataFormat = DataFormat()
     private var timerJob: Job? = null
-
-    //FavTracks
-    private var isFavourite = false
 
     private fun startAfterPrepare(afterPrepared: () -> Unit) {
         playerInteractor.startAfterPrepare(afterPrepared)
@@ -131,8 +128,7 @@ class PlayerViewModel(
         viewModelScope.launch {
             favTracksInteractor
                 .isFavoriteTrack(trackId)
-                .collect { isFavorite ->
-                    isFavourite = isFavorite
+                .collect { isFavourite ->
                     isFavouriteLiveData.postValue(isFavourite)
                 }
         }
@@ -140,14 +136,12 @@ class PlayerViewModel(
 
     fun onFavouriteClicked(track: Track) {
         viewModelScope.launch {
-            isFavourite = if (isFavourite) {
+            if (isFavouriteLiveData.value!!) {
                 favTracksInteractor.deleteFromFavorites(track.trackId)
                 isFavouriteLiveData.postValue(false)
-                false
             } else {
                 favTracksInteractor.addToFavorites(track)
                 isFavouriteLiveData.postValue(true)
-                true
             }
         }
     }
