@@ -1,9 +1,9 @@
-package com.project.playlistmaker.mediascreen.favourite.data.impl
+package com.project.playlistmaker.favourite.data.impl
 
-import com.project.playlistmaker.mediascreen.favourite.data.database.AppDatabase
-import com.project.playlistmaker.mediascreen.favourite.data.entity.TrackEntity
-import com.project.playlistmaker.mediascreen.favourite.data.mapper.TrackDbMapper
-import com.project.playlistmaker.mediascreen.favourite.domain.repository.FavouriteTracksRepository
+import com.project.playlistmaker.favourite.data.database.AppDatabase
+import com.project.playlistmaker.favourite.data.entity.TrackEntity
+import com.project.playlistmaker.favourite.data.mapper.TrackDbMapper
+import com.project.playlistmaker.favourite.domain.repository.FavouriteTracksRepository
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

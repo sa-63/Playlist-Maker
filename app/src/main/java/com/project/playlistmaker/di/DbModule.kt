@@ -1,8 +1,8 @@
 package com.project.playlistmaker.di
 
 import androidx.room.Room
-import com.project.playlistmaker.mediascreen.favourite.data.mapper.TrackDbMapper
-import com.project.playlistmaker.mediascreen.favourite.data.database.AppDatabase
+import com.project.playlistmaker.favourite.data.mapper.TrackDbMapper
+import com.project.playlistmaker.favourite.data.database.AppDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

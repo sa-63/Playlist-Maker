@@ -1,7 +1,7 @@
-package com.project.playlistmaker.mediascreen.favourite.domain.impl
+package com.project.playlistmaker.favourite.domain.impl
 
-import com.project.playlistmaker.mediascreen.favourite.domain.interactor.FavouriteTracksInteractor
-import com.project.playlistmaker.mediascreen.favourite.domain.repository.FavouriteTracksRepository
+import com.project.playlistmaker.favourite.domain.interactor.FavouriteTracksInteractor
+import com.project.playlistmaker.favourite.domain.repository.FavouriteTracksRepository
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.playlistmaker.mediascreen.favourite.domain.interactor.FavouriteTracksInteractor
+import com.project.playlistmaker.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.playerscreen.ui.model.playerstate.PlayerState
 import com.project.playlistmaker.searchscreen.domain.models.Track

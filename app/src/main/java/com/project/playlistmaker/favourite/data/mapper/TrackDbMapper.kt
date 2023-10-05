@@ -1,6 +1,6 @@
-package com.project.playlistmaker.mediascreen.favourite.data.mapper
+package com.project.playlistmaker.favourite.data.mapper
 
-import com.project.playlistmaker.mediascreen.favourite.data.entity.TrackEntity
+import com.project.playlistmaker.favourite.data.entity.TrackEntity
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import java.util.Calendar
 
