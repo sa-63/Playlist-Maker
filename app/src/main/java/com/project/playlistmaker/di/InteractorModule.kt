@@ -1,5 +1,7 @@
 package com.project.playlistmaker.di
 
+import com.project.playlistmaker.favourite.domain.impl.FavouriteTracksInteractorImpl
+import com.project.playlistmaker.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.playerscreen.domain.impl.PlayerInteractorImpl
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.searchscreen.domain.impl.SearchInteractorImpl
@@ -29,8 +31,14 @@ class InteractorModule {
             SettingsInteractorImpl(get())
         }
 
+        //Sharing
         single<SharingInteractor> {
             SharingInteractorImpl(get())
+        }
+
+        //Favourites
+        single<FavouriteTracksInteractor> {
+           FavouriteTracksInteractorImpl(get())
         }
     }
 }

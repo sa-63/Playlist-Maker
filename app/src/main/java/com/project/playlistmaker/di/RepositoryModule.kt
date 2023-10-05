@@ -1,5 +1,7 @@
 package com.project.playlistmaker.di
 
+import com.project.playlistmaker.favourite.data.impl.FavouriteTracksRepositoryImpl
+import com.project.playlistmaker.favourite.domain.repository.FavouriteTracksRepository
 import com.project.playlistmaker.playerscreen.data.PlayerRepositoryImpl
 import com.project.playlistmaker.playerscreen.domain.playerrepository.PlayerRepository
 import com.project.playlistmaker.searchscreen.data.impl.SearchRepositoryImpl
@@ -25,6 +27,11 @@ class RepositoryModule {
         //Settings
         single<SettingsRepository> {
             SettingsRepositoryImpl(get())
+        }
+
+        //Favourites
+        single<FavouriteTracksRepository> {
+            FavouriteTracksRepositoryImpl(get(), get())
         }
     }
 }

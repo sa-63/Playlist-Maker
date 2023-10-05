@@ -4,15 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.playlistmaker.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.playerscreen.ui.model.playerstate.PlayerState
+import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.utils.DataFormat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
-    private val playerInteractor: PlayerInteractor
+    private val playerInteractor: PlayerInteractor,
+    private val favTracksInteractor: FavouriteTracksInteractor
 ) : ViewModel() {
 
     //Observers
@@ -23,6 +26,8 @@ class PlayerViewModel(
     private val _duration = MutableLiveData<String>()
     fun observeCurrentDuration(): LiveData<String> = _duration
 
+    private val isFavouriteLiveData = MutableLiveData<Boolean>()
+
     init {
         _state.postValue(PlayerState.STATE_DEFAULT)
         _duration.postValue("00:00")
@@ -31,7 +36,6 @@ class PlayerViewModel(
     //Timer variables
     private val dataFormat = DataFormat()
     private var timerJob: Job? = null
-
 
     private fun startAfterPrepare(afterPrepared: () -> Unit) {
         playerInteractor.startAfterPrepare(afterPrepared)
@@ -113,6 +117,31 @@ class PlayerViewModel(
                         "00:00"
                     }
                 }
+            }
+        }
+    }
+
+    //For addToFavourite
+    fun observeFavourite(): LiveData<Boolean> = isFavouriteLiveData
+
+    fun checkIsFavourite(trackId: Int) {
+        viewModelScope.launch {
+            favTracksInteractor
+                .isFavoriteTrack(trackId)
+                .collect { isFavourite ->
+                    isFavouriteLiveData.postValue(isFavourite)
+                }
+        }
+    }
+
+    fun onFavouriteClicked(track: Track) {
+        viewModelScope.launch {
+            if (isFavouriteLiveData.value!!) {
+                favTracksInteractor.deleteFromFavorites(track.trackId)
+                isFavouriteLiveData.postValue(false)
+            } else {
+                favTracksInteractor.addToFavorites(track)
+                isFavouriteLiveData.postValue(true)
             }
         }
     }
