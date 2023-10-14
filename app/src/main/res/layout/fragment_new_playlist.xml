@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".createplaylist.ui.fragment.PlaylistsCreationFragment"
+    android:id="@+id/parent_layout">
+
+    <ImageButton
+        android:id="@+id/back_button_new_playlist"
+        style="@style/back_btn_style"
+        android:layout_margin="@dimen/margin_20"
+        app:layout_constraintBottom_toTopOf="@+id/iv_cover"
+        app:layout_constraintEnd_toStartOf="@id/title_new_playlist"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/title_new_playlist"
+        style="@style/NewPlaylistText"
+        android:text="@string/new_playlist"
+        app:layout_constraintStart_toEndOf="@id/back_button_new_playlist"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border_pl_24"
+        style="@style/constraintGuide_vertical"
+        app:layout_constraintGuide_begin="@dimen/guide_line_24" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border_pl_16"
+        style="@style/constraintGuide_vertical"
+        app:layout_constraintGuide_begin="@dimen/guide_line_16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border_pl_24"
+        style="@style/constraintGuide_vertical"
+        app:layout_constraintGuide_end="@dimen/guide_line_24" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border_pl_16"
+        style="@style/constraintGuide_vertical"
+        app:layout_constraintGuide_end="@dimen/guide_line_16" />
+
+    <ImageView
+        android:id="@+id/iv_cover"
+        style="@style/ImagePlaylist"
+        app:layout_constraintBottom_toTopOf="@id/text_input_playlist_title"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintEnd_toEndOf="@id/right_border_pl_24"
+        app:layout_constraintStart_toStartOf="@id/left_border_pl_24"
+        app:layout_constraintTop_toBottomOf="@id/back_button_new_playlist" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_playlist_title"
+        style="@style/InputLayoutPlaylist"
+        android:layout_marginTop="@dimen/margin_32"
+        app:layout_constraintBottom_toTopOf="@id/text_input_playlist_description"
+        app:layout_constraintEnd_toEndOf="@id/right_border_pl_16"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/left_border_pl_16"
+        app:layout_constraintTop_toBottomOf="@id/iv_cover">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_playlist_title"
+            style="@style/InputTextPlaylist"
+            android:hint="@string/playlist_name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_playlist_description"
+        style="@style/InputLayoutPlaylist"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginBottom="148dp"
+        app:layout_constraintBottom_toTopOf="@id/barrier_bottom_pl"
+        app:layout_constraintEnd_toEndOf="@id/right_border_pl_16"
+        app:layout_constraintStart_toStartOf="@id/left_border_pl_16"
+        app:layout_constraintTop_toBottomOf="@id/text_input_playlist_title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_playlist_description"
+            style="@style/InputTextPlaylist"
+            android:hint="@string/description" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_bottom_pl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="text_input_playlist_description" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_create_playlist"
+        style="@style/ButtonLong"
+        android:background="@drawable/selector_button_pl"
+        android:text="@string/create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/right_border_pl_16"
+        app:layout_constraintStart_toStartOf="@id/left_border_pl_16" />
+</androidx.constraintlayout.widget.ConstraintLayout>

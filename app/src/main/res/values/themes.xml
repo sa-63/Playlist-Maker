@@ -27,4 +27,6 @@
         <item name="android:textSize">@dimen/text_14</item>
         <item name="android:layout_marginTop">@dimen/margin_24</item>
     </style>
+
+    <color name="design_snackbar_background_color" tools:override="true">?attr/colorPrimary</color>
 </resources>

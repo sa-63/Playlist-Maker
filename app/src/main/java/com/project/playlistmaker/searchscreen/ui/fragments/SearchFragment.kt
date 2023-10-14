@@ -1,7 +1,6 @@
 package com.project.playlistmaker.searchscreen.ui.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,10 +10,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentSearchBinding
-import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
-import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity.Companion.TRACK_DTO_DATA
+import com.project.playlistmaker.playerscreen.ui.fragment.PlayerFragment
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.ui.adapter.TrackListAdapter
 import com.project.playlistmaker.searchscreen.ui.models.SearchScreenStatus
@@ -205,13 +205,12 @@ class SearchFragment : Fragment(), TrackListViewHolder.TrackListClickListener {
         searchViewModel.addToSearchHistory(track)
     }
 
-    //Open Player Activity
+    //Open Player
     private fun openPlayer(track: Track) {
-        activity?.let {
-            val intent = Intent(it, PlayerActivity::class.java)
-            intent.putExtra(TRACK_DTO_DATA, track)
-            it.startActivity(intent)
-        }
+        findNavController().navigate(
+            R.id.action_searchFragment_to_PlayerFragment,
+            PlayerFragment.createArgs(Gson().toJson(track))
+        )
     }
 
     //Adapters

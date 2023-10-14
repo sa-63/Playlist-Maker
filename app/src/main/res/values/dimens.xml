@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="text_5">5sp</dimen>
+    <dimen name="text_11">11sp</dimen>
     <dimen name="text_13">13sp</dimen>
     <dimen name="text_14">14sp</dimen>
     <dimen name="text_16">16sp</dimen>
     <dimen name="text_19">19sp</dimen>
     <dimen name="text_22">22sp</dimen>
+    <dimen name="text_24">22sp</dimen>
 
     <dimen name="zero_dp">0dp</dimen>
+    <dimen name="size_2">2dp</dimen>
     <dimen name="size_5">5dp</dimen>
     <dimen name="size_8">8dp</dimen>
     <dimen name="size_14">14dp</dimen>
     <dimen name="size_15">15dp</dimen>
+    <dimen name="size_16">16dp</dimen>
     <dimen name="size_36">36dp</dimen>
+    <dimen name="size_48">48dp</dimen>
     <dimen name="size_61">61dp</dimen>
+    <dimen name="size_160">160dp</dimen>
     <dimen name="guide_line_16">16dp</dimen>
-    <dimen name="guide_line_24">24dp</dimen>
+    <dimen name="guide_line_24">24dp</dimen>1
     <dimen name="cover_corner_size">8dp</dimen>
     <dimen name="circular_progress_indicator_size">44dp</dimen>
 
+    <dimen name="padding_8">8dp</dimen>
     <dimen name="padding_10">10dp</dimen>
     <dimen name="padding_11">11dp</dimen>
     <dimen name="padding_14">14dp</dimen>
@@ -26,27 +34,41 @@
     <dimen name="padding_16">16dp</dimen>
     <dimen name="padding_17">17dp</dimen>
     <dimen name="padding_20">20dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
     <dimen name="padding_28">28dp</dimen>
     <dimen name="padding_40">40dp</dimen>
     <dimen name="padding_44">44dp</dimen>
     <dimen name="settings_item_padding">42dp</dimen>
 
     <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_12">12dp</dimen>
     <dimen name="margin_14">14dp</dimen>
     <dimen name="margin_15">15dp</dimen>
     <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_17">16dp</dimen>
     <dimen name="margin_18">18dp</dimen>
     <dimen name="margin_20">20dp</dimen>
     <dimen name="margin_24">24dp</dimen>
     <dimen name="margin_28">28dp</dimen>
     <dimen name="margin_29">29dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_68">68dp</dimen>
 
     <dimen name="cover_size">45dp</dimen>
     <dimen name="round_btn_corners">54dp</dimen>
     <dimen name="default_bar_sizes">56dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
     <dimen name="max_text_size_in_track">250dp</dimen>
+    <dimen name="pl_card_text_size">12sp</dimen>
+    <dimen name="rounded_corners_album">8dp</dimen>
+    <dimen name="rounded_corners_album_preview">2dp</dimen>
+
+    <dimen name="vertical_padding_settings_menu_items">20dp</dimen>
+    <dimen name="vertical_padding_text_input_layout">18dp</dimen>
+    <dimen name="start_padding_settings_menu_items">16dp</dimen>
+    <dimen name="start_padding_text_input_layout">16dp</dimen>
+    <dimen name="edit_text_view_radius">4dp</dimen>
 </resources>
