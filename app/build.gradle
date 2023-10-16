@@ -67,4 +67,6 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.5.2'
     kapt group: 'androidx.room', name: 'room-compiler', version: '2.5.2'
     implementation group: 'androidx.room', name: 'room-runtime', version: '2.5.2'
+    //Peko
+    implementation 'com.markodevcic:peko:3.0.2'
 }

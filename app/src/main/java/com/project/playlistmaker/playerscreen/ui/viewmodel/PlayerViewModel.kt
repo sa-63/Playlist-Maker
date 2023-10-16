@@ -4,19 +4,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.playlistmaker.R
+import com.project.playlistmaker.createplaylist.domain.interactor.PlaylistDbInteractor
+import com.project.playlistmaker.createplaylist.domain.model.Playlist
 import com.project.playlistmaker.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
-import com.project.playlistmaker.playerscreen.ui.model.playerstate.PlayerState
+import com.project.playlistmaker.playerscreen.ui.model.PlayerState
+import com.project.playlistmaker.playerscreen.ui.model.PlaylistsInPlayerState
+import com.project.playlistmaker.playerscreen.ui.model.ToastState
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.utils.DataFormat
+import com.project.playlistmaker.utils.ResourceProvider
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
+    private val track: Track,
     private val playerInteractor: PlayerInteractor,
-    private val favTracksInteractor: FavouriteTracksInteractor
+    private val resourceProvider: ResourceProvider,
+    private val favTracksInteractor: FavouriteTracksInteractor,
+    private val playlistsDbInteractor: PlaylistDbInteractor
 ) : ViewModel() {
+
 
     //Observers
     private val _state = MutableLiveData<PlayerState>()
@@ -26,7 +36,16 @@ class PlayerViewModel(
     private val _duration = MutableLiveData<String>()
     fun observeCurrentDuration(): LiveData<String> = _duration
 
+    //Favourite
     private val isFavouriteLiveData = MutableLiveData<Boolean>()
+
+    //Toast
+    private val toastLiveData = MutableLiveData<ToastState>()
+    fun observeToastState(): LiveData<ToastState> = toastLiveData
+
+    //Playlists
+    private val playlistsLiveData = MutableLiveData<PlaylistsInPlayerState>()
+    fun observePlaylists(): LiveData<PlaylistsInPlayerState> = playlistsLiveData
 
     init {
         _state.postValue(PlayerState.STATE_DEFAULT)
@@ -36,6 +55,9 @@ class PlayerViewModel(
     //Timer variables
     private val dataFormat = DataFormat()
     private var timerJob: Job? = null
+
+    //FavTracks
+    private var isFavourite = false
 
     private fun startAfterPrepare(afterPrepared: () -> Unit) {
         playerInteractor.startAfterPrepare(afterPrepared)
@@ -128,7 +150,8 @@ class PlayerViewModel(
         viewModelScope.launch {
             favTracksInteractor
                 .isFavoriteTrack(trackId)
-                .collect { isFavourite ->
+                .collect { isFavorite ->
+                    isFavourite = isFavorite
                     isFavouriteLiveData.postValue(isFavourite)
                 }
         }
@@ -136,14 +159,49 @@ class PlayerViewModel(
 
     fun onFavouriteClicked(track: Track) {
         viewModelScope.launch {
-            if (isFavouriteLiveData.value!!) {
+            isFavourite = if (isFavourite) {
                 favTracksInteractor.deleteFromFavorites(track.trackId)
                 isFavouriteLiveData.postValue(false)
+                false
             } else {
                 favTracksInteractor.addToFavorites(track)
                 isFavouriteLiveData.postValue(true)
+                true
             }
         }
+    }
+
+    //Toast Related
+    fun toastWasShown() {
+        toastLiveData.value = ToastState.None
+    }
+
+    private fun showToast(message: String) {
+        toastLiveData.value =
+            ToastState.Show(message)
+    }
+
+    //Playlists Related
+    fun addToPlaylistClicked() {
+        viewModelScope.launch {
+            playlistsDbInteractor.getPlaylists().collect {
+                playlistsLiveData.postValue(PlaylistsInPlayerState.DisplayPlaylists(it))
+            }
+        }
+    }
+
+    fun onPlaylistClicked(playlist: Playlist) {
+        if (playlist.tracks.contains(track.trackId)) {
+            showToast("${resourceProvider.getString(R.string.track_is_in_pl_already)} ${playlist.name}")
+        } else {
+            viewModelScope.launch {
+                playlist.tracks.add(track.trackId)
+                val updatedPlaylist = playlist.copy(numberOfTracks = playlist.numberOfTracks + 1)
+                playlistsDbInteractor.addTrackToPlaylist(track, updatedPlaylist)
+            }
+            showToast("${resourceProvider.getString(R.string.track_added_to_pl)} ${playlist.name}")
+        }
+        playlistsLiveData.postValue(PlaylistsInPlayerState.HidePlaylists)
     }
 
     companion object {

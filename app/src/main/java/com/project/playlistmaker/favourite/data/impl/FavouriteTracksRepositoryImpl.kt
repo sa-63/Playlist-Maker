@@ -1,8 +1,8 @@
 package com.project.playlistmaker.favourite.data.impl
 
-import com.project.playlistmaker.favourite.data.database.AppDatabase
-import com.project.playlistmaker.favourite.data.entity.TrackEntity
-import com.project.playlistmaker.favourite.data.mapper.TrackDbMapper
+import com.project.playlistmaker.db.database.AppDatabase
+import com.project.playlistmaker.db.entity.TrackEntity
+import com.project.playlistmaker.db.mappers.TrackDbMapper
 import com.project.playlistmaker.favourite.domain.repository.FavouriteTracksRepository
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import kotlinx.coroutines.flow.Flow
@@ -13,22 +13,21 @@ class FavouriteTracksRepositoryImpl(
     private val trackDbConvertor: TrackDbMapper,
 ) : FavouriteTracksRepository {
 
-
     override suspend fun addToFavorites(track: Track) {
-        appDatabase.TrackDao().addToFavorites(trackDbConvertor.mapTrackToTrackEntity(track))
+        appDatabase.favoritesDao().addToFavorites(trackDbConvertor.mapTrackToTrackEntity(track))
     }
 
     override suspend fun getFavoritesTracks(): Flow<List<Track>> = flow {
-        val tracks = appDatabase.TrackDao().getTracks()
+        val tracks = appDatabase.favoritesDao().getTracks()
         emit(convertFromTrackEntity(tracks))
     }
 
     override suspend fun deleteFromFavorites(trackId: Int) {
-        appDatabase.TrackDao().deleteFromFavorites(trackId)
+        appDatabase.favoritesDao().deleteFromFavorites(trackId)
     }
 
     override suspend fun isFavoriteTrack(trackId: Int): Flow<Boolean> = flow {
-        val isFavorite = appDatabase.TrackDao().isFavoriteTrack(trackId)
+        val isFavorite = appDatabase.favoritesDao().isFavoriteTrack(trackId)
         emit(isFavorite)
     }
 

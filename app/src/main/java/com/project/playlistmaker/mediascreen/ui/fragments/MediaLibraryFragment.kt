@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentMediaLibraryBinding
+import com.project.playlistmaker.favourite.ui.fragment.FavTracksFragment
 import com.project.playlistmaker.mediascreen.ui.adapters.MediaViewPagerAdapter
+import com.project.playlistmaker.myplaylists.ui.fragment.PlaylistsFragment
 
 class MediaLibraryFragment : Fragment() {
 
@@ -19,7 +21,7 @@ class MediaLibraryFragment : Fragment() {
 
     private val fragmentsList = listOf(
         FavTracksFragment.newInstance(),
-        MyPlaylistsFragment.newInstance()
+        PlaylistsFragment.newInstance()
     )
 
     override fun onCreateView(

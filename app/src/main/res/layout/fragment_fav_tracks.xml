@@ -9,6 +9,7 @@
         android:id="@+id/rv_fav_tracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/padding_16"
         android:layout_marginTop="@dimen/margin_16"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

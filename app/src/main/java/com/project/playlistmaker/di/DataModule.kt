@@ -21,7 +21,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class DataModule {
-
     val dataModule = module {
         //Network
         single<ItunesSearchApi> {
@@ -67,13 +66,13 @@ class DataModule {
             SearchHistoryStorageImpl(get(), get())
         }
 
+        single<SettingsThemeStorage> {
+            SharedPrefsThemeStorage(get())
+        }
+
         //Settings
         single<ExternalNavigator> {
             ExternalNavigatorImpl(androidContext())
-        }
-
-        single<SettingsThemeStorage> {
-            SharedPrefsThemeStorage(get())
         }
 
         //Player
