@@ -81,11 +81,11 @@ class PlaylistsFragment : Fragment(), PlaylistsLargeAdapter.PlaylistLargeClickLi
         binding.playlistsRecyclerView.adapter = playlistsLargeAdapter
     }
 
+    override fun onPlaylistClickListener(playlist: Playlist) {
+    }
+
     companion object {
         fun newInstance() = PlaylistsFragment()
         private const val NUMBER_OF_COLUMNS = 2
-    }
-
-    override fun onPlaylistClickListener(playlist: Playlist) {
     }
 }
