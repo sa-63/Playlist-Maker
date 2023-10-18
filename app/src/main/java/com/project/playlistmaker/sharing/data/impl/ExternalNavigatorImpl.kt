@@ -38,4 +38,12 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
             context.startActivity(this)
         }
     }
+
+    override fun share(info: String) {
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, info)
+            type = "text/plain"
+        }
+    }
 }

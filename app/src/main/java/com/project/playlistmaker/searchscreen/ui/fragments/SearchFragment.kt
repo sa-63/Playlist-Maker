@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentSearchBinding
-import com.project.playlistmaker.playerscreen.ui.fragment.PlayerFragment
+import com.project.playlistmaker.playerscreen.ui.activity.PlayerFragment
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.ui.adapter.TrackListAdapter
 import com.project.playlistmaker.searchscreen.ui.models.SearchScreenStatus

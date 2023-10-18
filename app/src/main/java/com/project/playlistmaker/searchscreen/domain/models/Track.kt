@@ -3,17 +3,18 @@ package com.project.playlistmaker.searchscreen.domain.models
 import java.io.Serializable
 
 data class Track (
-    val trackName: String,
-    val artistName: String,
-    val trackTimeMillis: Long,
-    val artworkUrl100: String,
-    val trackId: Int,
-    val collectionName: String,
-    val releaseDate: String,
-    val primaryGenreName: String,
-    val country: String,
-    val previewUrl: String
+    var trackId: Long? = null,
+    var isFavorite: Boolean = false,
+    var trackName: String? = null,
+    var artistName: String? = null,
+    var trackTimeMillis: Long? = null,
+    var artworkUrl100: String? = null,
+    var collectionName: String? =null,
+    var releaseDate: String? = null,
+    var primaryGenreName: String? = null,
+    var country: String? = null,
+    var previewUrl: String? = null
 ): Serializable {
-    fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    fun getCoverArtwork() = artworkUrl100!!.replaceAfterLast('/',"512x512bb.jpg")
 }
 

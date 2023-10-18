@@ -4,7 +4,7 @@ import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInte
 import com.project.playlistmaker.playerscreen.domain.playerrepository.PlayerRepository
 
 class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : PlayerInteractor {
-    override fun preparePlayer(url: String) {
+    override fun preparePlayer(url: String?) {
         playerRepository.preparePlayer(url)
     }
 

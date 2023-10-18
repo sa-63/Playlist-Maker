@@ -405,4 +405,147 @@
         <item name="android:maxLines">1</item>
         <item name="android:enabled">false</item>
     </style>
+
+    <style name="TextPlaylist">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/item_marginTop_high</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontWeight">@dimen/weight_high_text</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textSize">@dimen/very_high_text</item>
+    </style>
+
+    <style name="IconPlaylist">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">@color/black</item>
+        <item name="android:layout_marginTop">@dimen/item_marginTop_low</item>
+    </style>
+
+    <style name="StyleSwitch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:paddingStart">@dimen/before_item</item>
+        <item name="android:paddingTop">@dimen/padding_top_low</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/medium_text</item>
+    </style>
+
+    <style name="StyleMenuButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:gravity">fill</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingStart">@dimen/before_item</item>
+        <item name="android:paddingEnd">@dimen/after_item</item>
+        <item name="android:paddingTop">@dimen/padding_top_low</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+        @@ -323,6 +325,26 @@
+        <item name="android:enabled">false</item>
+    </style>
+
+    <style name="StyleBackButton">
+        <item name="android:layout_width">61dp</item>
+        <item name="android:layout_height">@dimen/height_button</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="icon">@drawable/ic_arrow_back</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+
+    <style name="PlayerGuideLine">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="ImagePointInTracksRecycler">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">@color/light_grey</item>
+        <item name="android:paddingTop">@dimen/item_paddingTop_VeryLow</item>
+        <item name="android:src">@drawable/ic_dot</item>
+    </style>
+
+    <style name="BottomSheetLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/shape_day_butt_sheet</item>
+        <item name="behavior_hideable">true</item>
+        <item name="behavior_peekHeight">@dimen/bottom_sheet_height</item>
+        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior</item>
+    </style>
+
+    <style name="BottomSheetHandle">
+        <item name="android:layout_width">@dimen/width_low</item>
+        <item name="android:layout_height">@dimen/hight_veryLow</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/item_margin_low</item>
+        <item name="android:background">@drawable/shape_day_handle</item>
+    </style>
+
+
+    <style name="RootLayoutTracksRecycler">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="ImageInTracksRecycler">
+        <item name="android:layout_width">@dimen/icon_medium_size</item>
+        <item name="android:layout_height">@dimen/icon_medium_size</item>
+        <item name="android:layout_marginStart">@dimen/item_marginStart_low</item>
+        <item name="android:layout_marginTop">@dimen/item_margin_low</item>
+        <item name="android:layout_marginBottom">@dimen/item_margin_low</item>
+        <item name="android:layout_marginEnd">@dimen/item_margin_low</item>
+    </style>
+
+    <style name="TrackNameInTracksRecycler">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/item_paddingTop_low</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/medium_text</item>
+        <item name="android:fontWeight">@dimen/weight_medium_text</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ArtistNameInTracksRecycler">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/light_grey</item>
+        <item name="android:textSize">@dimen/low_text</item>
+        <item name="android:fontWeight">@dimen/weight_medium_text</item>
+    </style>
+
+    <style name="PlaylistStringInRecycler">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/hight_veryLow</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/bottom_nav_text</item>
+        <item name="android:fontWeight">@dimen/weight_medium_text</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>

@@ -11,7 +11,7 @@ class DataFormat {
         )
     }
 
-    fun convertTimeToMnSs(time: Long): String {
+    fun convertTimeToMnSs(time: Long?): String {
         return SimpleDateFormat(
             MIN_SEC_FORMAT, Locale.getDefault()
         ).format(time).toString()

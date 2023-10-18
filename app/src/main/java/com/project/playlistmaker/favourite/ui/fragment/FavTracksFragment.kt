@@ -11,7 +11,7 @@ import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentFavTracksBinding
 import com.project.playlistmaker.favourite.ui.model.FavTracksState
 import com.project.playlistmaker.favourite.ui.viewmodel.FavTracksViewModel
-import com.project.playlistmaker.playerscreen.ui.fragment.PlayerFragment
+import com.project.playlistmaker.playerscreen.ui.activity.PlayerFragment
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.ui.adapter.TrackListAdapter
 import com.project.playlistmaker.searchscreen.ui.view_holder.TrackListViewHolder

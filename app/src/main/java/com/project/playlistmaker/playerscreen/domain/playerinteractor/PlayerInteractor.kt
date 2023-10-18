@@ -1,7 +1,7 @@
 package com.project.playlistmaker.playerscreen.domain.playerinteractor
 
 interface PlayerInteractor {
-    fun preparePlayer(url: String)
+    fun preparePlayer(url: String?)
 
     fun startPlayer()
 

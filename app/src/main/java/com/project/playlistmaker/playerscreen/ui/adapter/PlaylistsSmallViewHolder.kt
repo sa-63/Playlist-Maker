@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.project.playlistmaker.R
-import com.project.playlistmaker.createplaylist.domain.model.Playlist
+import com.project.playlistmaker.createplaylist.domain.model.MyPlaylist
 import com.project.playlistmaker.utils.TextUtils
 
 class PlaylistsSmallViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -16,16 +16,16 @@ class PlaylistsSmallViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
     private val name = itemView.findViewById<TextView>(R.id.playlist_name_small)
     private val numberOfTracks = itemView.findViewById<TextView>(R.id.number_of_tracks_small)
 
-    fun bind(playlist: Playlist) {
+    fun bind(myPlaylist: MyPlaylist) {
         Glide.with(coverImage)
-            .load(playlist.coverUri)
+            .load(myPlaylist.coverUri)
             .transform(
                 CenterCrop(),
                 RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.rounded_corners_album_preview))
             )
             .placeholder(R.drawable.ic_track_placeholder_small)
             .into(coverImage)
-        name.text = playlist.name
-        numberOfTracks.text = TextUtils.numberOfTracksString(playlist.numberOfTracks)
+        name.text = myPlaylist.name
+        numberOfTracks.text = TextUtils.numberOfTracksString(myPlaylist.numberOfTracks)
     }
 }

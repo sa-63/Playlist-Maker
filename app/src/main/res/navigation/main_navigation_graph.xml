@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation_graph"
-    app:startDestination="@id/libraryFragment">
+    app:startDestination="@id/MediaFragment">
 
     <fragment
-        android:id="@+id/libraryFragment"
-        android:name="com.project.playlistmaker.mediascreen.ui.fragments.MediaLibraryFragment"
-        android:label="LibraryFragment">
-        <action
-            android:id="@+id/action_libraryFragment_to_favTracksFragment"
-            app:destination="@id/favTracksFragment" />
-        <action
-            android:id="@+id/action_libraryFragment_to_myPlaylistFragment"
-            app:destination="@id/myPlaylistFragment" />
+        android:id="@+id/MediaFragment"
+        android:name="com.project.playlistmaker.media.presentation.ui.MediaFragment"
+        android:label="MediaFragment">
         <action
             android:id="@+id/action_libraryFragment_to_PlayerFragment"
             app:destination="@id/PlayerFragment" />
         <action
-            android:id="@+id/action_libraryFragment_to_newPlaylistFragment"
-            app:destination="@id/newPlaylistFragment" />
+            android:id="@+id/action_MediaFragment_to_PlaylistsFragment"
+            app:destination="@id/PlaylistsFragment" />
+        <action
+            android:id="@+id/action_MediaFragment_to_FavouritesFragment"
+            app:destination="@id/FavouritesFragment" />
     </fragment>
 
     <fragment
@@ -38,27 +36,43 @@
 
     <fragment
         android:id="@+id/PlayerFragment"
-        android:name="com.project.playlistmaker.playerscreen.ui.fragment.PlayerFragment"
+        android:name="com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity"
         android:label="PlayerFragment" >
-        <action
-            android:id="@+id/action_PlayerFragment_to_newPlaylistFragment"
-            app:destination="@id/newPlaylistFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/myPlaylistFragment"
+        android:id="@+id/PlaylistsFragment"
         android:name="com.project.playlistmaker.myplaylists.ui.fragment.PlaylistsFragment"
-        android:label="myPlaylistFragment" >
+        android:label="PlaylistsFragment" />
+
+    <fragment
+        android:id="@+id/FavouritesFragment"
+        android:name="com.project.playlistmaker.media.presentation.ui.favourites.FavouritesFragment"
+        android:label="FavouritesFragment" >
     </fragment>
 
     <fragment
-        android:id="@+id/favTracksFragment"
-        android:name="com.project.playlistmaker.favourite.ui.fragment.FavTracksFragment"
-        android:label="FavTracksFragment" >
+        android:id="@+id/PlaylistDetailsFragment"
+        android:name="com.project.playlistmaker.media.presentation.ui.playlist_details.PlaylistDetailsFragment"
+        android:label="PlaylistDetailsFragment" >
+        <argument
+            android:name="playlist_id"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_aboutPlaylistFragment_to_PlayerFragment"
+            app:destination="@id/PlayerFragment" />
+        <action
+            android:id="@+id/action_PlaylistDetailsFragment_to_PlaylistEditFragment"
+            app:destination="@id/PlaylistEditFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/newPlaylistFragment"
-        android:name="com.project.playlistmaker.createplaylist.ui.fragment.PlaylistsCreationFragment"
-        android:label="FavTracksFragment" />
+        android:id="@+id/PlaylistEditFragment"
+        android:name="com.project.playlistmaker.media.presentation.ui.playlist.PlaylistEditFragment"
+        android:label="PlaylistEditFragment"
+        tools:layout="@layout/fragment_playlist" >
+        <argument
+            android:name="playlist"
+            app:argType="com.practicum.playlistmaker.media.presentation.models.ParcelablePlaylist" />
+    </fragment>
 </navigation>

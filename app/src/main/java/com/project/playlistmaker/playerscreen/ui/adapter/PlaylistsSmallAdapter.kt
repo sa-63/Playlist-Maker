@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.playlistmaker.R
-import com.project.playlistmaker.createplaylist.domain.model.Playlist
+import com.project.playlistmaker.createplaylist.domain.model.MyPlaylist
 
 class PlaylistsSmallAdapter(private val clickListener: PlaylistSmallClickListener) :
     RecyclerView.Adapter<PlaylistsSmallViewHolder>() {
 
-    val playlists = ArrayList<Playlist>()
+    val myPlaylists = ArrayList<MyPlaylist>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistsSmallViewHolder =
         PlaylistsSmallViewHolder(
             LayoutInflater.from(parent.context)
@@ -17,13 +17,13 @@ class PlaylistsSmallAdapter(private val clickListener: PlaylistSmallClickListene
         )
 
     override fun onBindViewHolder(holder: PlaylistsSmallViewHolder, position: Int) {
-        holder.bind(playlists[position])
-        holder.itemView.setOnClickListener { clickListener.onPlaylistClickListener(playlists[position]) }
+        holder.bind(myPlaylists[position])
+        holder.itemView.setOnClickListener { clickListener.onPlaylistClickListener(myPlaylists[position]) }
     }
 
-    override fun getItemCount(): Int = playlists.size
+    override fun getItemCount(): Int = myPlaylists.size
 
     fun interface PlaylistSmallClickListener {
-        fun onPlaylistClickListener(playlist: Playlist)
+        fun onPlaylistClickListener(myPlaylist: MyPlaylist)
     }
 }
