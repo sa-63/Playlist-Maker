@@ -15,6 +15,6 @@ data class Track (
     var country: String? = null,
     var previewUrl: String? = null
 ): Serializable {
-    fun getCoverArtwork() = artworkUrl100!!.replaceAfterLast('/',"512x512bb.jpg")
+    fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/',"512x512bb.jpg")
 }
 

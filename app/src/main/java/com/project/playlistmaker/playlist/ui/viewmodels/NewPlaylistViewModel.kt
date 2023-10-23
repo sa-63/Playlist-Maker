@@ -9,24 +9,21 @@ import com.project.playlistmaker.playlist.domain.models.states.StateAddDb
 import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
 import kotlinx.coroutines.launch
 
-open class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor): ViewModel() {
+open class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<StateAddDb>()
     fun getLiveData(): LiveData<StateAddDb> = stateLiveData
 
-    fun addPlaylist(playlist: Playlist){
-
+    fun addPlaylist(playlist: Playlist) {
         playlist.imageInStorage = playlistInteractor.getSavedImageFromPrivateStorage(playlist.imageInStorage)
-
         viewModelScope.launch {
-
             val result = playlistInteractor.addPlaylist(playlist)
 
-            when(result){
+            when (result) {
                 is StateAddDb.Error -> renderState(result)
                 is StateAddDb.NoError -> renderState(result)
                 is StateAddDb.Match -> renderState(result)
-                is StateAddDb.NoData ->renderState(result)
+                is StateAddDb.NoData -> renderState(result)
             }
         }
     }
@@ -38,19 +35,17 @@ open class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteract
         imagePlaylist: String?
     ) {
         viewModelScope.launch {
-            val result =playlistInteractor.updatePlaylist(
+            val result = playlistInteractor.updatePlaylist(
                 idPlaylist,
                 namePlaylist,
                 descriptionPlaylist,
                 imagePlaylist
             )
-
             renderState(result)
         }
     }
 
-   private fun renderState(state: StateAddDb){
-       stateLiveData.postValue(state)
-   }
-
+    private fun renderState(state: StateAddDb) {
+        stateLiveData.postValue(state)
+    }
 }

@@ -62,15 +62,17 @@ class DataModule {
             )
         }
 
+        //SearchHistory
         single<SearchHistoryStorage> {
             SearchHistoryStorageImpl(get(), get())
         }
 
+        //SettingsThemeStorage
         single<SettingsThemeStorage> {
             SharedPrefsThemeStorage(get())
         }
 
-        //Settings
+        //ExternalNavigator
         single<ExternalNavigator> {
             ExternalNavigatorImpl(androidContext())
         }

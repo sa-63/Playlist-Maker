@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_playlist"
-    android:background="@color/light_grey"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightest_grey"
     android:orientation="vertical"
     tools:context=".playlist.ui.fragments.PlaylistTracksFragment">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,15 +17,17 @@
 
         <ImageView
             android:id="@+id/image_pl"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="290dp"
+            android:layout_height="290dp"
+            android:layout_margin="30dp"
             android:contentDescription="@string/description_img_playlist"
-            app:layout_constraintDimensionRatio="H,1:1"
+            android:src="@drawable/add_playlist_holder"
+            app:layout_constraintBottom_toTopOf="@+id/name_pl"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/placeholder" />
-
 
         <Button
             android:id="@+id/back_button_new_playlist"
@@ -45,30 +45,25 @@
 
         <TextView
             android:id="@+id/name_pl"
-            style="@style/TextPlaylist"
-            android:textColor="@color/black"
+            style="@style/TextPlaylistBig"
             app:layout_constraintStart_toStartOf="@id/left_border_16_pl"
             app:layout_constraintTop_toBottomOf="@id/image_pl"
             tools:text="Best songs" />
 
         <TextView
             android:id="@+id/description_pl"
-            style="@style/TextPlaylist"
-            android:layout_marginTop="@dimen/item_marginTop_veryLow"
+            style="@style/TextPlaylistSmall"
+            android:layout_marginTop="@dimen/margin_8"
             android:fontFamily="@font/ys_display_regular"
-            android:textColor="@color/black"
-            android:textSize="@dimen/pl_text"
             app:layout_constraintStart_toStartOf="@id/left_border_16_pl"
             app:layout_constraintTop_toBottomOf="@+id/name_pl"
-            tools:text="2022" />
+            tools:text="2023" />
 
         <TextView
             android:id="@+id/time_length_pl"
-            style="@style/TextPlaylist"
-            android:layout_marginTop="@dimen/item_marginTop_veryLow"
+            style="@style/TextPlaylistSmall"
+            android:layout_marginTop="@dimen/margin_8"
             android:fontFamily="@font/ys_display_regular"
-            android:textColor="@color/black"
-            android:textSize="@dimen/pl_text"
             app:layout_constraintStart_toStartOf="@id/left_border_16_pl"
             app:layout_constraintTop_toBottomOf="@+id/description_pl"
             tools:text="300 минут" />
@@ -76,18 +71,20 @@
         <ImageView
             android:id="@+id/point_pl"
             style="@style/ImagePointInTracksRecycler"
-            android:layout_marginTop="12dp"
+            android:layout_width="3dp"
+            android:layout_height="3dp"
+            android:layout_marginHorizontal="@dimen/size_5"
+            android:layout_marginTop="17dp"
             app:layout_constraintStart_toEndOf="@id/time_length_pl"
             app:layout_constraintTop_toBottomOf="@+id/description_pl"
             app:tint="@color/black" />
 
         <TextView
             android:id="@+id/tracks_counter_pl"
-            style="@style/TextPlaylist"
+            style="@style/TextPlaylistSmall"
+            android:layout_marginStart="@dimen/size_5"
             android:layout_marginTop="@dimen/item_marginTop_veryLow"
             android:fontFamily="@font/ys_display_regular"
-            android:textColor="@color/black"
-            android:textSize="@dimen/pl_text"
             app:layout_constraintStart_toEndOf="@id/point_pl"
             app:layout_constraintTop_toBottomOf="@+id/description_pl"
             tools:text="97 треков" />
@@ -111,10 +108,13 @@
 
     <LinearLayout
         android:id="@+id/bottom_sheet_playlist_tracks"
-        style="@style/BottomSheetLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/bottom_sheet_shape"
+        android:orientation="vertical"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="266dp"
-        >
+        app:behavior_peekHeight="200dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View style="@style/BottomSheetHandle" />
 
@@ -128,14 +128,14 @@
 
         <TextView
             android:id="@+id/empty_pl"
-            style="@style/TextPlaylist"
-            android:layout_marginTop="@dimen/margin_top_medium"
+            style="@style/TextPlaylistSmall"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_top_medium"
             android:fontFamily="@font/ys_display_regular"
-            android:textSize="@dimen/pl_text"
             android:text="@string/no_tracks"
+            android:textSize="@dimen/pl_text"
             android:visibility="gone"
-            tools:text="В плейлисте нет треков"/>
+            tools:text="В плейлисте нет треков" />
 
     </LinearLayout>
 
@@ -144,23 +144,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#99000000"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/bottom_sheet_playlist_menu"
-        style="@style/BottomSheetLinearLayout"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:background="@drawable/bottom_sheet_shape"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_8"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="380dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="gone">
 
-        <View style="@style/BottomSheetHandle"/>
+        <View style="@style/BottomSheetHandle" />
 
-        <LinearLayout
-            style="@style/RootLayoutTracksRecycler">
+        <LinearLayout style="@style/RootLayoutTracksRecycler">
 
             <ImageView
                 android:id="@+id/image_playlist_menu"
                 style="@style/ImageInTracksRecycler"
-                tools:src="@drawable/placeholder"/>
+                tools:src="@drawable/placeholder" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -169,37 +174,30 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/TrackNameInTracksRecycler"
                     android:id="@+id/name_playlist_menu"
-                    tools:text="My loved songs"/>
+                    style="@style/TrackNameInTracksRecycler"
+                    tools:text="My loved songs" />
 
                 <TextView
-                    style="@style/ArtistNameInTracksRecycler"
                     android:id="@+id/counter_tracks_menu"
-                    tools:text="140 треков"/>
-
+                    style="@style/ArtistNameInTracksRecycler"
+                    tools:text="140 треков" />
             </LinearLayout>
-
         </LinearLayout>
 
         <Button
-            style="@style/StyleMenuButton"
             android:id="@+id/playlist_share"
-            android:text="@string/playlist_share"
-            />
+            style="@style/StyleMenuButton"
+            android:text="@string/playlist_share" />
 
         <Button
-            style="@style/StyleMenuButton"
             android:id="@+id/playlist_edit_info"
-            android:text="@string/edit_info"
-            />
+            style="@style/StyleMenuButton"
+            android:text="@string/edit_info" />
 
         <Button
-            style="@style/StyleMenuButton"
             android:id="@+id/delete_playlist"
-            android:text="@string/delete_playlist"
-            />
-
+            style="@style/StyleMenuButton"
+            android:text="@string/delete_playlist" />
     </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

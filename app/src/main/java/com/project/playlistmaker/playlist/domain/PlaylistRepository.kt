@@ -6,7 +6,6 @@ import com.project.playlistmaker.searchscreen.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistRepository {
-
     fun getSavedImageFromPrivateStorage(uriFile: String?): String?
 
     suspend fun addPlaylist(playlist: Playlist): Boolean
@@ -34,5 +33,5 @@ interface PlaylistRepository {
         namePlaylist: String?,
         descriptionPlaylist: String?,
         imagePlaylist: String?
-    ) : Boolean
+    ): Boolean
 }

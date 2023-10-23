@@ -2,7 +2,7 @@ package com.project.playlistmaker.playerscreen.domain.playerrepository
 
 interface PlayerRepository {
 
-    fun preparePlayer(url: String)
+    fun preparePlayer(url: String?)
 
     fun startPlayer()
 

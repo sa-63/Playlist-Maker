@@ -8,15 +8,15 @@ import com.project.playlistmaker.playlist.domain.PlaylistInteractor
 import com.project.playlistmaker.playlist.domain.models.states.EmptyStatePlaylist
 import kotlinx.coroutines.launch
 
-class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor): ViewModel() {
+class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
 
     private val emptyStateLiveData = MutableLiveData<EmptyStatePlaylist>()
-    fun getEmptyStateLiveData() : LiveData<EmptyStatePlaylist> = emptyStateLiveData
+    fun getEmptyStateLiveData(): LiveData<EmptyStatePlaylist> = emptyStateLiveData
 
-    fun getAllPlaylists(){
+    fun getAllPlaylists() {
         viewModelScope.launch {
-            playlistInteractor.getAllPlaylists().collect{
-                when(it){
+            playlistInteractor.getAllPlaylists().collect {
+                when (it) {
                     is EmptyStatePlaylist.EmptyPlaylist -> renderState(it)
                     is EmptyStatePlaylist.NotEmptyPlaylist -> renderState(it)
                 }
@@ -24,7 +24,7 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor): Vi
         }
     }
 
-    private fun renderState(state: EmptyStatePlaylist){
+    private fun renderState(state: EmptyStatePlaylist) {
         emptyStateLiveData.postValue(state)
     }
 }

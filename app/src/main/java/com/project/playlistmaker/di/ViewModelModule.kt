@@ -1,10 +1,10 @@
 package com.project.playlistmaker.di
 
-import com.project.playlistmaker.createplaylist.ui.viewmodel.PlaylistsCreationViewModel
 import com.project.playlistmaker.favourite.ui.viewmodel.FavTracksViewModel
-import com.project.playlistmaker.myplaylists.viewmodel.viewmodel.MyPlayListViewModel
 import com.project.playlistmaker.playerscreen.ui.viewmodel.PlayerViewModel
-import com.project.playlistmaker.searchscreen.domain.models.Track
+import com.project.playlistmaker.playlist.ui.viewmodels.NewPlaylistViewModel
+import com.project.playlistmaker.playlist.ui.viewmodels.PlaylistTracksViewModel
+import com.project.playlistmaker.playlist.ui.viewmodels.PlaylistsViewModel
 import com.project.playlistmaker.searchscreen.ui.view_model.SearchViewModel
 import com.project.playlistmaker.settingsscreen.ui.viewmodel.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -19,8 +19,8 @@ class ViewModelModule {
         }
 
         //Player
-        viewModel { (track: Track) ->
-            PlayerViewModel(track, get(), get(), get(), get())
+        viewModel {
+            PlayerViewModel(get(), get(), get(), get())
         }
 
         //Settings
@@ -33,14 +33,19 @@ class ViewModelModule {
             FavTracksViewModel(get())
         }
 
-        //MyPlaylists
+        //Playlist
         viewModel {
-            MyPlayListViewModel(get())
+            PlaylistsViewModel(get())
         }
 
-        //NewPlaylists
+        //NewPlaylist
         viewModel {
-            PlaylistsCreationViewModel(get(), get(), get())
+            NewPlaylistViewModel(get())
+        }
+
+        //PlaylistTracks
+        viewModel {
+            PlaylistTracksViewModel(get(), get())
         }
     }
 }

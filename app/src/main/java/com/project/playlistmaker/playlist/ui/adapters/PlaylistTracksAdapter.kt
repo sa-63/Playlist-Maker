@@ -13,10 +13,6 @@ class PlaylistTracksAdapter(
     private val listener: ClickTrackListener
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
     private var isClickAllowed = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -24,21 +20,15 @@ class PlaylistTracksAdapter(
     }
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
-
         holder.bind(listTracks[position])
-
         holder.itemView.setOnClickListener {
             if (clickDebounce()) {
                 listener.onShortClickView(listTracks[position])
             }
         }
-
         holder.itemView.setOnLongClickListener {
-
             listener.onLongClickView(listTracks[position].trackId)
-
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -46,9 +36,7 @@ class PlaylistTracksAdapter(
     }
 
     private fun clickDebounce(): Boolean {
-
         val isCurrentAllowedClick = isClickAllowed
-
         if (isClickAllowed) {
             isClickAllowed = false
 
@@ -57,13 +45,15 @@ class PlaylistTracksAdapter(
                 isClickAllowed = true
             }
         }
-
         return isCurrentAllowedClick
     }
 
     interface ClickTrackListener {
         fun onShortClickView(track: Track)
-
         fun onLongClickView(idTrack: Long?): Boolean
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

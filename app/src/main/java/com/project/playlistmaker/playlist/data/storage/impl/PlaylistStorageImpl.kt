@@ -12,12 +12,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class PlaylistStorageImpl(private val context: Context): PlaylistStorage {
+class PlaylistStorageImpl(private val context: Context) : PlaylistStorage {
 
     override fun getSavedImageFromPrivateStorage(uriFile: String?): String? {
-
-        if(uriFile != null && uriFile != "null" ) {
-
+        if (uriFile != null && uriFile != "null") {
             val filePath =
                 File(
                     context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),

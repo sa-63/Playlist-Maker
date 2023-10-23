@@ -14,43 +14,38 @@ import kotlinx.coroutines.flow.map
 class PlaylistInteractorImpl(private val repository: PlaylistRepository) : PlaylistInteractor {
 
     override suspend fun addPlaylist(myPlaylist: Playlist): StateAddDb {
-
-        return when(repository.addPlaylist(myPlaylist)){
+        return when (repository.addPlaylist(myPlaylist)) {
             false -> StateAddDb.NoError()
             else -> StateAddDb.Error()
-       }
+        }
     }
 
     override suspend fun addTrackInPlaylist(track: Track, idPlaylist: Int): StateAddDb {
-
-        return when(repository.addTrackInPlaylist(track, idPlaylist)){
+        return when (repository.addTrackInPlaylist(track, idPlaylist)) {
             false -> StateAddDb.NoError()
             else -> StateAddDb.Error()
         }
     }
 
     override suspend fun getAllPlaylists(): Flow<EmptyStatePlaylist> {
-
         return repository.getAllPlaylists().map { list ->
-
-           if (list == null || list.isEmpty()){
-               EmptyStatePlaylist.EmptyPlaylist()
-           }
-            else {
+            if (list == null || list.isEmpty()) {
+                EmptyStatePlaylist.EmptyPlaylist()
+            } else {
                 EmptyStatePlaylist.NotEmptyPlaylist(list)
             }
-         }
-     }
+        }
+    }
 
     override suspend fun getTracksFromCommonTable(listIdTracks: ArrayList<Long>): Flow<StateTracksInPlaylist> {
         return repository.getTracksFromCommonTable(listIdTracks).map {
-            if(!it.isNullOrEmpty()){
+            if (!it.isNullOrEmpty()) {
                 var durationTimeSum: Long = 0
-                for(i in 0 until it.size){
+                for (i in 0 until it.size) {
                     durationTimeSum = durationTimeSum + (it[i].trackTimeMillis ?: 0)
                 }
-                StateTracksInPlaylist.WithTracks(it.asReversed(),durationTimeSum)
-            }else{
+                StateTracksInPlaylist.WithTracks(it.asReversed(), durationTimeSum)
+            } else {
                 StateTracksInPlaylist.NoTracks()
             }
         }
@@ -59,43 +54,41 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
     override suspend fun deleteTrackFromPlaylist(
         idPlaylist: Int,
         idTrack: Long
-    ): Flow<StateTracksInPlaylist>{
-
+    ): Flow<StateTracksInPlaylist> {
         val flowTrack = repository.deleteTrackFromPlaylist(idPlaylist, idTrack)
 
-        if(flowTrack == null){
+        if (flowTrack == null) {
             return flow { emit(StateTracksInPlaylist.ErrorStateTracks()) }
         }
 
         return flowTrack.map {
-
-            if(it == null){
+            if (it == null) {
                 StateTracksInPlaylist.ErrorStateTracks()
             }
-            if(it!!.isEmpty()){
+            if (it!!.isEmpty()) {
                 StateTracksInPlaylist.NoTracks()
-            }else{
+            } else {
                 var durationTimeSum: Long = 0
-                for(i in 0 until it.size){
+                for (i in 0 until it.size) {
                     durationTimeSum = durationTimeSum + (it[i].trackTimeMillis ?: 0)
                 }
-                StateTracksInPlaylist.DeletedTrack(it.asReversed(),durationTimeSum,it.size)
+                StateTracksInPlaylist.DeletedTrack(it.asReversed(), durationTimeSum, it.size)
             }
-          }
         }
+    }
 
     override suspend fun deletePlaylist(idPlaylist: Int): Flow<StateTracksInPlaylist> {
         return repository.deletePlaylist(idPlaylist).map {
-            when(it){
-                null-> StateTracksInPlaylist.ErrorStateTracks()
-                else-> StateTracksInPlaylist.DeletedPlaylist()
+            when (it) {
+                null -> StateTracksInPlaylist.ErrorStateTracks()
+                else -> StateTracksInPlaylist.DeletedPlaylist()
             }
         }
     }
 
     override suspend fun getPlaylist(idPlaylist: Int): Flow<StateTracksInPlaylist> {
         return repository.getPlaylist(idPlaylist).map {
-            when(it){
+            when (it) {
                 null -> StateTracksInPlaylist.ErrorStateTracks()
                 else -> StateTracksInPlaylist.InitPlaylist(it)
             }
@@ -108,7 +101,12 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
         descriptionPlaylist: String?,
         imagePlaylist: String?
     ): StateAddDb {
-        return when(repository.updatePlaylist(idPlaylist,namePlaylist,descriptionPlaylist,imagePlaylist)){
+        return when (repository.updatePlaylist(
+            idPlaylist,
+            namePlaylist,
+            descriptionPlaylist,
+            imagePlaylist
+        )) {
             false -> StateAddDb.NoError()
             else -> StateAddDb.Error()
         }

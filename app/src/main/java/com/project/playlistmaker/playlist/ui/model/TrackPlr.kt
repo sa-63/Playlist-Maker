@@ -35,7 +35,7 @@ class TrackPlr(
             )
         }
 
-        fun mappingTrack(track:TrackPlr): Track {
+        fun mappingTrack(track: TrackPlr): Track {
             return Track(
                 trackId = track.trackId,
                 isFavorite = track.isFavorite,
@@ -51,6 +51,4 @@ class TrackPlr(
             )
         }
     }
-
-    fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
 }

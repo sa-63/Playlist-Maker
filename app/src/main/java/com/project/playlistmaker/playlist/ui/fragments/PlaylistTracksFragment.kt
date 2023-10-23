@@ -1,5 +1,6 @@
 package com.project.playlistmaker.playlist.ui.fragments
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,23 +20,19 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.project.playlistmaker.playlist.ui.viewmodels.PlaylistTracksViewModel
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentPlaylistTracksBinding
-import com.project.playlistmaker.playerscreen.ui.model.ToastState
+import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
 import com.project.playlistmaker.playlist.domain.models.states.StateTracksInPlaylist
 import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
 import com.project.playlistmaker.playlist.ui.adapters.PlaylistTracksAdapter
 import com.project.playlistmaker.playlist.ui.model.TrackPlr
+import com.project.playlistmaker.playlist.ui.viewmodels.PlaylistTracksViewModel
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.utils.Formatter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistTracksFragment : Fragment() {
-
-    companion object {
-        const val ID_ARG = "ID_PLAYLIST"
-    }
 
     private lateinit var binding: FragmentPlaylistTracksBinding
     private lateinit var bottomSheetTracks: BottomSheetBehavior<LinearLayout>
@@ -58,7 +54,6 @@ class PlaylistTracksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaylistTracksBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -73,70 +68,64 @@ class PlaylistTracksFragment : Fragment() {
 
         bottomSheetTracks = BottomSheetBehavior.from(binding.bottomSheetPlaylistTracks)
 
-
         playlistTracksViewModel.getStatePlaylistLiveData().observe(viewLifecycleOwner) {
             renderTracksInPlaylist(it)
         }
 
         playlistTracksViewModel.getToastStateLiveData().observe(viewLifecycleOwner) {
-//            if (it is ToastState.ShowMessage) {
-//                ShowToast(it.message)
-//            }
             playlistTracksViewModel.setStateToastNone()
         }
 
-         initCallbacks()
-
-        bottomSheetTracks.setPeekHeight(getMetricsDisplayForPeekHight())
+        initCallbacks()
 
         playlistTracksAdapter =
             PlaylistTracksAdapter(arrayTracks, { lifecycleScope }, listenerClickOnTracks)
         binding.recyclerPlaylistTracks.adapter = playlistTracksAdapter
         binding.recyclerPlaylistTracks.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.sharePl.post(Runnable {
+            val shareButtonLocation = IntArray(2)
+            binding.sharePl.getLocationOnScreen(shareButtonLocation)
+            bottomSheetTracks.setPeekHeight(
+                binding.root.height - shareButtonLocation[1] - resources.getDimensionPixelSize(
+                    R.dimen.item_marginTop_high
+                )
+            )
+        })
+
         playlistTracksViewModel.getPlaylist(idPlaylist!!)
-
     }
 
-    private fun getMetricsDisplayForPeekHight():Int{
-        if(resources.configuration.fontScale>1.0){
-            return requireActivity().windowManager.defaultDisplay.height*20/100
-        }
-        else{return requireActivity().windowManager.defaultDisplay.height*30/100}
-    }
-
-    private fun delTrackFromPlaylistWithDialog(): MaterialAlertDialogBuilder{
-        val dialogDelete = MaterialAlertDialogBuilder(requireContext())
+    private fun delTrackFromPlaylistWithDialog(): MaterialAlertDialogBuilder {
+        val dialogDelete = MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
             .setTitle(R.string.title_del_track_dialog)
             .setMessage(R.string.message_about_delete_track)
-            .setNeutralButton(R.string.cancel_playlist_dialog) { dialog, which ->
-
-            }
-            .setPositiveButton(R.string.positive_playlist_dialog) { dialog, which ->
+            .setNeutralButton(R.string.no) { dialog, which -> }
+            .setPositiveButton(R.string.yes) { dialog, which ->
                 playlistTracksViewModel.deleteTrackFromPlaylist(idPlaylist!!, idTrackInPlaylist!!)
             }
         return dialogDelete
     }
 
-    private fun deletePlaylistWithDialog(): MaterialAlertDialogBuilder{
-        val dialogDeletePlaylist = MaterialAlertDialogBuilder(requireContext())
+    private fun deletePlaylistWithDialog(): MaterialAlertDialogBuilder {
+        val dialogDeletePlaylist = MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
             .setTitle(R.string.title_del_playlist_dialog)
             .setMessage(R.string.message_about_delete_playlist)
-            .setNeutralButton(R.string.cancel_playlist_dialog) { dialog, which ->
-
-            }
-            .setPositiveButton(R.string.positive_playlist_dialog) { dialog, which ->
+            .setNeutralButton(R.string.no) { dialog, which -> }
+            .setPositiveButton(R.string.yes) { dialog, which ->
                 playlistTracksViewModel.deletePlaylist(idPlaylist!!)
             }
         return dialogDeletePlaylist
     }
 
-    private fun initCallbacks(){
-
+    private fun initCallbacks() {
         listenerClickOnTracks = object : PlaylistTracksAdapter.ClickTrackListener {
             override fun onLongClickView(idTrack: Long?): Boolean {
                 idTrackInPlaylist = idTrack
-                delTrackFromPlaylistWithDialog().show()
+                delTrackFromPlaylistWithDialog().show().apply {
+                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.blue))
+                    getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(resources.getColor(R.color.blue))
+                }
                 return true
             }
 
@@ -164,7 +153,6 @@ class PlaylistTracksFragment : Fragment() {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                binding.overlay.alpha = slideOffset
             }
         })
 
@@ -179,17 +167,23 @@ class PlaylistTracksFragment : Fragment() {
 
         binding.deletePlaylist.setOnClickListener {
             bottomSheetMenu.state = BottomSheetBehavior.STATE_HIDDEN
-            deletePlaylistWithDialog().show()
+            deletePlaylistWithDialog().show().apply {
+                getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.blue))
+                getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(resources.getColor(R.color.blue))
+            }
         }
 
         binding.playlistEditInfo.setOnClickListener {
-
             findNavController().navigate(
-                R.id.action_playlistTracksFragment_to_updatePlaylistFragment,
-                bundleOf(Pair(UpdatePlaylistFragment.ID_PLAYLIST,idPlaylist),
-                    Pair(UpdatePlaylistFragment.NAME_PLAYLIST,myPlaylistTemp.playlistName),
-                    Pair(UpdatePlaylistFragment.DESCRIPTION_PLAYLIST,myPlaylistTemp.descriptionPlaylist),
-                    Pair(UpdatePlaylistFragment.IMAGE_PLAYLIST,myPlaylistTemp.imageInStorage)
+                R.id.action_PlaylistTracksFragment_to_UpdatePlaylistFragment,
+                bundleOf(
+                    Pair(UpdatePlaylistFragment.ID_PLAYLIST, idPlaylist),
+                    Pair(UpdatePlaylistFragment.NAME_PLAYLIST, myPlaylistTemp.playlistName),
+                    Pair(
+                        UpdatePlaylistFragment.DESCRIPTION_PLAYLIST,
+                        myPlaylistTemp.descriptionPlaylist
+                    ),
+                    Pair(UpdatePlaylistFragment.IMAGE_PLAYLIST, myPlaylistTemp.imageInStorage)
                 )
             )
         }
@@ -197,7 +191,6 @@ class PlaylistTracksFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         bottomSheetMenu.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
@@ -216,7 +209,7 @@ class PlaylistTracksFragment : Fragment() {
             )
 
             is StateTracksInPlaylist.DeletedPlaylist -> showStateDeletedPlaylist()
-            is StateTracksInPlaylist.InitPlaylist -> initPlaylist(state.myPlaylist)
+            is StateTracksInPlaylist.InitPlaylist -> initPlaylist(state.playlist)
             is StateTracksInPlaylist.ErrorStateTracks -> Log.e(
                 "ErrorQueryOnDb",
                 getString(R.string.error_query_db)
@@ -263,12 +256,7 @@ class PlaylistTracksFragment : Fragment() {
         findNavController().popBackStack()
     }
 
-    private fun ShowToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-    }
-
     private fun initPlaylist(playlist: Playlist) {
-
         myPlaylistTemp = playlist
         listIdTracksTemp = playlist.tracksInPlaylist ?: ArrayList<Long>()
 
@@ -318,5 +306,9 @@ class PlaylistTracksFragment : Fragment() {
             }
             playlistTracksViewModel.sharePlaylist(sharePlaylist)
         }
+    }
+
+    companion object {
+        const val ID_ARG = "ID_PLAYLIST"
     }
 }

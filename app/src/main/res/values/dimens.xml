@@ -5,6 +5,7 @@
     <dimen name="text_13">13sp</dimen>
     <dimen name="text_14">14sp</dimen>
     <dimen name="text_16">16sp</dimen>
+    <dimen name="text_18">18sp</dimen>
     <dimen name="text_19">19sp</dimen>
     <dimen name="text_22">22sp</dimen>
     <dimen name="text_24">22sp</dimen>
@@ -41,6 +42,7 @@
     <dimen name="settings_item_padding">42dp</dimen>
 
     <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_12">12dp</dimen>

@@ -58,7 +58,6 @@
     <string name="message_about_delete_playlist">Вы уверены, что хотите удалить этот плейлист?</string>
     <string name="title_del_track_dialog">Удалить трек</string>
     <string name="title_del_playlist_dialog">Удалить плейлист</string>
-    <string name="positive_playlist_dialog">Удалить</string>
     <string name="message_no_tracks_in_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
     <string name="edit">Редактировать</string>
     <string name="save">Сохранить</string>
@@ -68,7 +67,8 @@
     <string name="permission_denied">Permission to access the storage is denied.</string>
     <string name="error_init_playlist">Error initialized playlist.Check Db work.</string>
     <string name="error_query_db">Error query in database.Please check chains methods work correct with database.</string>
-    <string name="cancel_playlist_dialog">Отмена</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
     <string name="description_poster_player">Изображение трека</string>
     <string name="description_img_playlist">Изображение плейлиста</string>
     <string name="description_placeholder">Изоборажение-заглушка.</string>

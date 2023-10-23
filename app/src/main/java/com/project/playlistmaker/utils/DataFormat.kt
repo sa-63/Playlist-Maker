@@ -11,10 +11,9 @@ class DataFormat {
         )
     }
 
-    fun convertTimeToMnSs(time: Long?): String {
-        return SimpleDateFormat(
-            MIN_SEC_FORMAT, Locale.getDefault()
-        ).format(time).toString()
+    fun convertTimeToMnSs(timeInMilles: Long?): String {
+        return SimpleDateFormat(MIN_SEC_FORMAT, Locale.getDefault())
+            .format(timeInMilles) ?: ""
     }
 
     fun convertMediaPlayerRemainingTime(duration: Int, currentPosition: Int): Int {

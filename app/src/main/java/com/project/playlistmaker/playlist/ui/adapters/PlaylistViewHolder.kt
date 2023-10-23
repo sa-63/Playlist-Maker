@@ -18,7 +18,7 @@ import com.project.playlistmaker.utils.Formatter
 class PlaylistViewHolder(
     parentView: ViewGroup,
     itemView: View = LayoutInflater.from(parentView.context)
-        .inflate(R.layout.recycler_playlists, parentView, false)
+        .inflate(R.layout.playlist_item, parentView, false)
 ) : RecyclerView.ViewHolder(itemView) {
 
     private val imagePlaylist: ImageView = itemView.findViewById(R.id.reclr_plst_image)
@@ -27,10 +27,10 @@ class PlaylistViewHolder(
 
     @SuppressLint("SuspiciousIndentation")
     fun bind(playlist: Playlist) {
+        val roundCorners =
+            RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.radius_button_low))
 
-        val roundCorners = RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.radius_button_low))
-
-        val options = RequestOptions().transform(CenterCrop(),roundCorners)
+        val options = RequestOptions().transform(CenterCrop(), roundCorners)
         Glide.with(itemView)
             .load(playlist.imageInStorage)
             .placeholder(R.drawable.placeholder)
@@ -38,6 +38,7 @@ class PlaylistViewHolder(
             .into(imagePlaylist)
 
         playlistNameView.text = playlist.playlistName
-        countTracksView.text = Formatter.formattingTheEndTracks(playlist.countTracks,itemView.context)
+        countTracksView.text =
+            Formatter.formattingTheEndTracks(playlist.countTracks, itemView.context)
     }
 }

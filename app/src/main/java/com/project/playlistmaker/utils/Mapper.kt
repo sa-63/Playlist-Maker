@@ -2,8 +2,8 @@ package com.project.playlistmaker.utils
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.project.playlistmaker.playlist.data.models.PlaylistEntity
-import com.project.playlistmaker.playlist.data.models.TrackEntityInPlaylist
+import com.project.playlistmaker.playlist.data.db.entity.PlaylistEntity
+import com.project.playlistmaker.playlist.data.db.entity.TrackEntityInPlaylist
 import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
 import com.project.playlistmaker.searchscreen.domain.models.Track
 
@@ -11,7 +11,6 @@ object Mapper {
     val gson = Gson()
 
     fun getArrayPlaylistFromPlaylistEntity(playlist: List<PlaylistEntity>): List<Playlist> {
-
         return playlist.map {
             Playlist(
                 id = it.id,
@@ -80,7 +79,6 @@ object Mapper {
 
 
     fun takeFromJson(jsonString: String?): ArrayList<Long> {
-
         if (jsonString != null) {
             val itemType = object : TypeToken<ArrayList<Long>>() {}.type
 
@@ -92,5 +90,4 @@ object Mapper {
     fun toJsonFromArray(listId: ArrayList<Long>): String {
         return gson.toJson(listId)
     }
-
 }

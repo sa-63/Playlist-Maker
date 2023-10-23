@@ -1,8 +1,10 @@
 package com.project.playlistmaker.playlist.ui.fragments
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +15,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
@@ -30,55 +33,39 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.markodevcic.peko.PermissionRequester
 import com.markodevcic.peko.PermissionResult
-import com.project.playlistmaker.playlist.ui.viewmodels.NewPlaylistViewModel
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.project.playlistmaker.mainscreen.RootActivity
+import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
 import com.project.playlistmaker.playlist.domain.models.states.StateAddDb
 import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.ui.viewmodels.NewPlaylistViewModel
+import com.project.playlistmaker.utils.ArgsTransfer
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 open class NewPlaylistFragment : Fragment() {
 
-    companion object {
-
-        const val IMAGE_PL = "IMAGE"
-        private var creationWithoutGraph = false
-
-        fun newInstance(flagWithoutGraph:Boolean): NewPlaylistFragment {
-
-            creationWithoutGraph = flagWithoutGraph
-
-            return NewPlaylistFragment()
-        }
-    }
-
     open val newPlaylistViewModel: NewPlaylistViewModel by viewModel()
-
     open lateinit var binding: FragmentNewPlaylistBinding
-
     private val requester = PermissionRequester.instance()
 
-     var uriImageTemp: Uri? = null
-     var playlistNameTemp: String? = null
-     var descriptionPlaylistTemp: String? = null
+    var uriImageTemp: Uri? = null
+    var playlistNameTemp: String? = null
+    var descriptionPlaylistTemp: String? = null
 
 
-     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
         if (it != null) {
-            val roundCorners = RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
-            val options = RequestOptions().transform(CenterCrop(),roundCorners)
+            val roundCorners =
+                RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
+            val options = RequestOptions().transform(CenterCrop(), roundCorners)
 
-            Glide.with(this)
-                .load(it.toString())
-                .placeholder(R.drawable.add_playlist_holder)
-                .apply(options)
-                .into(binding.ivCover)
-
+            Glide.with(this).load(it.toString()).placeholder(R.drawable.add_playlist_holder)
+                .apply(options).into(binding.ivCover)
             uriImageTemp = it
         } else {
             Log.d("Image", R.string.image_not_select.toString())
@@ -86,58 +73,50 @@ open class NewPlaylistFragment : Fragment() {
     }
 
 
-     open fun checkPermission(): Boolean {
+    open fun checkPermission(): Boolean {
         val permissionProvided =
             ContextCompat.checkSelfPermission(requireContext(), getCheckedStorageConst())
-
         return (permissionProvided == PackageManager.PERMISSION_GRANTED)
     }
 
     private fun getCheckedStorageConst(): String {
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            Manifest.permission.READ_MEDIA_IMAGES
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) Manifest.permission.READ_MEDIA_IMAGES
         else Manifest.permission.READ_EXTERNAL_STORAGE
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentNewPlaylistBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val dialogExit =
+            MaterialAlertDialogBuilder(
+                requireContext(),
+                R.style.DialogStyle
+            ).setTitle(R.string.ask_to_cancel)
+                .setMessage(R.string.confirm_cancel)
+                .setNeutralButton(R.string.no) { dialog, which ->
+                }.setPositiveButton(R.string.finish) { dialog, which ->
+                    backStackSelector()
+                }
 
-        val dialogExit = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.ask_to_cancel)
-            .setMessage(R.string.confirm_cancel)
-            .setNeutralButton(R.string.cancel_playlist_dialog){ dialog, which ->
-
-            }
-            .setPositiveButton(R.string.finish){ dialog, which ->
-
-                backStackSelector()
-            }
-
-        newPlaylistViewModel.getLiveData().observe(viewLifecycleOwner){
+        newPlaylistViewModel.getLiveData().observe(viewLifecycleOwner) {
             render(it)
         }
 
         binding.ivCover.setOnClickListener {
-
             if (!checkPermission()) {
-
                 lifecycleScope.launch {
                     requester.request(getCheckedStorageConst()).collect {
                         when (it) {
                             is PermissionResult.Granted -> {
                                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                             }
+
                             is PermissionResult.Denied.NeedsRationale -> {
                                 Toast.makeText(
                                     requireContext(),
@@ -145,16 +124,19 @@ open class NewPlaylistFragment : Fragment() {
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
+
                             is PermissionResult.Denied.DeniedPermanently -> {
-                                val intent =
-                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                intent.data = Uri.fromParts("package", requireContext().packageName, null)
+                                intent.data =
+                                    Uri.fromParts("package", requireContext().packageName, null)
                                 requireContext().startActivity(intent)
                             }
+
                             is PermissionResult.Cancelled -> {
                                 return@collect
                             }
+
                             is PermissionResult.Denied -> {
                                 Log.d("Permission", R.string.permission_denied.toString())
                             }
@@ -168,55 +150,62 @@ open class NewPlaylistFragment : Fragment() {
         }
 
         binding.backButtonNewPlaylist.setOnClickListener {
-            if(uriImageTemp == null &&
-                (playlistNameTemp == null || playlistNameTemp == "") &&
-                (descriptionPlaylistTemp == null || descriptionPlaylistTemp == "")){
-
-                   backStackSelector()
-
-            }else {
-                dialogExit.show()
+            if (uriImageTemp == null && (playlistNameTemp == null || playlistNameTemp == "") && (descriptionPlaylistTemp == null || descriptionPlaylistTemp == "")) {
+                backStackSelector()
+            } else {
+                dialogExit.show().apply {
+                    getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.blue))
+                    getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(resources.getColor(R.color.blue))
+                }
             }
         }
 
         binding.etPlaylistTitle.addTextChangedListener(getTextWatcherForName())
-        binding.etPlaylistDescription.addTextChangedListener(getTextWatcherForDiscription())
+        binding.etPlaylistDescription.addTextChangedListener(getTextWatcherForDescription())
 
         binding.btnCreatePlaylist.setOnClickListener {
-             newPlaylistViewModel.addPlaylist(
-                 Playlist(
-                 playlistName = playlistNameTemp,
-                 descriptionPlaylist = descriptionPlaylistTemp,
-                 imageInStorage = uriImageTemp.toString()
-                 )
-             )
+            playlistCreatedSnackBar(view.findViewById(R.id.parent_layout))
+            newPlaylistViewModel.addPlaylist(
+                Playlist(
+                    playlistName = playlistNameTemp,
+                    descriptionPlaylist = descriptionPlaylistTemp,
+                    imageInStorage = uriImageTemp.toString()
+                )
+            )
         }
-
-        switchOnBackPressedDispatcher(true,dialogExit)
-
+        switchOnBackPressedDispatcher(true, dialogExit)
     }
 
-    open fun switchOnBackPressedDispatcher(switch:Boolean,dialogExit: MaterialAlertDialogBuilder?){
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(switch){
-
-            override fun handleOnBackPressed() {
-                if(uriImageTemp == null &&
-                    (playlistNameTemp == null || playlistNameTemp == "") &&
-                    (descriptionPlaylistTemp == null || descriptionPlaylistTemp == "")){
-
-                    backStackSelector()
-
-                }else {
-                    dialogExit?.show()
+    open fun switchOnBackPressedDispatcher(
+        switch: Boolean, dialogExit: MaterialAlertDialogBuilder?
+    ) {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(switch) {
+                override fun handleOnBackPressed() {
+                    if (uriImageTemp == null && (playlistNameTemp == null || playlistNameTemp == "") && (descriptionPlaylistTemp == null || descriptionPlaylistTemp == "")) {
+                        backStackSelector()
+                    } else {
+                        dialogExit!!.show().apply {
+                            getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(
+                                resources.getColor(
+                                    R.color.blue
+                                )
+                            )
+                            getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(
+                                resources.getColor(
+                                    R.color.blue
+                                )
+                            )
+                        }
+                    }
                 }
-            }
-        })
+            })
     }
 
-    private fun backStackSelector(){
-
+    private fun backStackSelector() {
         if (creationWithoutGraph) {
-            requireActivity().findViewById<CoordinatorLayout>(R.id.coordinator_player).isVisible = true
+            requireActivity().findViewById<CoordinatorLayout>(R.id.player_constraint).isVisible =
+                true
             parentFragmentManager.popBackStack()
             creationWithoutGraph = false
         } else {
@@ -224,19 +213,32 @@ open class NewPlaylistFragment : Fragment() {
         }
     }
 
+    //SnackBar
+    private fun playlistCreatedSnackBar(view: View) {
+        val snackBar = Snackbar.make(
+            requireContext(),
+            view,
+            "${getString(R.string.playlist)} ${binding.etPlaylistTitle.text} ${getString(R.string.created)}",
+            Snackbar.LENGTH_LONG
+        )
+        snackBar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).apply {
+            textSize = resources.getDimension(R.dimen.text_5)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            typeface = Typeface.DEFAULT
+        }
+        snackBar.show()
+    }
+
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getString(IMAGE_PL) != "null") {
+                val roundCorners =
+                    RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
+                val options = RequestOptions().transform(CenterCrop(), roundCorners)
 
-        if(savedInstanceState != null) {
-
-            if(savedInstanceState.getString(IMAGE_PL) != "null") {
-                val roundCorners = RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
-                val options = RequestOptions().transform(CenterCrop(),roundCorners)
-
-                Glide.with(this)
-                    .load(savedInstanceState.getString(IMAGE_PL))
-                    .placeholder(R.drawable.add_playlist_holder)
-                    .apply(options)
+                Glide.with(this).load(savedInstanceState.getString(IMAGE_PL))
+                    .placeholder(R.drawable.add_playlist_holder).apply(options)
                     .into(binding.ivCover)
 
                 uriImageTemp = savedInstanceState.getString(IMAGE_PL)!!.toUri()
@@ -246,67 +248,93 @@ open class NewPlaylistFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(IMAGE_PL,uriImageTemp.toString())
+        outState.putString(IMAGE_PL, uriImageTemp.toString())
     }
 
-   override fun onStart() {
+    override fun onStart() {
         super.onStart()
-        if(creationWithoutGraph) requireActivity().findViewById<CoordinatorLayout>(R.id.coordinator_player).isVisible = false
+        if (creationWithoutGraph) requireActivity().findViewById<CoordinatorLayout>(R.id.player_constraint).isVisible =
+            false
     }
 
 
     private fun getTextWatcherForName(): TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //empty
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.btnCreatePlaylist.isEnabled = s?.isNotEmpty() == true
                 playlistNameTemp = s.toString()
             }
+
             override fun afterTextChanged(s: Editable?) {
-                //empty
             }
         }
     }
 
-    private fun getTextWatcherForDiscription(): TextWatcher {
+    private fun getTextWatcherForDescription(): TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //empty
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 descriptionPlaylistTemp = s.toString()
             }
+
             override fun afterTextChanged(s: Editable?) {
-                //empty
             }
         }
     }
 
-    open fun render(state: StateAddDb){
-        when(state){
-            is StateAddDb.Error -> {Log.e("ErrorAddPlaylist",R.string.error_add_playlist.toString())}
-            is StateAddDb.NoError -> {
+    open fun render(state: StateAddDb) {
+        when (state) {
+            is StateAddDb.Error -> {
+                Log.e("ErrorAddPlaylist", R.string.error_add_playlist.toString())
+            }
 
+            is StateAddDb.NoError -> {
                 if (creationWithoutGraph) {
-                    (requireActivity() as ArgsTransfer)
-                        .postArgs(bundleOf(Pair(PlayerActivity.BUNDLE_ARGS,playlistNameTemp)))
-                    requireActivity().findViewById<CoordinatorLayout>(R.id.coordinator_player).isVisible = true
+                    (requireActivity() as ArgsTransfer).postArgs(
+                        bundleOf(
+                            Pair(
+                                PlayerActivity.BUNDLE_ARGS,
+                                playlistNameTemp
+                            )
+                        )
+                    )
+                    requireActivity().findViewById<CoordinatorLayout>(R.id.player_constraint).isVisible =
+                        true
                     creationWithoutGraph = false
                     parentFragmentManager.popBackStack()
-                }
-                else {
-                    (requireActivity() as ArgsTransfer)
-                        .postArgs(bundleOf(Pair(RootActivity.BUNDLE_ARGS,playlistNameTemp)))
+                } else {
+                    (requireActivity() as ArgsTransfer).postArgs(
+                        bundleOf(
+                            Pair(
+                                RootActivity.BUNDLE_ARGS,
+                                playlistNameTemp
+                            )
+                        )
+                    )
                     findNavController().popBackStack()
                 }
             }
-            is StateAddDb.Match -> {Log.e("ErrorAddPlaylist", getString(R.string.error_match_playlist))}
-            is StateAddDb.NoData->{
-                //State for Single Live Event, show Toast and other way
+
+            is StateAddDb.Match -> {
+                Log.e("ErrorAddPlaylist", getString(R.string.error_match_playlist))
+            }
+
+            is StateAddDb.NoData -> {
             }
         }
     }
 
+    companion object {
+        const val IMAGE_PL = "IMAGE"
+        private var creationWithoutGraph = false
+        fun newInstance(flagWithoutGraph: Boolean): NewPlaylistFragment {
+            creationWithoutGraph = flagWithoutGraph
+            return NewPlaylistFragment()
+        }
+    }
 }

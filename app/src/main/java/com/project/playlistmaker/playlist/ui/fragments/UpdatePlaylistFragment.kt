@@ -13,14 +13,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.project.playlistmaker.R
 import com.project.playlistmaker.playlist.domain.models.states.StateAddDb
 
-class UpdatePlaylistFragment: NewPlaylistFragment() {
-
-    companion object{
-        const val ID_PLAYLIST = "ID_PL"
-        const val NAME_PLAYLIST = "NAME_PL"
-        const val DESCRIPTION_PLAYLIST = "DESC_PL"
-        const val IMAGE_PLAYLIST = "IMAGE_PL"
-    }
+class UpdatePlaylistFragment : NewPlaylistFragment() {
 
     private var idPlaylistTemp: Int? = null
 
@@ -29,12 +22,13 @@ class UpdatePlaylistFragment: NewPlaylistFragment() {
         idPlaylistTemp = requireArguments().getInt(ID_PLAYLIST)
         playlistNameTemp = requireArguments().getString(NAME_PLAYLIST)
         descriptionPlaylistTemp = requireArguments().getString(DESCRIPTION_PLAYLIST)
-        if(requireArguments().getString(IMAGE_PLAYLIST) != null){
+        if (requireArguments().getString(IMAGE_PLAYLIST) != null) {
             uriImageTemp = requireArguments().getString(IMAGE_PLAYLIST)!!.toUri()
         }
 
-        val roundCorners = RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
-        val options = RequestOptions().transform(CenterCrop(),roundCorners)
+        val roundCorners =
+            RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
+        val options = RequestOptions().transform(CenterCrop(), roundCorners)
         Glide.with(this)
             .load(uriImageTemp)
             .placeholder(R.drawable.add_playlist_holder)
@@ -46,20 +40,20 @@ class UpdatePlaylistFragment: NewPlaylistFragment() {
         binding.etPlaylistTitle.setText(playlistNameTemp)
         binding.etPlaylistDescription.setText(descriptionPlaylistTemp)
 
-        binding.btnCreatePlaylist.setOnClickListener{
-                newPlaylistViewModel.updatePlaylist(
-                    idPlaylistTemp!!,
-                    playlistNameTemp,
-                    descriptionPlaylistTemp,
-                    uriImageTemp.toString()
-                )
-            }
+        binding.btnCreatePlaylist.setOnClickListener {
+            newPlaylistViewModel.updatePlaylist(
+                idPlaylistTemp!!,
+                playlistNameTemp,
+                descriptionPlaylistTemp,
+                uriImageTemp.toString()
+            )
+        }
 
         binding.backButtonNewPlaylist.setOnClickListener {
             findNavController().popBackStack()
         }
-        switchOnBackPressedDispatcher(false,null)
-        }
+        switchOnBackPressedDispatcher(false, null)
+    }
 
     override fun switchOnBackPressedDispatcher(
         switch: Boolean,
@@ -67,22 +61,31 @@ class UpdatePlaylistFragment: NewPlaylistFragment() {
     ) {
     }
 
-       override fun render(state: StateAddDb){
-              when(state){
-                  is StateAddDb.NoError -> {
-                      findNavController().popBackStack()
-                  }
-                  is StateAddDb.Error -> {
-                      Log.e("ErrorUpdatePlaylist",getString(R.string.error_query_db))
-                  }
-                  is StateAddDb.Match -> {
-                      Log.e("ErrorUpdatePlaylist", getString(R.string.error_match_playlist))
-                  }
-                  is StateAddDb.NoData ->{
-                      //State for Single Live Event, show Toast and other way. Not use in this fragment.
-                  }
-              }
+    override fun render(state: StateAddDb) {
+        when (state) {
+            is StateAddDb.NoError -> {
+                findNavController().popBackStack()
+            }
+
+            is StateAddDb.Error -> {
+                Log.e("ErrorUpdatePlaylist", getString(R.string.error_query_db))
+            }
+
+            is StateAddDb.Match -> {
+                Log.e("ErrorUpdatePlaylist", getString(R.string.error_match_playlist))
+            }
+
+            is StateAddDb.NoData -> {
+            }
         }
-   }
+    }
+
+    companion object {
+        const val ID_PLAYLIST = "ID_PL"
+        const val NAME_PLAYLIST = "NAME_PL"
+        const val DESCRIPTION_PLAYLIST = "DESC_PL"
+        const val IMAGE_PLAYLIST = "IMAGE_PL"
+    }
+}
 
 

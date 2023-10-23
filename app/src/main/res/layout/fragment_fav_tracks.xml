@@ -1,30 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <ProgressBar android:id="@+id/progressBar"
-        android:layout_width="@dimen/progress_bar_size"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:indeterminateTint="@color/blue"
-        android:visibility="gone"/>
-
-    <include
-        layout="@layout/ph_favourites_empty_view"
-        android:id="@+id/favouritesEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
-        android:visibility="gone"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favouriteTrackList"
+        android:id="@+id/rv_fav_tracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_24"
-        tools:listitem="@layout/track_item"
-        android:scrollbars="vertical"
-        android:visibility="visible"/>
-</FrameLayout>
+        android:layout_marginHorizontal="@dimen/padding_16"
+        android:layout_marginTop="@dimen/margin_16"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <LinearLayout
+        android:id="@+id/ll_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="106dp"
+            android:layout_marginBottom="@dimen/margin_16"
+            android:src="@drawable/nothing_found_image" />
+
+        <TextView
+            android:id="@+id/tv_empty_media"
+            style="@style/TabFragmentsText"
+            android:text="@string/empty_media" />
+    </LinearLayout>
+
+</LinearLayout>

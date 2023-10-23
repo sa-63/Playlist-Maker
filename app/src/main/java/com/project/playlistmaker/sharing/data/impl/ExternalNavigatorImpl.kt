@@ -40,10 +40,11 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     }
 
     override fun share(info: String) {
-        Intent().apply {
+        Intent().addFlags(FLAG_ACTIVITY_NEW_TASK).apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, info)
             type = "text/plain"
+            context.startActivity(this, null)
         }
     }
 }

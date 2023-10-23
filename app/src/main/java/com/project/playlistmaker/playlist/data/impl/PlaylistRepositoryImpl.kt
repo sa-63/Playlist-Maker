@@ -1,9 +1,9 @@
 package com.project.playlistmaker.playlist.data.impl
 
 import android.annotation.SuppressLint
-import com.project.playlistmaker.playlist.data.PlaylistDataBase
-import com.project.playlistmaker.playlist.data.models.PlaylistEntity
-import com.project.playlistmaker.playlist.data.models.TrackEntityInPlaylist
+import com.project.playlistmaker.playlist.data.db.database.PlaylistDataBase
+import com.project.playlistmaker.playlist.data.db.entity.PlaylistEntity
+import com.project.playlistmaker.playlist.data.db.entity.TrackEntityInPlaylist
 import com.project.playlistmaker.playlist.data.storage.PlaylistStorage
 import com.project.playlistmaker.playlist.domain.PlaylistRepository
 import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
@@ -19,15 +19,11 @@ class PlaylistRepositoryImpl(
     private val storage: PlaylistStorage
 ) : PlaylistRepository {
 
-    companion object {
-        private const val ONE_TRACK = 1
-    }
-
-    override suspend fun addPlaylist(playlist: Playlist):Boolean {
+    override suspend fun addPlaylist(playlist: Playlist): Boolean {
         return withContext(Dispatchers.IO) {
             try {
                 database.getPlaylistDao().insertPlaylist(
-                Mapper.getPlaylistEntityFromPlaylist(playlist)
+                    Mapper.getPlaylistEntityFromPlaylist(playlist)
                 )
                 false
             } catch (exp: Throwable) {
@@ -42,7 +38,7 @@ class PlaylistRepositoryImpl(
                 val playlists = database.getPlaylistDao().getAllPlaylists()
 
                 if (playlists != null) {
-                 Mapper.getArrayPlaylistFromPlaylistEntity(playlists)
+                    Mapper.getArrayPlaylistFromPlaylistEntity(playlists)
                 } else {
                     null
                 }
@@ -52,7 +48,7 @@ class PlaylistRepositoryImpl(
 
     override suspend fun addTrackInPlaylist(
         track: Track,
-        idPlaylist:Int
+        idPlaylist: Int
     ): Boolean {
         return withContext(Dispatchers.IO) {
             try {
@@ -66,13 +62,13 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    private suspend fun removeTrackFromCommonTable(idTrack: Long){
+    private suspend fun removeTrackFromCommonTable(idTrack: Long) {
         val allPlaylists = database.getPlaylistDao().getAllPlaylists()
 
         allPlaylists!!.map {
             val listId = Mapper.takeFromJson(it.tracksInPlaylist)
 
-            if(listId.contains(idTrack)){
+            if (listId.contains(idTrack)) {
                 return
             }
         }
@@ -81,9 +77,8 @@ class PlaylistRepositoryImpl(
     }
 
     private suspend fun insertTrackInCommonTable(track: Track) {
-
         database.getPlaylistDao().insertTrackInCommonTable(
-          Mapper.getTrackEntityFromTrack(track)
+            Mapper.getTrackEntityFromTrack(track)
         )
     }
 
@@ -106,7 +101,7 @@ class PlaylistRepositoryImpl(
         database.getPlaylistDao().updatePlaylist(newModifiedPlaylist)
     }
 
-    private suspend fun removeTrackFromPlDb(idPlaylist: Int,idTrack: Long){
+    private suspend fun removeTrackFromPlDb(idPlaylist: Int, idTrack: Long) {
         val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
         val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
 
@@ -124,47 +119,46 @@ class PlaylistRepositoryImpl(
         database.getPlaylistDao().insertPlaylist(newModifiedPlaylist)
     }
 
-//StN
-    override suspend fun getTracksFromCommonTable(listIdTracks:ArrayList<Long>):Flow<List<Track>?>{
-
+    //StN
+    override suspend fun getTracksFromCommonTable(listIdTracks: ArrayList<Long>): Flow<List<Track>?> {
         return flow {
-        emit(withContext(Dispatchers.IO) {
+            emit(withContext(Dispatchers.IO) {
+                if (listIdTracks.isEmpty()) {
+                    null
+                } else {
+                    val tracksList: ArrayList<TrackEntityInPlaylist> = arrayListOf()
 
-            if(listIdTracks.isEmpty()){
-                null
-            } else {
-            val tracksList:ArrayList<TrackEntityInPlaylist> = arrayListOf()
+                    for (i in 0 until listIdTracks.size) {
 
-            for (i in 0 until listIdTracks.size) {
+                        val track: TrackEntityInPlaylist =
+                            database.getPlaylistDao().getTrackFromCommonTable(listIdTracks[i])
 
-               val track: TrackEntityInPlaylist = database.getPlaylistDao().getTrackFromCommonTable(listIdTracks[i])
-
-              tracksList.add(track)
-            }
-           Mapper.getArrayTrackFromTrackEntityPlaylist(tracksList)
+                        tracksList.add(track)
+                    }
+                    Mapper.getArrayTrackFromTrackEntityPlaylist(tracksList)
+                }
+            })
         }
-        })
-       }
-      }
+    }
 
 
     override suspend fun deleteTrackFromPlaylist(
         idPlaylist: Int,
-        idTrack:Long): Flow<List<Track>?>?
-     {
+        idTrack: Long
+    ): Flow<List<Track>?>? {
         try {
-            removeTrackFromPlDb(idPlaylist,idTrack)
+            removeTrackFromPlDb(idPlaylist, idTrack)
             removeTrackFromCommonTable(idTrack)
 
             val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
             val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
 
-            return if(listId.isEmpty()){
-                flow{emit(ArrayList<Track>())}
-            } else{
+            return if (listId.isEmpty()) {
+                flow { emit(ArrayList<Track>()) }
+            } else {
                 getTracksFromCommonTable(listId)
             }
-        }catch(exp:Throwable){
+        } catch (exp: Throwable) {
             return null
         }
     }
@@ -172,34 +166,35 @@ class PlaylistRepositoryImpl(
     @SuppressLint("SuspiciousIndentation")
     override suspend fun deletePlaylist(idPlaylist: Int): Flow<Unit?> {
         try {
-        val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
-        val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
-            if(listId.isEmpty()) {
+            val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
+            val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
+            if (listId.isEmpty()) {
                 database.getPlaylistDao().deletePlaylist(idPlaylist)
-                       return flow {emit(Unit)}
-            }else{
+                return flow { emit(Unit) }
+            } else {
                 database.getPlaylistDao().deletePlaylist(idPlaylist)
-                for (i in 0 until listId.size ){
+                for (i in 0 until listId.size) {
                     removeTrackFromCommonTable(listId[i])
                 }
-                      return  flow {emit(Unit)}
+                return flow { emit(Unit) }
             }
 
-    }catch (ext:Throwable){
-           return flow{ emit(null) }
-    }
+        } catch (ext: Throwable) {
+            return flow { emit(null) }
+        }
     }
 
     override suspend fun getPlaylist(idPlaylist: Int): Flow<Playlist?> {
         try {
             val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
 
-            return flow { emit(
-               Mapper.getPlaylistFromPlaylistEntity(playlist)
-            ) }
+            return flow {
+                emit(
+                    Mapper.getPlaylistFromPlaylistEntity(playlist)
+                )
+            }
 
-        }
-        catch (exp:Throwable){
+        } catch (exp: Throwable) {
             return flow { emit(null) }
         }
     }
@@ -223,15 +218,19 @@ class PlaylistRepositoryImpl(
                         countTracks = playlist.countTracks
                     )
                 )
-                 false
+                false
 
             } catch (exp: Throwable) {
-                 true
+                true
             }
         }
     }
 
     override fun getSavedImageFromPrivateStorage(uriFile: String?): String? {
-        return  storage.getSavedImageFromPrivateStorage(uriFile)
+        return storage.getSavedImageFromPrivateStorage(uriFile)
+    }
+
+    companion object {
+        private const val ONE_TRACK = 1
     }
 }

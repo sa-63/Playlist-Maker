@@ -61,12 +61,11 @@ open class PlaylistTracksViewModel(
         toastStateLiveData.postValue(ToastState.None)
     }
 
-    fun sharePlaylist(playlistInMessage: String){
+    fun sharePlaylist(playlistInMessage: String) {
         sharingInteractor.sharePlaylist(playlistInMessage)
     }
 
     private fun renderStateTracksInPlaylist(state: StateTracksInPlaylist) {
         statePlaylistLiveData.postValue(state)
     }
-
 }
