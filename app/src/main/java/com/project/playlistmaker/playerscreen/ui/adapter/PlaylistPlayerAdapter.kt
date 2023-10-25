@@ -3,7 +3,7 @@ package com.project.playlistmaker.playerscreen.ui.adapter
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -12,10 +12,6 @@ class PlaylistPlayerAdapter(
     private val lifecycleScope: () -> LifecycleCoroutineScope,
     private val listener: PlaylistClickListener
 ) : RecyclerView.Adapter<PlaylistPlayerViewHolder>() {
-
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
 
     private var isClickAllowed = true
 
@@ -53,7 +49,7 @@ class PlaylistPlayerAdapter(
             isClickAllowed = false
 
             lifecycleScope.invoke().launch {
-                delay(CLICK_DEBOUNCE_DELAY)
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isClickAllowed = true
             }
         }
@@ -63,5 +59,9 @@ class PlaylistPlayerAdapter(
 
     interface PlaylistClickListener {
         fun onClickView(playlist: Playlist)
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 }

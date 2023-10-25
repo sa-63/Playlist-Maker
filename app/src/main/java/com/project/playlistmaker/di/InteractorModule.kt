@@ -17,32 +17,26 @@ import org.koin.dsl.module
 class InteractorModule {
     val interactorModule = module {
 
-        //Search
         single<SearchInteractor> {
             SearchInteractorImpl(get())
         }
 
-        //Player
         single<PlayerInteractor> {
             PlayerInteractorImpl(get())
         }
 
-        //Settings
         single<SettingsInteractor> {
             SettingsInteractorImpl(get())
         }
 
-        //Sharing
         single<SharingInteractor> {
             SharingInteractorImpl(get())
         }
 
-        //Favourites
         single<FavouriteTracksInteractor> {
             FavouriteTracksInteractorImpl(get())
         }
 
-        //Playlist
         single<PlaylistInteractor>{
             PlaylistInteractorImpl(get())
         }

@@ -1,4 +1,4 @@
-package com.project.playlistmaker.playlist.domain.models.states.entity
+package com.project.playlistmaker.playlist.domain.models.entity
 
 data class Playlist(
     val id: Int? = null,

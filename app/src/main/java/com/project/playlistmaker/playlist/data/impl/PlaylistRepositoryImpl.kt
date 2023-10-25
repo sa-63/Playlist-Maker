@@ -6,7 +6,7 @@ import com.project.playlistmaker.playlist.data.db.entity.PlaylistEntity
 import com.project.playlistmaker.playlist.data.db.entity.TrackEntityInPlaylist
 import com.project.playlistmaker.playlist.data.storage.PlaylistStorage
 import com.project.playlistmaker.playlist.domain.PlaylistRepository
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.utils.Mapper
 import kotlinx.coroutines.Dispatchers

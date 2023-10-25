@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.playlistmaker.playlist.domain.PlaylistInteractor
 import com.project.playlistmaker.playlist.domain.models.states.StateAddDb
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import kotlinx.coroutines.launch
 
 open class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {

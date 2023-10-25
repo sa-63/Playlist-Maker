@@ -22,7 +22,7 @@ import com.project.playlistmaker.playerscreen.ui.model.ToastState
 import com.project.playlistmaker.playerscreen.ui.viewmodel.PlayerViewModel
 import com.project.playlistmaker.playlist.domain.models.states.EmptyStatePlaylist
 import com.project.playlistmaker.playlist.domain.models.states.StateAddDb
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import com.project.playlistmaker.playlist.ui.fragments.NewPlaylistFragment
 import com.project.playlistmaker.playlist.ui.model.TrackPlr
 import com.project.playlistmaker.searchscreen.domain.models.Track

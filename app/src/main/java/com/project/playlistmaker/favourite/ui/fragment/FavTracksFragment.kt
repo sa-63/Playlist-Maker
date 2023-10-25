@@ -13,17 +13,15 @@ import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
 import com.project.playlistmaker.playlist.ui.model.TrackPlr
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.ui.adapter.TrackListAdapter
-import com.project.playlistmaker.searchscreen.ui.view_holder.TrackListViewHolder
+import com.project.playlistmaker.searchscreen.ui.viewholder.TrackListViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavTracksFragment : Fragment(), TrackListViewHolder.TrackListClickListener {
-    //ViewModel
+
     private val favTracksViewModel by viewModel<FavTracksViewModel>()
 
-    //Binding
     private lateinit var binding: FragmentFavTracksBinding
 
-    //For tracksRv
     private lateinit var favTracksAdapter: TrackListAdapter
     private var favTracksList = mutableListOf<Track>()
 
@@ -63,11 +61,9 @@ class FavTracksFragment : Fragment(), TrackListViewHolder.TrackListClickListener
         }
     }
 
-    //Open Player Activity
-    //Open Player
     private fun openPlayer(track: Track) {
         val intent = Intent(requireContext(), PlayerActivity::class.java)
-        intent.putExtra("dataTrack", TrackPlr.mappingTrack(track))
+        intent.putExtra(INTENT_TRACK, TrackPlr.mappingTrack(track))
         requireContext().startActivity(intent)
     }
 
@@ -83,6 +79,7 @@ class FavTracksFragment : Fragment(), TrackListViewHolder.TrackListClickListener
 
     companion object {
         fun newInstance() = FavTracksFragment()
+        const val INTENT_TRACK = "dataTrack"
     }
 
     override fun setTrackClickListener(track: Track) {

@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.project.playlistmaker.R
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import com.project.playlistmaker.utils.Formatter
 
 class PlaylistViewHolder(

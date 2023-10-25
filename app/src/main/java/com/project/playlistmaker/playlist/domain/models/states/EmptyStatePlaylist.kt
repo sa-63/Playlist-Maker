@@ -1,6 +1,6 @@
 package com.project.playlistmaker.playlist.domain.models.states
 
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 
 sealed class EmptyStatePlaylist {
     class EmptyPlaylist : EmptyStatePlaylist()

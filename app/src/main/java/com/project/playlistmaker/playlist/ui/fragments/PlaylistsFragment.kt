@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import com.project.playlistmaker.playlist.domain.models.states.EmptyStatePlaylist
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
 import com.project.playlistmaker.playlist.ui.adapters.PlaylistAdapter
 import com.project.playlistmaker.playlist.ui.viewmodels.PlaylistsViewModel
 import com.project.playlistmaker.utils.ArgsTransfer

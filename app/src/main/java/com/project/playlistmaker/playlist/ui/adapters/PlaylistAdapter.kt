@@ -3,7 +3,7 @@ package com.project.playlistmaker.playlist.ui.adapters
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

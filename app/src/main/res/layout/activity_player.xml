@@ -83,7 +83,7 @@
             app:layout_constraintEnd_toEndOf="@id/rightBorder_24"
             app:layout_constraintStart_toStartOf="@id/leftBorder_24"
             app:layout_constraintTop_toBottomOf="@id/iv_album_cover"
-            tools:text="Yesterday (Remastered 2009)" />
+            tools:text="[Yesterday (Remastered 2009)]" />
 
         <TextView
             android:id="@+id/tv_artist_name"
@@ -96,7 +96,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="@id/leftBorder_24"
             app:layout_constraintTop_toBottomOf="@id/tv_track_name"
-            tools:text="The Beatles" />
+            tools:text="[The Beatles]" />
 
         <!--Кнопки-->
         <ImageButton
@@ -212,7 +212,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_album_in_table"
             app:layout_constraintEnd_toEndOf="@id/rightBorder_16"
             app:layout_constraintTop_toBottomOf="@id/tv_track_duration_current"
-            tools:text="5:35" />
+            tools:text="[5:35]" />
 
         <TextView
             android:id="@+id/tv_album_in_table"
@@ -221,7 +221,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_year_in_table"
             app:layout_constraintEnd_toEndOf="@id/rightBorder_16"
             app:layout_constraintTop_toBottomOf="@id/tv_duration_total"
-            tools:text="Yesterday (Remastered 2009)" />
+            tools:text="[Yesterday (Remastered 2009)]" />
 
         <TextView
             android:id="@+id/tv_year_in_table"
@@ -230,7 +230,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_genre_in_table"
             app:layout_constraintEnd_toEndOf="@id/rightBorder_16"
             app:layout_constraintTop_toBottomOf="@id/tv_album_in_table"
-            tools:text="1965" />
+            tools:text="[1965]" />
 
         <TextView
             android:id="@+id/tv_genre_in_table"
@@ -239,7 +239,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_country_in_table"
             app:layout_constraintEnd_toEndOf="@id/rightBorder_16"
             app:layout_constraintTop_toBottomOf="@id/tv_year_in_table"
-            tools:text="Rock" />
+            tools:text="[Rock]" />
 
         <TextView
             android:id="@+id/tv_country_in_table"
@@ -249,7 +249,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/rightBorder_16"
             app:layout_constraintTop_toBottomOf="@id/tv_genre_in_table"
-            tools:text="Великобритания" />
+            tools:text="[Великобритания]" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -263,6 +263,7 @@
         android:id="@+id/bottom_sheet_linear"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        tools:visibility="gone"
         style="@style/BottomSheetStyle"
         android:background="@drawable/bottom_sheet_shape"
         android:orientation="vertical"

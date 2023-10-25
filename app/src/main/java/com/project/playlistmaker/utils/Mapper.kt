@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.project.playlistmaker.playlist.data.db.entity.PlaylistEntity
 import com.project.playlistmaker.playlist.data.db.entity.TrackEntityInPlaylist
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import com.project.playlistmaker.searchscreen.domain.models.Track
 
 object Mapper {

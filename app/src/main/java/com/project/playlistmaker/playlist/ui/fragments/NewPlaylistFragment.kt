@@ -40,8 +40,8 @@ import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.project.playlistmaker.mainscreen.RootActivity
 import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import com.project.playlistmaker.playlist.domain.models.states.StateAddDb
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
 import com.project.playlistmaker.playlist.ui.viewmodels.NewPlaylistViewModel
 import com.project.playlistmaker.utils.ArgsTransfer
 import kotlinx.coroutines.launch
@@ -94,14 +94,15 @@ open class NewPlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dialogExit =
-            MaterialAlertDialogBuilder(
-                requireContext(),
-                R.style.DialogStyle
-            ).setTitle(R.string.ask_to_cancel)
+            MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
+                .setTitle(R.string.ask_to_cancel)
                 .setMessage(R.string.confirm_cancel)
-                .setNeutralButton(R.string.no) { dialog, which ->
-                }.setPositiveButton(R.string.finish) { dialog, which ->
+                .setNegativeButton(R.string.no) { dialog, which ->
+                }
+                .setPositiveButton(R.string.finish) { dialog, which ->
                     backStackSelector()
+                }
+                .setOnDismissListener {
                 }
 
         newPlaylistViewModel.getLiveData().observe(viewLifecycleOwner) {

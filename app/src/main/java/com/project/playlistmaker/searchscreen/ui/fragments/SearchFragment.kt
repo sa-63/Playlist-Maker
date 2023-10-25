@@ -18,8 +18,8 @@ import com.project.playlistmaker.playlist.ui.model.TrackPlr
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.ui.adapter.TrackListAdapter
 import com.project.playlistmaker.searchscreen.ui.models.SearchScreenStatus
-import com.project.playlistmaker.searchscreen.ui.view_holder.TrackListViewHolder
-import com.project.playlistmaker.searchscreen.ui.view_model.SearchViewModel
+import com.project.playlistmaker.searchscreen.ui.viewholder.TrackListViewHolder
+import com.project.playlistmaker.searchscreen.ui.viewmodel.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(), TrackListViewHolder.TrackListClickListener {

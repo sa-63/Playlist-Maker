@@ -31,7 +31,7 @@ class TracksViewHolder(
         duration.text = Formatter.dateFormatting(trackData.trackTimeMillis)
 
         Glide.with(itemView)
-            .load(trackData.artworkUrl100)
+            .load(trackData.getCover60())
             .placeholder(R.drawable.placeholder)
             .centerCrop()
             .transform(RoundedCorners(cornerSize))

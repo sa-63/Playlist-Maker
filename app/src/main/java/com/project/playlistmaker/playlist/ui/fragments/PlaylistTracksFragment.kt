@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -23,8 +24,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentPlaylistTracksBinding
 import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
+import com.project.playlistmaker.playerscreen.ui.model.ToastState
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
 import com.project.playlistmaker.playlist.domain.models.states.StateTracksInPlaylist
-import com.project.playlistmaker.playlist.domain.models.states.entity.Playlist
 import com.project.playlistmaker.playlist.ui.adapters.PlaylistTracksAdapter
 import com.project.playlistmaker.playlist.ui.model.TrackPlr
 import com.project.playlistmaker.playlist.ui.viewmodels.PlaylistTracksViewModel
@@ -73,6 +75,9 @@ class PlaylistTracksFragment : Fragment() {
         }
 
         playlistTracksViewModel.getToastStateLiveData().observe(viewLifecycleOwner) {
+            if (it is ToastState.Show) {
+                showToast(it.additionalMessage)
+            }
             playlistTracksViewModel.setStateToastNone()
         }
 
@@ -100,9 +105,10 @@ class PlaylistTracksFragment : Fragment() {
         val dialogDelete = MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
             .setTitle(R.string.title_del_track_dialog)
             .setMessage(R.string.message_about_delete_track)
-            .setNeutralButton(R.string.no) { dialog, which -> }
+            .setNegativeButton(R.string.no) { dialog, which -> }
             .setPositiveButton(R.string.yes) { dialog, which ->
                 playlistTracksViewModel.deleteTrackFromPlaylist(idPlaylist!!, idTrackInPlaylist!!)
+                listIdTracksTemp.remove(idTrackInPlaylist)
             }
         return dialogDelete
     }
@@ -111,7 +117,7 @@ class PlaylistTracksFragment : Fragment() {
         val dialogDeletePlaylist = MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
             .setTitle(R.string.title_del_playlist_dialog)
             .setMessage(R.string.message_about_delete_playlist)
-            .setNeutralButton(R.string.no) { dialog, which -> }
+            .setNegativeButton(R.string.no) { dialog, which -> }
             .setPositiveButton(R.string.yes) { dialog, which ->
                 playlistTracksViewModel.deletePlaylist(idPlaylist!!)
             }
@@ -131,7 +137,7 @@ class PlaylistTracksFragment : Fragment() {
 
             override fun onShortClickView(track: Track) {
                 val intent = Intent(requireContext(), PlayerActivity::class.java)
-                intent.putExtra("dataTrack", TrackPlr.mappingTrack(track))
+                intent.putExtra(INTENT_TRACK, TrackPlr.mappingTrack(track))
                 requireContext().startActivity(intent)
             }
         }
@@ -218,6 +224,7 @@ class PlaylistTracksFragment : Fragment() {
     }
 
     private fun showStateNoTracks() {
+        arrayTracks.clear()
         binding.recyclerPlaylistTracks.isVisible = false
         binding.emptyPl.isVisible = true
         binding.timeLengthPl.text = Formatter.formattingTheEndMinutes(null, requireContext())
@@ -291,6 +298,7 @@ class PlaylistTracksFragment : Fragment() {
     }
 
     private fun sharePlaylist() {
+        playlistTracksViewModel.getTracksFromCommonTable(listIdTracksTemp)
         if (arrayTracks.isEmpty()) {
             playlistTracksViewModel.showToast(getString(R.string.message_no_tracks_in_playlist))
         } else {
@@ -308,7 +316,12 @@ class PlaylistTracksFragment : Fragment() {
         }
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
     companion object {
+        const val INTENT_TRACK = "dataTrack"
         const val ID_ARG = "ID_PLAYLIST"
     }
 }

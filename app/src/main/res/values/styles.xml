@@ -336,10 +336,14 @@
 
     <style name="DialogPositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="android:fontWeight">@dimen/weight_high_text</item>
     </style>
 
     <style name="DialogNegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="android:fontWeight">@dimen/weight_high_text</item>
     </style>
 
     <style name="DialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
@@ -359,7 +363,7 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/text_22</item>
-        <item name="android:fontWeight">500</item>
+        <item name="android:fontWeight">@dimen/weight_high_text</item>
     </style>
 
     <style name="ImagePlaylist">
@@ -454,6 +458,9 @@
         <item name="android:paddingEnd">@dimen/after_item</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_16</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:fontWeight">@dimen/weight_medium_text</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
@@ -487,7 +494,8 @@
         <item name="android:orientation">vertical</item>
         <item name="android:background">@drawable/bottom_sheet_shape</item>
         <item name="behavior_hideable">true</item>
-        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior</item>
+        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior
+        </item>
     </style>
 
     <style name="BottomSheetHandle">

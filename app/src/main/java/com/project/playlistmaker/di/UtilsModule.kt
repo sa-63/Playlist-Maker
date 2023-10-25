@@ -8,12 +8,10 @@ import org.koin.dsl.module
 
 class UtilsModule {
     val utilsModule = module {
-        //ResourceProvider
         single<ResourceProvider> {
             ResourceProviderImpl(androidContext())
         }
 
-        //PermissionRequester
         single {
             PermissionRequester.instance()
         }

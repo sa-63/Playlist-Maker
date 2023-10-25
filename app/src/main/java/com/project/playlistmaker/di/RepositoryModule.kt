@@ -15,27 +15,22 @@ import org.koin.dsl.module
 class RepositoryModule {
     val repositoryModule = module {
 
-        //Search
         single<SearchRepository> {
             SearchRepositoryImpl(get(), get())
         }
 
-        //Player
         single<PlayerRepository> {
             PlayerRepositoryImpl(get())
         }
 
-        //Settings
         single<SettingsRepository> {
             SettingsRepositoryImpl(get())
         }
 
-        //Favourites
         single<FavouriteTracksRepository> {
             FavouriteTracksRepositoryImpl(get(), get())
         }
 
-        //Playlist
         single<PlaylistRepository> {
             PlaylistRepositoryImpl(get(), get())
         }

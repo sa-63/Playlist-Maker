@@ -11,23 +11,20 @@ import org.koin.dsl.module
 
 class DbModule {
     val dbModule = module {
-        //FavouritesDataBase
         single {
             Room.databaseBuilder(androidContext(), FavouritesDataBase::class.java, DB_FAVOURITE)
                 .build()
         }
 
-        //FavouriteDbMapper
         single {
             FavouriteDbMapper()
         }
 
-        //PlaylistDataBase
         single {
             Room.databaseBuilder(androidContext(), PlaylistDataBase::class.java, DB_PLAYLISTS)
                 .build()
         }
-        //PlaylistStorage
+
         single<PlaylistStorage> {
             PlaylistStorageImpl(get())
         }
