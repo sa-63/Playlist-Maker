@@ -22,7 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DataModule {
     val dataModule = module {
-        //Network
         single<ItunesSearchApi> {
             val interceptor = HttpLoggingInterceptor().apply {
                 this.level = HttpLoggingInterceptor.Level.BODY
@@ -46,16 +45,13 @@ class DataModule {
             NetworkClientImpl(get(), get())
         }
 
-        //LocalDb
         factory { Gson() }
 
         single<SharedPreferences> {
-            //History
             androidContext().getSharedPreferences(
                 SearchHistoryStorageImpl.SHARED_PREF_SEARCH,
                 Context.MODE_PRIVATE
             )
-            //Theme
             androidContext().getSharedPreferences(
                 SharedPrefsThemeStorage.SHARED_PREF_SETTINGS,
                 Context.MODE_PRIVATE
@@ -70,12 +66,10 @@ class DataModule {
             SharedPrefsThemeStorage(get())
         }
 
-        //Settings
         single<ExternalNavigator> {
             ExternalNavigatorImpl(androidContext())
         }
 
-        //Player
         single {
             return@single MediaPlayer()
         }

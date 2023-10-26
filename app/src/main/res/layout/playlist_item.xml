@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/playlist_image"
+        android:id="@+id/reclr_plst_image"
         android:layout_width="@dimen/size_160"
         android:layout_height="@dimen/size_160"
         android:scaleType="centerCrop"
@@ -15,18 +15,17 @@
         tools:src="@drawable/placeholder" />
 
     <TextView
-        android:id="@+id/playlist_title"
+        android:id="@+id/reclr_plst_name"
         style="@style/NewPlaylist_textview_style"
         android:layout_marginTop="@dimen/margin_4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playlist_image"
+        app:layout_constraintTop_toBottomOf="@+id/reclr_plst_image"
         tools:text="BEST SONG EVER" />
 
     <TextView
-        android:id="@+id/playlist_size"
+        android:id="@+id/reclr_plst_tracks"
         style="@style/NewPlaylist_textview_style"
-        app:layout_constraintStart_toStartOf="@+id/playlist_title"
-        app:layout_constraintTop_toBottomOf="@+id/playlist_title"
+        app:layout_constraintStart_toStartOf="@+id/reclr_plst_name"
+        app:layout_constraintTop_toBottomOf="@+id/reclr_plst_name"
         tools:text="12 tracks" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

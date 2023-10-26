@@ -1,34 +1,37 @@
 package com.project.playlistmaker.di
 
 import androidx.room.Room
-import com.project.playlistmaker.createplaylist.data.db.fileslocal.PrivateStorage
-import com.project.playlistmaker.createplaylist.data.db.fileslocal.PrivateStorageImpl
-import com.project.playlistmaker.db.mappers.PlaylistDbMapper
-import com.project.playlistmaker.db.database.AppDatabase
-import com.project.playlistmaker.db.mappers.TrackDbMapper
+import com.project.playlistmaker.favourite.data.db.database.FavouritesDataBase
+import com.project.playlistmaker.favourite.data.db.mappers.FavouriteDbMapper
+import com.project.playlistmaker.playlist.data.db.database.PlaylistDataBase
+import com.project.playlistmaker.playlist.data.storage.PlaylistStorage
+import com.project.playlistmaker.playlist.data.storage.impl.PlaylistStorageImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 class DbModule {
     val dbModule = module {
-        //DataBase
         single {
-            Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            Room.databaseBuilder(androidContext(), FavouritesDataBase::class.java, DB_FAVOURITE)
                 .build()
         }
 
-        //Mappers
         single {
-            TrackDbMapper()
+            FavouriteDbMapper()
         }
 
         single {
-            PlaylistDbMapper()
+            Room.databaseBuilder(androidContext(), PlaylistDataBase::class.java, DB_PLAYLISTS)
+                .build()
         }
 
-        //PrivateStorage
-        single<PrivateStorage> {
-            PrivateStorageImpl(androidContext())
+        single<PlaylistStorage> {
+            PlaylistStorageImpl(get())
         }
+    }
+
+    companion object {
+        private const val DB_FAVOURITE: String = "FavoriteTracks.db"
+        private const val DB_PLAYLISTS: String = "Playlists.db"
     }
 }

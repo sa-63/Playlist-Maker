@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation_graph"
-    app:startDestination="@id/libraryFragment">
+    app:startDestination="@id/MediaFragment">
 
     <fragment
-        android:id="@+id/libraryFragment"
-        android:name="com.project.playlistmaker.mediascreen.ui.fragments.MediaLibraryFragment"
-        android:label="LibraryFragment">
+        android:id="@+id/MediaFragment"
+        android:name="com.project.playlistmaker.mediascreen.ui.fragments.MediaFragment"
+        android:label="MediaFragment"
+        tools:layout="@layout/fragment_media">
         <action
-            android:id="@+id/action_libraryFragment_to_favTracksFragment"
-            app:destination="@id/favTracksFragment" />
+            android:id="@+id/action_MediaFragment_to_PlaylistsFragment"
+            app:destination="@id/PlaylistsFragment" />
         <action
-            android:id="@+id/action_libraryFragment_to_myPlaylistFragment"
-            app:destination="@id/myPlaylistFragment" />
+            android:id="@+id/action_MediaFragment_to_FavouritesFragment"
+            app:destination="@id/FavouritesFragment" />
         <action
-            android:id="@+id/action_libraryFragment_to_PlayerFragment"
-            app:destination="@id/PlayerFragment" />
+            android:id="@+id/action_MediaFragment_to_UpdatePlaylistFragment"
+            app:destination="@id/UpdatePlaylistFragment" />
         <action
-            android:id="@+id/action_libraryFragment_to_newPlaylistFragment"
-            app:destination="@id/newPlaylistFragment" />
+            android:id="@+id/action_MediaFragment_to_PlayerActivity"
+            app:destination="@id/PlayerActivity" />
+        <action
+            android:id="@+id/action_MediaFragment_to_PlaylistTracksFragment"
+            app:destination="@id/PlaylistTracksFragment" />
+        <action
+            android:id="@+id/action_MediaFragment_to_NewPlaylistFragment"
+            app:destination="@id/NewPlaylistFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.project.playlistmaker.searchscreen.ui.fragments.SearchFragment"
-        android:label="SearchFragment">
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_PlayerFragment"
-            app:destination="@id/PlayerFragment" />
+            app:destination="@id/PlayerActivity" />
     </fragment>
 
     <fragment
@@ -36,29 +45,44 @@
         android:name="com.project.playlistmaker.settingsscreen.ui.fragments.SettingsFragment"
         android:label="SettingsFragment" />
 
-    <fragment
-        android:id="@+id/PlayerFragment"
-        android:name="com.project.playlistmaker.playerscreen.ui.fragment.PlayerFragment"
-        android:label="PlayerFragment" >
-        <action
-            android:id="@+id/action_PlayerFragment_to_newPlaylistFragment"
-            app:destination="@id/newPlaylistFragment" />
-    </fragment>
+    <activity
+        android:id="@+id/PlayerActivity"
+        android:name="com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity"
+        android:label="PlayerActivity" />
 
     <fragment
-        android:id="@+id/myPlaylistFragment"
-        android:name="com.project.playlistmaker.myplaylists.ui.fragment.PlaylistsFragment"
-        android:label="myPlaylistFragment" >
-    </fragment>
+        android:id="@+id/PlaylistsFragment"
+        android:name="com.project.playlistmaker.playlist.ui.fragments.PlaylistsFragment"
+        android:label="PlaylistsFragment"
+        tools:layout="@layout/fragment_playlists"/>
 
     <fragment
-        android:id="@+id/favTracksFragment"
+        android:id="@+id/FavouritesFragment"
         android:name="com.project.playlistmaker.favourite.ui.fragment.FavTracksFragment"
-        android:label="FavTracksFragment" >
+        android:label="FavouritesFragment"
+        tools:layout="@layout/fragment_fav_tracks"/>
+
+    <fragment
+        android:id="@+id/PlaylistTracksFragment"
+        android:name="com.project.playlistmaker.playlist.ui.fragments.PlaylistTracksFragment"
+        android:label="PlaylistTracksFragment">
+        <action
+            android:id="@+id/action_aboutPlaylistFragment_to_PlayerFragment"
+            app:destination="@id/PlayerActivity" />
+        <action
+            android:id="@+id/action_PlaylistTracksFragment_to_UpdatePlaylistFragment"
+            app:destination="@id/UpdatePlaylistFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/newPlaylistFragment"
-        android:name="com.project.playlistmaker.createplaylist.ui.fragment.PlaylistsCreationFragment"
-        android:label="FavTracksFragment" />
+        android:id="@+id/NewPlaylistFragment"
+        android:name="com.project.playlistmaker.playlist.ui.fragments.NewPlaylistFragment"
+        android:label="NewPlaylistFragment"
+        tools:layout="@layout/fragment_new_playlist" />
+
+    <fragment
+        android:id="@+id/UpdatePlaylistFragment"
+        android:name="com.project.playlistmaker.playlist.ui.fragments.UpdatePlaylistFragment"
+        android:label="UpdatePlaylistFragment"
+        tools:layout="@layout/fragment_new_playlist" />
 </navigation>

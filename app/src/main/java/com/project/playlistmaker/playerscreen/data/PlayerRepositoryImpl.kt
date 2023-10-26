@@ -7,7 +7,7 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
 
     private var isPlayerReleased = false
 
-    override fun preparePlayer(url: String) {
+    override fun preparePlayer(url: String?) {
         if (isPlayerReleased) {
             mediaPlayer = MediaPlayer()
         }

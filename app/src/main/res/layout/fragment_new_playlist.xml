@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".createplaylist.ui.fragment.PlaylistsCreationFragment"
+    tools:context=".playlist.ui.fragments.NewPlaylistFragment"
     android:id="@+id/parent_layout">
 
     <ImageButton

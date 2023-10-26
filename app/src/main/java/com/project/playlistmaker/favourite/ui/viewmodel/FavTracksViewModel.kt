@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.playlistmaker.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.favourite.ui.model.FavTracksState
-import com.project.playlistmaker.searchscreen.ui.view_model.SearchViewModel.Companion.CLICK_DEBOUNCE_DELAY_MILLIS
+import com.project.playlistmaker.searchscreen.ui.viewmodel.SearchViewModel.Companion.CLICK_DEBOUNCE_DELAY_MILLIS
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

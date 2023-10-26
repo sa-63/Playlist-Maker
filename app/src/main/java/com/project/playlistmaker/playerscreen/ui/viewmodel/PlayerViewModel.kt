@@ -5,13 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.playlistmaker.R
-import com.project.playlistmaker.createplaylist.domain.interactor.PlaylistDbInteractor
-import com.project.playlistmaker.createplaylist.domain.model.Playlist
 import com.project.playlistmaker.favourite.domain.interactor.FavouriteTracksInteractor
 import com.project.playlistmaker.playerscreen.domain.playerinteractor.PlayerInteractor
 import com.project.playlistmaker.playerscreen.ui.model.PlayerState
-import com.project.playlistmaker.playerscreen.ui.model.PlaylistsInPlayerState
 import com.project.playlistmaker.playerscreen.ui.model.ToastState
+import com.project.playlistmaker.playlist.domain.PlaylistInteractor
+import com.project.playlistmaker.playlist.domain.models.states.EmptyStatePlaylist
+import com.project.playlistmaker.playlist.domain.models.states.StateAddDb
+import com.project.playlistmaker.playlist.domain.models.entity.Playlist
+import com.project.playlistmaker.playlist.ui.model.TrackPlr
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.utils.DataFormat
 import com.project.playlistmaker.utils.ResourceProvider
@@ -20,13 +22,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
-    private val track: Track,
     private val playerInteractor: PlayerInteractor,
     private val resourceProvider: ResourceProvider,
     private val favTracksInteractor: FavouriteTracksInteractor,
-    private val playlistsDbInteractor: PlaylistDbInteractor
+    private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
-
 
     //Observers
     private val _state = MutableLiveData<PlayerState>()
@@ -44,8 +44,11 @@ class PlayerViewModel(
     fun observeToastState(): LiveData<ToastState> = toastLiveData
 
     //Playlists
-    private val playlistsLiveData = MutableLiveData<PlaylistsInPlayerState>()
-    fun observePlaylists(): LiveData<PlaylistsInPlayerState> = playlistsLiveData
+    private val emptyPlaylistLiveData = MutableLiveData<EmptyStatePlaylist>()
+    fun getEmptyPlaylistLiveData(): LiveData<EmptyStatePlaylist> = emptyPlaylistLiveData
+
+    private val addPlaylistLivaData = MutableLiveData<StateAddDb>()
+    fun getAddPlaylistLivaData(): LiveData<StateAddDb> = addPlaylistLivaData
 
     init {
         _state.postValue(PlayerState.STATE_DEFAULT)
@@ -64,7 +67,7 @@ class PlayerViewModel(
         _state.value = PlayerState.STATE_PLAYING
     }
 
-    private fun preparePlayer(url: String) {
+    private fun preparePlayer(url: String?) {
         playerInteractor.preparePlayer(url)
         _state.value = PlayerState.STATE_PREPARED
     }
@@ -99,7 +102,7 @@ class PlayerViewModel(
         return playerInteractor.getCurrentPosition()
     }
 
-    fun playbackControl(trackUrl: String) {
+    fun playbackControl(trackUrl: String?) {
         when (_state.value!!) {
             PlayerState.STATE_PLAYING -> {
                 pausePlayer()
@@ -146,7 +149,7 @@ class PlayerViewModel(
     //For addToFavourite
     fun observeFavourite(): LiveData<Boolean> = isFavouriteLiveData
 
-    fun checkIsFavourite(trackId: Int) {
+    fun checkIsFavourite(trackId: Long?) {
         viewModelScope.launch {
             favTracksInteractor
                 .isFavoriteTrack(trackId)
@@ -176,32 +179,72 @@ class PlayerViewModel(
         toastLiveData.value = ToastState.None
     }
 
-    private fun showToast(message: String) {
+    fun showToast(message: String) {
         toastLiveData.value =
             ToastState.Show(message)
     }
 
     //Playlists Related
-    fun addToPlaylistClicked() {
+    private fun renderPlaylistState(state: EmptyStatePlaylist) {
+        emptyPlaylistLiveData.postValue(state)
+    }
+
+    private fun renderAddTrackState(state: StateAddDb) {
+        addPlaylistLivaData.postValue(state)
+    }
+
+    fun getAllPlaylists() {
         viewModelScope.launch {
-            playlistsDbInteractor.getPlaylists().collect {
-                playlistsLiveData.postValue(PlaylistsInPlayerState.DisplayPlaylists(it))
+            playlistInteractor.getAllPlaylists().collect {
+                when (it) {
+                    is EmptyStatePlaylist.EmptyPlaylist -> renderPlaylistState(it)
+                    is EmptyStatePlaylist.NotEmptyPlaylist -> renderPlaylistState(it)
+                }
             }
         }
     }
 
-    fun onPlaylistClicked(playlist: Playlist) {
-        if (playlist.tracks.contains(track.trackId)) {
-            showToast("${resourceProvider.getString(R.string.track_is_in_pl_already)} ${playlist.name}")
-        } else {
-            viewModelScope.launch {
-                playlist.tracks.add(track.trackId)
-                val updatedPlaylist = playlist.copy(numberOfTracks = playlist.numberOfTracks + 1)
-                playlistsDbInteractor.addTrackToPlaylist(track, updatedPlaylist)
-            }
-            showToast("${resourceProvider.getString(R.string.track_added_to_pl)} ${playlist.name}")
+    fun addTrackInPlaylist(track: TrackPlr, playlist: Playlist) {
+        if (track.trackId == null) {
+            renderAddTrackState(StateAddDb.Error())
+            return
         }
-        playlistsLiveData.postValue(PlaylistsInPlayerState.HidePlaylists)
+
+        viewModelScope.launch {
+            if (playlist.tracksInPlaylist == null) {
+                val stateError = playlistInteractor.addTrackInPlaylist(
+                    TrackPlr.mappingTrack(track),
+                    playlist.id!!
+                )
+                when (stateError) {
+                    is StateAddDb.Error -> renderAddTrackState(StateAddDb.Error())
+                    is StateAddDb.NoError -> renderAddTrackState(StateAddDb.NoError(playlist.playlistName))
+                    is StateAddDb.Match -> renderAddTrackState(StateAddDb.Error())
+                    is StateAddDb.NoData -> renderAddTrackState(StateAddDb.NoData())
+                }
+            } else {
+                if (playlist.tracksInPlaylist.contains(track.trackId!!)) {
+                    renderAddTrackState(StateAddDb.Match(playlist.playlistName))
+                    showToast("${resourceProvider.getString(R.string.track_is_in_pl_already)} ${playlist.playlistName}")
+                } else {
+                    val stateError = playlistInteractor.addTrackInPlaylist(
+                        TrackPlr.mappingTrack(track),
+                        playlist.id!!
+                    )
+                    showToast("${resourceProvider.getString(R.string.track_added_to_pl)} ${playlist.playlistName}")
+                    when (stateError) {
+                        is StateAddDb.Error -> renderAddTrackState(StateAddDb.Error())
+                        is StateAddDb.NoError -> renderAddTrackState(StateAddDb.NoError(playlist.playlistName))
+                        is StateAddDb.Match -> renderAddTrackState(StateAddDb.Error())
+                        is StateAddDb.NoData -> renderAddTrackState(StateAddDb.NoData())
+                    }
+                }
+            }
+        }
+    }
+
+    fun setStateNoDataPlaylistLivaData() {
+        renderAddTrackState(StateAddDb.NoData())
     }
 
     companion object {

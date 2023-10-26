@@ -45,4 +45,38 @@
     <string name="track_is_in_pl_already">Трек уже добавлен в плейлист</string>
     <string name="read_image_rationale">Необходимо разрешение для чтения файлов из общего хранилища</string>
     <string name="track_added_to_pl">Добавлено в плейлист</string>
+
+
+    <string name="option_one_for_one_track">трек</string>
+    <string name="option_two_for_one_track">трека</string>
+    <string name="option_one_for_many_tracks">треков</string>
+    <string name="option_one_for_minutes">минута</string>
+    <string name="option_two_for_minutes">минуты</string>
+    <string name="option_three_for_minutes">минут</string>
+    <string name="no_tracks">В плейлисте нет треков</string>
+    <string name="message_about_delete_track">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="message_about_delete_playlist">Вы уверены, что хотите удалить этот плейлист?</string>
+    <string name="title_del_track_dialog">Удалить трек</string>
+    <string name="title_del_playlist_dialog">Удалить плейлист</string>
+    <string name="message_no_tracks_in_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
+    <string name="error_add_playlist">Error additing data in database, or commands is not allowed!</string>
+    <string name="error_match_playlist">Error, operation \'match\' impossible!</string>
+    <string name="image_not_select">Image not select</string>
+    <string name="permission_denied">Permission to access the storage is denied.</string>
+    <string name="error_init_playlist">Error initialized playlist.Check Db work.</string>
+    <string name="error_query_db">Error query in database.Please check chains methods work correct with database.</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="description_poster_player">Изображение трека</string>
+    <string name="description_img_playlist">Изображение плейлиста</string>
+    <string name="description_placeholder">Изоборажение-заглушка.</string>
+    <string name="description_button_add">Добавить трек плейлист</string>
+    <string name="description_button_play">Играть</string>
+    <string name="description_button_heart">Добавить трек в любимые</string>
+    <string name="playlist_share">Поделиться</string>
+    <string name="edit_info">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="rationale_permission_on_storage">Данное разрешения необходимо для добавления картинки к плейлисту</string>
 </resources>

@@ -1,30 +1,27 @@
 package com.project.playlistmaker.favourite.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
-import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentFavTracksBinding
 import com.project.playlistmaker.favourite.ui.model.FavTracksState
 import com.project.playlistmaker.favourite.ui.viewmodel.FavTracksViewModel
-import com.project.playlistmaker.playerscreen.ui.fragment.PlayerFragment
+import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
+import com.project.playlistmaker.playlist.ui.model.TrackPlr
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.ui.adapter.TrackListAdapter
-import com.project.playlistmaker.searchscreen.ui.view_holder.TrackListViewHolder
+import com.project.playlistmaker.searchscreen.ui.viewholder.TrackListViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavTracksFragment : Fragment(), TrackListViewHolder.TrackListClickListener {
-    //ViewModel
+
     private val favTracksViewModel by viewModel<FavTracksViewModel>()
 
-    //Binding
     private lateinit var binding: FragmentFavTracksBinding
 
-    //For tracksRv
     private lateinit var favTracksAdapter: TrackListAdapter
     private var favTracksList = mutableListOf<Track>()
 
@@ -64,12 +61,10 @@ class FavTracksFragment : Fragment(), TrackListViewHolder.TrackListClickListener
         }
     }
 
-    //Open Player Activity
-    //Open Player
     private fun openPlayer(track: Track) {
-        findNavController().navigate(
-            R.id.action_libraryFragment_to_PlayerFragment,
-            PlayerFragment.createArgs(Gson().toJson(track)))
+        val intent = Intent(requireContext(), PlayerActivity::class.java)
+        intent.putExtra(INTENT_TRACK, TrackPlr.mappingTrack(track))
+        requireContext().startActivity(intent)
     }
 
     override fun onResume() {
@@ -84,6 +79,7 @@ class FavTracksFragment : Fragment(), TrackListViewHolder.TrackListClickListener
 
     companion object {
         fun newInstance() = FavTracksFragment()
+        const val INTENT_TRACK = "dataTrack"
     }
 
     override fun setTrackClickListener(track: Track) {

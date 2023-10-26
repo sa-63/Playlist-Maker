@@ -1,6 +1,7 @@
 package com.project.playlistmaker.searchscreen.ui.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,16 +11,15 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
 import com.project.playlistmaker.R
 import com.project.playlistmaker.databinding.FragmentSearchBinding
-import com.project.playlistmaker.playerscreen.ui.fragment.PlayerFragment
+import com.project.playlistmaker.playerscreen.ui.activity.PlayerActivity
+import com.project.playlistmaker.playlist.ui.model.TrackPlr
 import com.project.playlistmaker.searchscreen.domain.models.Track
 import com.project.playlistmaker.searchscreen.ui.adapter.TrackListAdapter
 import com.project.playlistmaker.searchscreen.ui.models.SearchScreenStatus
-import com.project.playlistmaker.searchscreen.ui.view_holder.TrackListViewHolder
-import com.project.playlistmaker.searchscreen.ui.view_model.SearchViewModel
+import com.project.playlistmaker.searchscreen.ui.viewholder.TrackListViewHolder
+import com.project.playlistmaker.searchscreen.ui.viewmodel.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(), TrackListViewHolder.TrackListClickListener {
@@ -207,10 +207,9 @@ class SearchFragment : Fragment(), TrackListViewHolder.TrackListClickListener {
 
     //Open Player
     private fun openPlayer(track: Track) {
-        findNavController().navigate(
-            R.id.action_searchFragment_to_PlayerFragment,
-            PlayerFragment.createArgs(Gson().toJson(track))
-        )
+        val intent = Intent(requireContext(), PlayerActivity::class.java)
+        intent.putExtra("dataTrack", TrackPlr.mappingTrack(track))
+        requireContext().startActivity(intent)
     }
 
     //Adapters

@@ -5,6 +5,7 @@
     <dimen name="text_13">13sp</dimen>
     <dimen name="text_14">14sp</dimen>
     <dimen name="text_16">16sp</dimen>
+    <dimen name="text_18">18sp</dimen>
     <dimen name="text_19">19sp</dimen>
     <dimen name="text_22">22sp</dimen>
     <dimen name="text_24">22sp</dimen>
@@ -41,6 +42,7 @@
     <dimen name="settings_item_padding">42dp</dimen>
 
     <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_12">12dp</dimen>
@@ -71,4 +73,71 @@
     <dimen name="start_padding_settings_menu_items">16dp</dimen>
     <dimen name="start_padding_text_input_layout">16dp</dimen>
     <dimen name="edit_text_view_radius">4dp</dimen>
+
+    <dimen name="medium_text">16sp</dimen>
+    <dimen name="very_high_text">24sp</dimen>
+    <dimen name="high_text">22sp</dimen>
+    <dimen name="placeholder_text">19sp</dimen>
+    <dimen name="pl_text">18sp</dimen>
+    <dimen name="low_text">11sp</dimen>
+    <dimen name="bottom_nav_text">12sp</dimen>
+    <dimen name="button_text_low">14sp</dimen>
+
+    <dimen name="icon_padding_main">10dp</dimen>
+    <dimen name="button_width_medium">91dp</dimen>
+    <dimen name="button_height_medium">50dp</dimen>
+    <dimen name="padding_top_low">18dp</dimen>
+    <dimen name="padding_lowly">12dp</dimen>
+    <dimen name="padding_low">14dp</dimen>
+    <dimen name="icon_padding">28dp</dimen>
+
+    <dimen name="item_marginStart_veryLow">4dp</dimen>
+    <dimen name="item_marginStart_low">13dp</dimen>
+    <dimen name="item_marginStart_medium">24dp</dimen>
+    <dimen name="item_marginTop_veryLow">8dp</dimen>
+    <dimen name="item_marginTop_low">16dp</dimen>
+    <dimen name="item_marginTop_medium">18dp</dimen>
+    <dimen name="item_marginTop_high">24dp</dimen>
+    <dimen name="weight_high_text">500</dimen>
+    <dimen name="line_of_text_low">13sp</dimen>
+    <dimen name="line_of_text">14sp</dimen>
+    <dimen name="radius_button">16dp</dimen>
+    <dimen name="radius_button_low">8dp</dimen>
+    <dimen name="radius_button_medium">54dp</dimen>
+    <dimen name="radius_medium">44dp</dimen>
+    <dimen name="margin_top_veryHeight">148dp</dimen>
+    <dimen name="margin_top_height">54dp</dimen>
+    <dimen name="margin_top_medium">39dp</dimen>
+    <dimen name="margin_top_low">17dp</dimen>
+    <dimen name="margin_top_button">16dp</dimen>
+    <dimen name="before_item">16dp</dimen>
+    <dimen name="after_item">16dp</dimen>
+    <dimen name="height_button">61dp</dimen>
+    <dimen name="weight_medium_text">400</dimen>
+    <dimen name="padding_item">13dp</dimen>
+    <dimen name="high_view_medium">61dp</dimen>
+    <dimen name="item_paddingTop_VeryLow">1dp</dimen>
+    <dimen name="item_paddingTop_low">14dp</dimen>
+    <dimen name="item_margin_veryLow">4dp</dimen>
+    <dimen name="item_margin_low">8dp</dimen>
+    <dimen name="item_marginEnd_low">12dp</dimen>
+    <dimen name="item_marginEnd_medium">24dp</dimen>
+    <dimen name="item_marginTop_plhFavorite">106dp</dimen>
+    <dimen name="item_marginTop_plhPlaylist">46dp</dimen>
+    <dimen name="item_marginTop_veryHigh">113dp</dimen>
+    <dimen name="item_marginTop_history_search">26dp</dimen>
+    <dimen name="item_marginBottom_low">15dp</dimen>
+    <dimen name="item_marginBottom_medium">32dp</dimen>
+    <dimen name="item_marginBottom_veryHight">106dp</dimen>
+    <dimen name="marginTop_recycler_history_search">16dp</dimen>
+    <dimen name="text_placeholder_marginTop">20dp</dimen>
+    <dimen name="icon_medium_size">45dp</dimen>
+    <dimen name="icon_small_size">24dp</dimen>
+    <dimen name="radius_corner_PlPoster">8dp</dimen>
+    <dimen name="radius_corner_RcklView">10dp</dimen>
+    <dimen name="layout_size_medium">44dp</dimen>
+    <dimen name="tab_width">180dp</dimen>
+    <dimen name="bottom_sheet_height">0dp</dimen>
+    <dimen name="width_low">50dp</dimen>
+    <dimen name="hight_veryLow">4dp</dimen>
 </resources>

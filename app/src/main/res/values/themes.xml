@@ -15,6 +15,7 @@
         <item name="editTextBackground">@color/lightest_grey</item>
         <item name="editTextColor">@color/light_grey</item>
         <item name="buttonTint">#401A1B22</item>
+        <item name="bottomSheetStyle">@color/white</item>
     </style>
 
     <style name="searchActivityBtnStyle">
@@ -27,6 +28,4 @@
         <item name="android:textSize">@dimen/text_14</item>
         <item name="android:layout_marginTop">@dimen/margin_24</item>
     </style>
-
-    <color name="design_snackbar_background_color" tools:override="true">?attr/colorPrimary</color>
 </resources>

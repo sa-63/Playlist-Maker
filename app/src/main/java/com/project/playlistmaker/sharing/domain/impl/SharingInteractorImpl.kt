@@ -32,6 +32,10 @@ class SharingInteractorImpl(
         return TERM_LINK
     }
 
+    override fun sharePlaylist(playlistInMessage: String) {
+        externalNavigator.share(playlistInMessage)
+    }
+
     companion object {
         const val APP_LINK = "https://practicum.yandex.ru/android-developer"
         const val SUPPORT_EMAIL = "saa-aka-mr.blonde@yandex.ru"

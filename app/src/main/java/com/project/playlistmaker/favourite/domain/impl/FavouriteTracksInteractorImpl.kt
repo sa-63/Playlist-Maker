@@ -17,11 +17,11 @@ class FavouriteTracksInteractorImpl(
         return favouriteTracksRepository.getFavoritesTracks()
     }
 
-    override suspend fun deleteFromFavorites(trackId: Int) {
+    override suspend fun deleteFromFavorites(trackId: Long?) {
         favouriteTracksRepository.deleteFromFavorites(trackId)
     }
 
-    override suspend fun isFavoriteTrack(trackId: Int): Flow<Boolean> {
+    override suspend fun isFavoriteTrack(trackId: Long?): Flow<Boolean> {
         return favouriteTracksRepository.isFavoriteTrack(trackId)
     }
 }

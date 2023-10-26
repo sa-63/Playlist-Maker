@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.playlistmaker.R
 import com.project.playlistmaker.searchscreen.domain.models.Track
-import com.project.playlistmaker.searchscreen.ui.view_holder.TrackListViewHolder
+import com.project.playlistmaker.searchscreen.ui.viewholder.TrackListViewHolder
 
 class TrackListAdapter(
     private val tracksList: List<Track>,
